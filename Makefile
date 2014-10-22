@@ -85,7 +85,9 @@ $1_BASENAME := $(or $3,$(call downcase,$1))
 $1_TARGET := $($(or $2,$1)_DIR)/$$($1_BASENAME)
 PRODUCTS += $1
 # first dependency on archive
-$$($1_TARGET) : $$($(or $2,$1)_TGZ)
+$$($1_TARGET) $$($(or $2,$1)_DIR)/__$$(notdir $$($(or $2,$1)_TGZ))__ : $$($(or $2,$1)_TGZ)
+# second dependency on check file
+$$($1_TARGET) : $$($(or $2,$1)_DIR)/__$$(notdir $$($(or $2,$1)_TGZ))__
 # copy product to output dir
 $$(OUTPUT_DIR)/$$($1_BASENAME) : $$($1_TARGET)
 	strip $$< -Sx -o $$@
@@ -155,6 +157,7 @@ define clean_untar
 	rm -rf $(@D)
 	$(mkpath) $(@D)
 	tar -C $(@D) --strip-components=1 -m -xzf $<
+	touch $(@D)/__$(notdir $<)__
 endef
 
 pkgconfig_pwd = perl -pi -e 's/(?<=dir=).*/$$ENV{PWD}/'
