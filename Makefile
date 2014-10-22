@@ -144,7 +144,7 @@ test : all
 	$(call check_bin,jpegtran, -v - 2>&1,$(LIBJPEG_VER))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush, -version 2>&1,$(PNGCRUSH_VER))
-	$(call check_bin,pngquant,--version,$(PNGQUANT_VER))
+	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 
 # ====== CLEAN ======
 
