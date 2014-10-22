@@ -82,12 +82,14 @@ PRODUCTS :=
 # $3 - basename ($1 if empty)
 define target
 $1_BASENAME := $(or $3,$(call downcase,$1))
-$1_TARGET := $($(or $2,$1)_DIR)/$$($1_BASENAME)
+$1_DIR := $($(or $2,$1)_DIR)
+$1_TGZ := $($(or $2,$1)_TGZ)
+$1_TARGET := $$($1_DIR)/$$($1_BASENAME)
 PRODUCTS += $1
 # first dependency on archive
-$$($1_TARGET) $$($(or $2,$1)_DIR)/__$$(notdir $$($(or $2,$1)_TGZ))__ : $$($(or $2,$1)_TGZ)
+$$($1_TARGET) $$($1_DIR)/__$$(notdir $$($1_TGZ))__ : $$($1_TGZ)
 # second dependency on check file
-$$($1_TARGET) : $$($(or $2,$1)_DIR)/__$$(notdir $$($(or $2,$1)_TGZ))__
+$$($1_TARGET) : $$($1_DIR)/__$$(notdir $$($1_TGZ))__
 # copy product to output dir
 $$(OUTPUT_DIR)/$$($1_BASENAME) : $$($1_TARGET)
 	strip $$< -Sx -o $$@
