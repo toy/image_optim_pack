@@ -135,7 +135,7 @@ test : ARCH_STRING := Intel 80386
 else ifeq (x86_64,$(ARCH))
 test : ARCH_STRING := x86-64
 endif
-test :
+test : all
 	$(if $(ARCH_STRING),,@echo Detecting 'ARCH $(ARCH) for OS $(OS) undefined'; false)
 	$(call check_bin,advpng,--version 2>&1,$(ADVANCECOMP_VER))
 	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
