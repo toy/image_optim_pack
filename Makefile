@@ -114,16 +114,20 @@ all : $(call downcase,$(PRODUCTS))
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
-for_version = @test ! -f $(OUTPUT_DIR)/$1 && echo "no $1" || $(OUTPUT_DIR)/$1
-versions :
-	$(call for_version,advpng) --version 2>&1  | fgrep --color $(ADVANCECOMP_VER)
-	$(call for_version,gifsicle) --version     | fgrep --color $(GIFSICLE_VER)
-	$(call for_version,jhead) -V               | fgrep --color $(JHEAD_VER)
-	$(call for_version,jpegoptim) --version    | fgrep --color $(JPEGOPTIM_VER)
-	$(call for_version,jpegtran) -v - 2>&1     | fgrep --color $(LIBJPEG_VER)
-	$(call for_version,optipng) --version      | fgrep --color $(OPTIPNG_VER)
-	$(call for_version,pngcrush) -version 2>&1 | fgrep --color $(PNGCRUSH_VER)
-	$(call for_version,pngquant) --version     | fgrep --color $(PNGQUANT_VER)
+define check_bin
+	@test ! -f $(OUTPUT_DIR)/$1 && echo "no $1" || \
+		$(OUTPUT_DIR)/$1 $2 | fgrep --color $3 || \
+		($(OUTPUT_DIR)/$1 $2 && false)
+endef
+test :
+	$(call check_bin,advpng,--version 2>&1,$(ADVANCECOMP_VER))
+	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
+	$(call check_bin,jhead, -V,$(JHEAD_VER))
+	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
+	$(call check_bin,jpegtran, -v - 2>&1,$(LIBJPEG_VER))
+	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
+	$(call check_bin,pngcrush, -version 2>&1,$(PNGCRUSH_VER))
+	$(call check_bin,pngquant,--version,$(PNGQUANT_VER))
 
 # ====== CLEAN ======
 
