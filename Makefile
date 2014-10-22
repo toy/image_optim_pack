@@ -117,11 +117,26 @@ download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
 define check_bin
-	@test ! -f $(OUTPUT_DIR)/$1 && echo "no $1" || \
+	@test -f $(OUTPUT_DIR)/$1 || echo "no $1"
+	@# if bin exists check architecture
+	@test ! -f $(OUTPUT_DIR)/$1 || \
+		file -b $(OUTPUT_DIR)/$1 | grep -q '$(ARCH_STRING)' || \
+		(echo "Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)"; false)
+	@# if bin exists check and output version
+	@test ! -f $(OUTPUT_DIR)/$1 || \
 		$(OUTPUT_DIR)/$1 $2 | fgrep --color $3 || \
-		($(OUTPUT_DIR)/$1 $2 && false)
+		(echo "Expected $3, got $$($(OUTPUT_DIR)/$1 $2)"; false)
 endef
+
+ifdef IS_DARWIN
+test : ARCH_STRING := $(ARCH)
+else ifeq (i686,$(ARCH))
+test : ARCH_STRING := Intel 80386
+else ifeq (x86_64,$(ARCH))
+test : ARCH_STRING := x86-64
+endif
 test :
+	$(if $(ARCH_STRING),,@echo Detecting 'ARCH $(ARCH) for OS $(OS) undefined'; false)
 	$(call check_bin,advpng,--version 2>&1,$(ADVANCECOMP_VER))
 	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
 	$(call check_bin,jhead, -V,$(JHEAD_VER))
