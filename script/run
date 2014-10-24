@@ -4,6 +4,12 @@ set -xe
 
 MAKE_COMMAND='make all test -j'
 
+for arg in "$@"; do
+  if [[ "$arg" =~ ^([A-Z_]+)=(.*)$ ]]; then
+    eval "$(printf %q=%q "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}")"
+  fi
+done
+
 for arch in i386 x86_64; do
   $MAKE_COMMAND ARCH=$arch
 done
