@@ -204,6 +204,10 @@ export CXXFLAGS := $(GCC_FLAGS)
 export CPPFLAGS := $(GCC_FLAGS)
 export LDFLAGS := $(GCC_FLAGS)
 
+ifdef IS_DARWIN
+export MACOSX_DEPLOYMENT_TARGET=10.6
+endif
+
 ## advpng
 $(eval $(call depend,ADVPNG,LIBZ))
 $(ADVPNG_TARGET) :; $(clean_untar)
