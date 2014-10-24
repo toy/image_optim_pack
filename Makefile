@@ -139,11 +139,11 @@ test : all
 	$(if $(ARCH_STRING),,@echo Detecting 'ARCH $(ARCH) for OS $(OS) undefined'; false)
 	$(call check_bin,advpng,--version 2>&1,$(ADVANCECOMP_VER))
 	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
-	$(call check_bin,jhead, -V,$(JHEAD_VER))
+	$(call check_bin,jhead,-V,$(JHEAD_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
-	$(call check_bin,jpegtran, -v - 2>&1,$(LIBJPEG_VER))
+	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
-	$(call check_bin,pngcrush, -version 2>&1,$(PNGCRUSH_VER))
+	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 
 # ====== CLEAN ======
