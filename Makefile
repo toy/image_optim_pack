@@ -115,6 +115,9 @@ $(eval $(call target,PNGQUANT))
 all : $(call downcase,$(PRODUCTS))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+download-tidy-up :
+	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
+
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
 define check_bin
