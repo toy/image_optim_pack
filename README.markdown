@@ -41,6 +41,30 @@ gem 'image_optim'
 gem 'image_optim_pack'
 ```
 
+## Development
+
+Mac OS X binaries and libraries are built on host, others using vagrant.
+
+```sh
+script/run # Build and test all for all oses and architectures
+script/run NO_HALT=1 # Don't halt VMs after building
+
+make all # Build and copy all to output directory for current os/arch
+make run # => all
+
+make test # `all` and test bins for current os/arch
+
+make download # Download archives
+make build # Build all without copying to output directory
+
+make livecheck # Check versions
+make update-versions # Update versions in Makefile
+
+make clean # Remove build and output directories for current os/arch
+make clean-all # Remove build root and output root directories
+make clobber # `claen-all` and remove download directory
+```
+
 ## Copyright
 
 Copyright (c) 2014 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
