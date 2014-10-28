@@ -58,6 +58,7 @@ $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER)$(strip $3).tar.gz
 ARCHIVES += $1
 # download archive from url
 $$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
+livecheck-$(call downcase,$1) :; @script/livecheck $(call downcase,$1) $($1_VER)
 endef
 
 $(eval $(call archive,ADVANCECOMP, http://prdownloads.sourceforge.net/advancemame/advancecomp-[VER].tar.gz?download))
@@ -145,6 +146,8 @@ test : all
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
+
+livecheck : $(foreach archive,$(ARCHIVES),livecheck-$(call downcase,$(archive)))
 
 # ====== CLEAN ======
 

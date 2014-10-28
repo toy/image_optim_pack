@@ -1,0 +1,72 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+require 'uri'
+require 'net/http'
+require 'versionomy'
+
+bare = ARGV.delete('--bare')
+
+unless [1, 2].include?(ARGV.length)
+  abort 'expected project name and optional current version'
+end
+
+def version(string)
+  Versionomy.parse(string)
+end
+
+name = ARGV[0].downcase
+config = YAML.load(DATA)[name]
+abort "Livecheck for #{name} was not defined" unless config
+
+uri = URI(config['url'])
+version_regex = Regexp.new(config['regexp'])
+current_version = ARGV[1] && version(ARGV[1])
+
+data = Net::HTTP.get(uri)
+versions = data.scan(version_regex).uniq.map{ |match| version(match[0]) }
+abort 'No versions found' if versions.empty?
+
+latest_version = versions.max
+case
+when bare
+  print latest_version
+when current_version
+  if latest_version > current_version
+    puts "#{name} #{latest_version} > #{current_version}"
+  end
+else
+  puts "#{name} #{latest_version}"
+end
+
+__END__
+advancecomp:
+  url: http://sourceforge.net/projects/advancemame/rss?path=/advancecomp
+  regexp: /advancecomp/(\d+(?:\.\d+)*)/
+gifsicle:
+  url: http://www.lcdf.org/gifsicle/
+  regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
+jhead:
+  url: http://www.sentex.net/~mwandel/jhead/
+  regexp: jhead-(\d+(?:\.\d+)*)
+jpegoptim:
+  url: http://www.kokkonen.net/tjko/src/
+  regexp: jpegoptim-(\d+(?:\.\d+)*)
+libjpeg:
+  url: http://www.ijg.org/files/
+  regexp: jpegsrc.v(.*?).tar.gz
+libpng:
+  url: http://sourceforge.net/projects/libpng/rss
+  regexp: /libpng\d*/(\d+(?:\.\d+)*)/
+libz:
+  url: http://sourceforge.net/projects/libpng/rss?path=/zlib
+  regexp: /zlib/(\d+(?:\.\d+)*)/
+optipng:
+  url: http://sourceforge.net/projects/optipng/rss
+  regexp: /OptiPNG/optipng-(\d+(?:\.\d+)*)/
+pngcrush:
+  url: http://sourceforge.net/projects/pmt/rss?path=/pngcrush
+  regexp: /pngcrush/(\d+(?:\.\d+)*)/
+pngquant:
+  url: http://pngquant.org/releases.html
+  regexp: pngquant-([0-9.]+)-src.tar.bz2
