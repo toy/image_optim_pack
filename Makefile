@@ -149,6 +149,10 @@ test : all
 
 livecheck : $(foreach archive,$(ARCHIVES),livecheck-$(call downcase,$(archive)))
 
+update-versions :
+	cat Makefile | script/update_versions > Makefile.tmp
+	mv Makefile.tmp Makefile
+
 # ====== CLEAN ======
 
 clean :
