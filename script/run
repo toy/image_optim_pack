@@ -10,6 +10,11 @@ for arg in "$@"; do
   fi
 done
 
+if [ "$(uname -s | tr A-Z a-z)" != 'darwin' ]; then
+  echo 'expected to run on Mac OS X'
+  exit 1
+fi
+
 for arch in i386 x86_64; do
   $MAKE_COMMAND ARCH=$arch
 done
