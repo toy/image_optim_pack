@@ -57,7 +57,7 @@ $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
 $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER)$(strip $3).tar.gz
 ARCHIVES += $1
 # download archive from url
-$$($1_TGZ) : ; $$(call download,$$($1_URL),$$@)
+$$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
 endef
 
 $(eval $(call archive,ADVANCECOMP, http://prdownloads.sourceforge.net/advancemame/advancecomp-[VER].tar.gz?download))
@@ -234,7 +234,7 @@ $(JPEGOPTIM_TARGET) :; $(clean_untar)
 
 ## jpegtran
 $(eval $(call depend,JPEGTRAN,LIBJPEG))
-$(JPEGTRAN_TARGET) : ; # built in $(LIBJPEG_TARGET)
+$(JPEGTRAN_TARGET) :; # built in $(LIBJPEG_TARGET)
 
 ## libjpeg
 $(LIBJPEG_TARGET) :; $(clean_untar)
