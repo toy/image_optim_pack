@@ -26,6 +26,26 @@ class ImageOptim
         end
       end
 
+      # Return true if all bins can execute and return version
+      def all_bins_working?
+        bins.all?(&:version)
+      end
+
+      # Return true if all bins can't execute and return version
+      def all_bins_failing?
+        bins.none?(&:version)
+      end
+
+      # List of bins which can execute and return version
+      def working_bins
+        bins.select(&:version)
+      end
+
+      # List of bins which can't execute and return version
+      def failing_bins
+        bins.reject(&:version)
+      end
+
     private
 
       def bin_paths
@@ -51,7 +71,7 @@ class ImageOptim
       def path
         ordered_by_os_arch_match.find do |path|
           yield "image_optim_pack: #{debug_message(path)}" if block_given?
-          path.bins.all?(&:version)
+          path.all_bins_working?
         end
       end
 
@@ -66,15 +86,14 @@ class ImageOptim
 
       # Messages based on success of getting versions of bins
       def debug_message(path)
-        bins = path.bins
         case
-        when bins.all?(&:version)
+        when path.all_bins_working?
           "all bins from #{path} worked"
-        when bins.any?(&:version)
-          names = bins.reject(&:version).map(&:name)
-          "#{names.join(', ')} from #{path} failed"
-        else
+        when path.all_bins_failing?
           "all bins from #{path} failed"
+        else
+          "#{path.failing_bins.map(&:name).join(', ')} from #{path} failed"
+        else
         end
       end
     end
