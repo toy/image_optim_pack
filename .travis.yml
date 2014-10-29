@@ -1,5 +1,6 @@
 language: ruby
 script:
   - make test
+  - bundle exec image_optim --info
   - bundle exec rspec
   - '! bundle show rubocop || bundle exec rubocop' # run rubocop only if bundled
