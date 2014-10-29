@@ -103,7 +103,6 @@ class ImageOptim
           "all bins from #{path} failed"
         else
           "#{path.failing_bins.map(&:name).join(', ')} from #{path} failed"
-        else
         end
       end
     end
