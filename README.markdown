@@ -55,10 +55,10 @@ Mac OS X binaries and libraries are built on host, others using vagrant.
 script/run # Build and test all for all oses and architectures
 script/run NO_HALT=1 # Don't halt VMs after building
 
-make all # Build and copy all to output directory for current os/arch
+make all # Build and copy all to output directory for current os/arch, then test
 make run # => all
 
-make test # `all` and test bins for current os/arch
+make test # Test bins for current os/arch
 
 make download # Download archives
 make build # Build all without copying to output directory

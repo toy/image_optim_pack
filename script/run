@@ -2,7 +2,7 @@
 
 set -xe
 
-MAKE_COMMAND='make all test -j'
+MAKE_COMMAND='make all -j'
 
 for arg in "$@"; do
   if [[ "$arg" =~ ^([A-Z_]+)=(.*)$ ]]; then
