@@ -122,7 +122,7 @@ download-tidy-up :
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
 define check_bin
-	@test -f $(OUTPUT_DIR)/$1 || echo "no $1"
+	@test -f $(OUTPUT_DIR)/$1 || (echo "no $1"; false)
 	@# if bin exists check architecture
 	@test ! -f $(OUTPUT_DIR)/$1 || \
 		file -b $(OUTPUT_DIR)/$1 | grep -q '$(ARCH_STRING)' || \

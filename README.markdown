@@ -59,6 +59,7 @@ make all # Build and copy all to output directory for current os/arch, then test
 make run # => all
 
 make test # Test bins for current os/arch
+make test -i # Continue if one of bins fail
 
 make download # Download archives
 make build # Build all without copying to output directory
