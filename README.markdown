@@ -1,3 +1,9 @@
+[![Gem Version](https://img.shields.io/gem/v/image_optim_pack.svg?style=flat)](https://rubygems.org/gems/image_optim_pack)
+[![Build Status](https://img.shields.io/travis/toy/image_optim_pack/master.svg?style=flat)](https://travis-ci.org/toy/image_optim_pack)
+[![Code Climate](https://img.shields.io/codeclimate/github/toy/image_optim_pack.svg?style=flat)](https://codeclimate.com/github/toy/image_optim_pack)
+[![Dependency Status](https://img.shields.io/gemnasium/toy/image_optim_pack.svg?style=flat)](https://gemnasium.com/toy/image_optim_pack)
+[![Inch CI](http://inch-ci.org/github/toy/image_optim_pack.svg?branch=master&style=flat)](http://inch-ci.org/github/toy/image_optim_pack)
+
 # image\_optim\_pack
 
 Precompiled binaries for [`image_optim`](https://github.com/toy/image_optim).
