@@ -2,3 +2,4 @@ language: ruby
 script:
   - make test
   - bundle exec rspec
+  - '! bundle show rubocop || bundle exec rubocop' # run rubocop only if bundled
