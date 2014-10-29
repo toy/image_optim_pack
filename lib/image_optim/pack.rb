@@ -43,7 +43,7 @@ class ImageOptim
     VENDOR_PATH = FSPath('../../../vendor').expand_path(__FILE__)
 
     # List of paths
-    PACK_PATHS = VENDOR_PATH.glob('*/*').map{ |path| Path.new(path) }
+    PATHS = VENDOR_PATH.glob('*/*').map{ |path| Path.new(path) }
 
     class << self
       # Return path to directory with binaries
@@ -59,7 +59,7 @@ class ImageOptim
 
       # Order by match of os and architecture
       def ordered_by_os_arch_match
-        PACK_PATHS.sort_by do |path|
+        PATHS.sort_by do |path|
           [path.os == OS ? 0 : 1, path.arch == ARCH ? 0 : 1]
         end
       end
