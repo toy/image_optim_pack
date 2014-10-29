@@ -7,14 +7,23 @@ class ImageOptim
   module Pack
     # Path to binary, last two parts are expect to be os/arch
     class Path
-      attr_reader :path, :os, :arch
+      # Path provided to initialize as FSPath
+      attr_reader :path
 
+      # Intended os
+      attr_reader :os
+
+      # Inteded architecture
+      attr_reader :arch
+
+      # Receive path, use last part for arch and last but one part for os
       def initialize(path)
         @path = FSPath(path)
         @os = @path.dirname.basename.to_s
         @arch = @path.basename.to_s
       end
 
+      # Return path converted to string
       def to_s
         path.to_s
       end
@@ -48,6 +57,7 @@ class ImageOptim
 
     private
 
+      # All children except those starting with 'lib'
       def bin_paths
         path.children.reject{ |child| child.basename.to_s =~ /^lib/ }
       end
