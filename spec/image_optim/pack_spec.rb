@@ -50,7 +50,7 @@ describe ImageOptim::Pack do
     describe :bins do
       subject{ Pack.path.bins }
 
-      define :be_non_libraries do |expected|
+      define :be_non_libraries do
         match do |bin|
           bin.name !~ /^lib/
         end
