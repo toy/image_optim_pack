@@ -6,6 +6,9 @@ AllCops:
 Lint/EndAlignment:
   AlignWith: variable
 
+Metrics/MethodLength:
+  Max: 15
+
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
