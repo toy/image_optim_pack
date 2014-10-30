@@ -80,7 +80,7 @@ describe ImageOptim do
   test_images = images_dir.glob('**/*.*')
 
   # select images which for which there are workers
-  test_images.select! do |image|
+  test_images = test_images.select do |image|
     image_optim.workers_for_image(image)
   end
 
