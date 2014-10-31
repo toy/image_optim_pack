@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = %w[lib]
 
-  s.add_dependency 'image_optim'
+  s.add_dependency 'image_optim', '~> 0.18'
   s.add_dependency 'fspath', '~> 2.1'
   s.add_development_dependency 'versionomy', '~> 0.4.4'
   s.add_development_dependency 'rspec', '~> 3.0'
