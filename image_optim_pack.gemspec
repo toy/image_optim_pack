@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'image_optim', '~> 0.18'
   s.add_dependency 'fspath', '~> 2.1'
+
   s.add_development_dependency 'versionomy', '~> 0.4.4'
   s.add_development_dependency 'rspec', '~> 3.0'
   if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('1.9.3')
