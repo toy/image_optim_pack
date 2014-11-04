@@ -19,6 +19,9 @@ Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64) and Linux (i686 and x
 * [jhead](http://sentex.net/~mwandel/jhead/) by Matthias Wandel ([public domain](acknowledgements/jhead.txt))
 * [jpegoptim](http://www.kokkonen.net/tjko/projects.html) by Timo Kokkonen ([GNU GPLv2](acknowledgements/jpegoptim.txt) or later)
 * [libjpeg and jpegtran](http://ijg.org/) by the Independent JPEG Group ([license](acknowledgements/libjpeg.txt))
+* [libjpeg-turbo](http://www.libjpeg-turbo.org/) by libjpeg-turbo Project ([license](acknowledgements/libjpeg-turbo.txt))
+	* based on libjpeg, see above
+	* includes [x86 SIMD extension for IJG JPEG library](http://cetus.sakura.ne.jp/softlab/jpeg-x86simd/jpegsimd.html) by MIYASAKA Masaru ([license](acknowledgements/libjpeg-x86-simd.txt))
 * [libpng](http://libpng.org/pub/png/) by Guy Eric Schalnat, Andreas Dilger, Glenn Randers-Pehrson and others ([license](acknowledgements/libpng.txt))
 * [optipng](http://optipng.sourceforge.net/) by Cosmin Truta ([license](acknowledgements/optipng.txt), [authors](acknowledgements/optipng-authors.txt))
 	* contains code based in part on the work of Miyasaka Masaru for BMP support ([license](acknowledgements/bmp2png.txt))
