@@ -7,6 +7,7 @@ GIFSICLE_VER := 1.86
 JHEAD_VER := 2.97
 JPEGOPTIM_VER := 1.4.1
 LIBJPEG_VER := 9a
+LIBMOZJPEG_VER := 2.1
 LIBPNG_VER := 1.6.14
 LIBZ_VER := 1.2.8
 OPTIPNG_VER := 0.7.5
@@ -67,6 +68,7 @@ $(eval $(call archive,GIFSICLE,    http://www.lcdf.org/gifsicle/gifsicle-[VER].t
 $(eval $(call archive,JHEAD,       http://www.sentex.net/~mwandel/jhead/jhead-[VER].tar.gz))
 $(eval $(call archive,JPEGOPTIM,   http://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
 $(eval $(call archive,LIBJPEG,     http://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
+$(eval $(call archive,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
 $(eval $(call archive,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
@@ -103,8 +105,8 @@ $(eval $(call target,ADVPNG,ADVANCECOMP))
 $(eval $(call target,GIFSICLE))
 $(eval $(call target,JHEAD))
 $(eval $(call target,JPEGOPTIM))
-$(eval $(call target,JPEGTRAN,LIBJPEG))
-$(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
+$(eval $(call target,JPEGTRAN,LIBMOZJPEG))
+$(eval $(call target,LIBMOZJPEG,,libjpeg$(DLEXT)))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
 $(eval $(call target,OPTIPNG))
@@ -147,7 +149,7 @@ test :
 	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
 	$(call check_bin,jhead,-V,$(JHEAD_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
-	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
+	$(call check_bin,jpegtran,-v - 2>&1,$(LIBMOZJPEG_VER))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
@@ -238,20 +240,22 @@ $(JHEAD_TARGET) :; $(clean_untar)
 	cd $(@D) && $(MAKE) jhead CC="$(CC) $(GCC_FLAGS)"
 
 ## jpegoptim
-$(eval $(call depend,JPEGOPTIM,LIBJPEG))
+$(eval $(call depend,JPEGOPTIM,LIBMOZJPEG))
 $(JPEGOPTIM_TARGET) :; $(clean_untar)
 	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)" --host $(HOST)
 	cd $(@D) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
 
 ## jpegtran
-$(eval $(call depend,JPEGTRAN,LIBJPEG))
-$(JPEGTRAN_TARGET) :; # built in $(LIBJPEG_TARGET)
+$(eval $(call depend,JPEGTRAN,LIBMOZJPEG))
+$(JPEGTRAN_TARGET) :; # built in $(LIBMOZJPEG_TARGET)
 
-## libjpeg
-$(LIBJPEG_TARGET) :; $(clean_untar)
-	cd $(@D) && ./configure CC="$(CC) $(GCC_FLAGS)"
+## libmozjpeg
+$(LIBMOZJPEG_TARGET) :; $(clean_untar)
+	cd $(@D) && autoreconf -fiv
+	cd $(@D) && ./configure --host $(HOST)
 	$(libtool_target_soname)
+	cd $(@D)/simd && $(MAKE)
 ifdef IS_DARWIN
 	cd $(@D) && $(MAKE) libjpeg.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
 else
