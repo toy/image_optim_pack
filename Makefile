@@ -20,6 +20,7 @@ ARCH := $(shell uname -m)
 
 IS_DARWIN := $(findstring darwin,$(OS))
 DLEXT := $(if $(IS_DARWIN),.dylib,.so)
+HOST := $(ARCH)-$(if $(IS_DARWIN),apple,pc)-$(OS)
 
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
@@ -239,7 +240,7 @@ $(JHEAD_TARGET) :; $(clean_untar)
 ## jpegoptim
 $(eval $(call depend,JPEGOPTIM,LIBJPEG))
 $(JPEGOPTIM_TARGET) :; $(clean_untar)
-	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)"
+	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)" --host $(HOST)
 	cd $(@D) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
 
