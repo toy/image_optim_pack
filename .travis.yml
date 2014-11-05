@@ -5,10 +5,8 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
-  - ruby-head
   - jruby-18mode
   - jruby-19mode
-  - jruby-head
   - ree
 script:
   - make test
@@ -17,6 +15,3 @@ script:
   - '! bundle show rubocop || bundle exec rubocop' # run rubocop only if bundled
 matrix:
   fast_finish: true
-  allow_failures:
-    - rvm: ruby-head
-    - rvm: jruby-head
