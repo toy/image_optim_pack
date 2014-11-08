@@ -9,9 +9,15 @@ rvm:
   - jruby-19mode
   - ree
 script:
-  - make test
-  - bundle exec image_optim --info
-  - bundle exec rspec
-  - '! bundle show rubocop || bundle exec rubocop' # run rubocop only if bundled
+  if [ -z "$RUBOCOP" ]; then
+    make test
+    && bundle exec image_optim --info
+    && bundle exec rspec
+  ; else
+    bundle exec rubocop
+  ; fi
 matrix:
   fast_finish: true
+  include:
+    - env: RUBOCOP=true
+      rvm: default
