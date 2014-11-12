@@ -15,15 +15,25 @@ def version(string)
   Versionomy.parse(string)
 end
 
+def get(url)
+  uri = URI(url)
+
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.use_ssl = (uri.scheme == 'https')
+
+  request = Net::HTTP::Get.new(uri.request_uri)
+  http.request(request).body
+end
+
 name = ARGV[0].downcase
 config = YAML.load(DATA)[name]
 abort "Livecheck for #{name} was not defined" unless config
 
-uri = URI(config['url'])
+url = config['url']
 version_regex = Regexp.new(config['regexp'])
 current_version = ARGV[1] && version(ARGV[1])
 
-data = Net::HTTP.get(uri)
+data = get(url)
 versions = data.scan(version_regex).uniq.map{ |match| version(match[0]) }
 abort 'No versions found' if versions.empty?
 
@@ -52,9 +62,15 @@ jhead:
 jpegoptim:
   url: http://www.kokkonen.net/tjko/src/
   regexp: jpegoptim-(\d+(?:\.\d+)*)
+jpegarchive:
+  url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
+  regexp: <title>JPEG-Archive (\d+(?:\.\d+)*)</title>
 libjpeg:
   url: http://www.ijg.org/files/
   regexp: jpegsrc.v(.*?).tar.gz
+libmozjpeg:
+  url: https://github.com/mozilla/mozjpeg/releases.atom
+  regexp: <title>mozjpeg v(\d+(?:\.\d+)*)</title>
 libpng:
   url: http://sourceforge.net/projects/libpng/rss
   regexp: /libpng\d*/(\d+(?:\.\d+)*)/

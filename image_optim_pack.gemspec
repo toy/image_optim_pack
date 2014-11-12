@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'image_optim_pack'
-  s.version     = '0.1.0.20141104'
+  s.version     = '0.2.0'
   s.summary     = %q{Precompiled binaries for image_optim: advpng, gifsicle, jhead, jpegoptim, jpegtran, optipng, pngcrush, pngquant}
   s.homepage    = "http://github.com/toy/#{s.name}"
   s.authors     = ['Ivan Kuchin']
@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = %w[lib]
 
-  s.add_dependency 'image_optim', '~> 0.18'
+  s.add_dependency 'image_optim', '~> 0.19'
   s.add_dependency 'fspath', '~> 2.1'
 
   s.add_development_dependency 'versionomy', '~> 0.4.4'
