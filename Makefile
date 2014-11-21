@@ -74,7 +74,7 @@ $(eval $(call archive,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[
 $(eval $(call archive,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
-$(eval $(call archive,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER].tar.gz?download))
+$(eval $(call archive,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive,PNGQUANT,    https://github.com/pornel/pngquant/archive/[VER].tar.gz))
 
 # ====== PRODUCTS ======
@@ -332,7 +332,7 @@ $(OPTIPNG_TARGET) :; $(clean_untar)
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
 $(PNGCRUSH_TARGET) :; $(clean_untar)
 	cd $(@D) && rm -f png.h pngconf.h
-	cd $(@D) && $(MAKE) -f Makefile-nolib pngcrush \
+	cd $(@D) && $(MAKE) -f Makefile pngcrush \
 		LIBS="-lpng -lz -lm" \
 		CFLAGS="$(GCC_FLAGS)" \
 		LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
