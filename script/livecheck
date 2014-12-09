@@ -35,7 +35,7 @@ current_version = ARGV[1] && version(ARGV[1])
 
 data = get(url)
 versions = data.scan(version_regex).uniq.map{ |match| version(match[0]) }
-abort 'No versions found' if versions.empty?
+abort "No versions found for #{name}" if versions.empty?
 
 latest_version = versions.max
 case
