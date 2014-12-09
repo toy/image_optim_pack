@@ -84,5 +84,5 @@ pngcrush:
   url: http://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
 pngquant:
-  url: http://pngquant.org/releases.html
-  regexp: pngquant-([0-9.]+)-src.tar.bz2
+  url: https://github.com/pornel/pngquant/releases.atom
+  regexp: /pornel/pngquant/releases/tag/(\d+(?:\.\d+)*)
