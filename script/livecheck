@@ -35,7 +35,7 @@ current_version = ARGV[1] && version(ARGV[1])
 
 data = get(url)
 versions = data.scan(version_regex).uniq.map{ |match| version(match[0]) }
-abort 'No versions found' if versions.empty?
+abort "No versions found for #{name}" if versions.empty?
 
 latest_version = versions.max
 case
@@ -84,5 +84,5 @@ pngcrush:
   url: http://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
 pngquant:
-  url: http://pngquant.org/releases.html
-  regexp: pngquant-([0-9.]+)-src.tar.bz2
+  url: https://github.com/pornel/pngquant/releases.atom
+  regexp: /pornel/pngquant/releases/tag/(\d+(?:\.\d+)*)

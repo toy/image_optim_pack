@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'image_optim_pack'
-  s.version     = '0.2.0.20141210'
+  s.version     = '0.2.1'
   s.summary     = %q{Precompiled binaries for image_optim: advpng, gifsicle, jhead, jpegoptim, jpegtran, optipng, pngcrush, pngquant}
   s.homepage    = "http://github.com/toy/#{s.name}"
   s.authors     = ['Ivan Kuchin']
@@ -21,6 +21,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'versionomy', '~> 0.4.4'
   s.add_development_dependency 'rspec', '~> 3.0'
   if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('1.9.3')
-    s.add_development_dependency 'rubocop', '~> 0.26.0'
+    s.add_development_dependency 'rubocop', '~> 0.26'
   end
 end
