@@ -5,10 +5,10 @@ run : all
 ADVANCECOMP_VER := 1.19
 GIFSICLE_VER := 1.87
 JHEAD_VER := 3.00
-JPEGARCHIVE_VER := 2.0.1
+JPEGARCHIVE_VER := 2.1.0
 JPEGOPTIM_VER := 1.4.2
 LIBJPEG_VER := 9a
-LIBMOZJPEG_VER := 2.1
+LIBMOZJPEG_VER := 3.0
 LIBPNG_VER := 1.6.17
 LIBZ_VER := 1.2.8
 OPTIPNG_VER := 0.7.5
@@ -166,8 +166,7 @@ test :
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 
-LIVECHECK_ARCHIVES := $(filter-out LIBMOZJPEG,$(ARCHIVES))
-livecheck : $(foreach archive,$(LIVECHECK_ARCHIVES),livecheck-$(call downcase,$(archive)))
+livecheck : $(foreach archive,$(ARCHIVES),livecheck-$(call downcase,$(archive)))
 
 update-versions :
 	cat Makefile | script/update_versions > Makefile.tmp
