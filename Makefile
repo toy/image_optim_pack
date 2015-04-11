@@ -166,8 +166,7 @@ test :
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 
-LIVECHECK_ARCHIVES := $(filter-out LIBMOZJPEG,$(ARCHIVES))
-livecheck : $(foreach archive,$(LIVECHECK_ARCHIVES),livecheck-$(call downcase,$(archive)))
+livecheck : $(foreach archive,$(ARCHIVES),livecheck-$(call downcase,$(archive)))
 
 update-versions :
 	cat Makefile | script/update_versions > Makefile.tmp
