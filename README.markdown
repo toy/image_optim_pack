@@ -92,6 +92,25 @@ make clean-all # Remove build root and output root directories
 make clobber # `clean-all` and remove download directory
 ```
 
+## Docker
+
+This project includes a `Dockerfile` in the root, which builds a minimal image with most binaries included.
+
+#### Running
+
+```bash
+docker run --rm ghcr.io/toy/image_optim --version # image_optim version
+docker run --rm ghcr.io/toy/image_optim --info # image_optim info including bin versions
+docker run --rm -v "$PWD":/here -w /here ghcr.io/toy/image_optim image-in-this-folder.jpg
+```
+
+#### Building
+
+```bash
+make docker-build # will be tagged with latest and current date in format %Y%m%d
+make docker-push # will push tags created by docker-build
+```
+
 ## Copyright
 
 Copyright (c) 2014-2021 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.

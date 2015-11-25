@@ -1,0 +1,10 @@
+/boxes/
+/.git/
+
+/build/
+/.vagrant/
+
+Gemfile.lock
+/*.gem
+/.bundle
+/tmp/

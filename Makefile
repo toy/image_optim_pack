@@ -65,7 +65,7 @@ $1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
 $$($1_EXTRACTED) : $$($1_TGZ)
 	mkdir -p $(BUILD_DIR)
 	rm -rf $$(@D)
-	echo "$$($1_SHA256)  $$($1_TGZ)" | $(sha256sum) -c
+	echo "$$($1_SHA256)  $$<" | $(sha256sum) -c
 	mkdir $$(@D)
 	$(tar) -C $$(@D) --strip-components=1 -xzf $$<
 	touch $$(@D)/__$$(notdir $$<)__
@@ -258,6 +258,24 @@ update-versions :
 	script/livecheck --update
 	make checksum-update
 .PHONY : update-versions
+
+# ====== DOCKER ======
+
+DOCKER_IMAGE := ghcr.io/toy/image_optim
+DOCKER_TAG := $(shell date +%Y%m%d)
+
+docker-build : download
+	@docker build \
+		$(foreach archive,$(ARCHIVES),--build-arg $(archive)_VER=$($(archive)_VER) --build-arg $(archive)_SHA256=$($(archive)_SHA256)) \
+		-t $(DOCKER_IMAGE):$(DOCKER_TAG) \
+		-t $(DOCKER_IMAGE):latest \
+		.
+.PHONY : docker-build
+
+docker-push : docker-build
+	@docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+	@docker push $(DOCKER_IMAGE):latest
+.PHONY : docker-push
 
 # ====== CLEAN ======
 

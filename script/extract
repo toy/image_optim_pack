@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -e
+
+if [ "$#" -ne 1 ]; then
+  echo "Require name of package as argument" >&2
+  exit 1
+fi
+
+name="$1"
+upcase=$(echo "$name" | tr a-z A-Z)
+version=$(printenv "${upcase}_VER")
+checksum=$(printenv "${upcase}_SHA256")
+archive="download/${name}-${version}.tar.gz"
+build_dir="build/$name"
+
+echo "$checksum  $archive" | sha256sum -c
+mkdir -p "$build_dir"
+tar -C "$build_dir" --strip-components=1 -xzf "$archive"
