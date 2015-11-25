@@ -81,6 +81,34 @@ make clean-all # Remove build root and output root directories
 make clobber # `claen-all` and remove download directory
 ```
 
+## Docker
+
+This project includes a dockerfile in the root, which builds a minimal image with all binaries already installed.
+
+#### Running
+
+```bash
+$ docker run --rm -it rhardih/image_optim_pack sh
+/tmp # for util in advpng gifsicle jhead jpegoptim jpeg-recompress jpegtran optipng pngcrush pngout pngquant svgo; do which $util; done
+/usr/local/bin/advpng
+/usr/local/bin/gifsicle
+/usr/local/bin/jhead
+/usr/local/bin/jpegoptim
+/usr/local/bin/jpeg-recompress
+/usr/local/bin/jpegtran
+/usr/local/bin/optipng
+/usr/local/bin/pngcrush
+/usr/local/bin/pngout
+/usr/local/bin/pngquant
+/usr/bin/svgo
+```
+
+#### Building
+
+```bash
+$ docker build -t <tag_name> .
+```
+
 ## Copyright
 
 Copyright (c) 2014-2015 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
