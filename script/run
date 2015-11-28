@@ -22,5 +22,5 @@ done
 for vm in linux_{i686,x86_64}; do
   vagrant up $vm
   vagrant ssh $vm -c "cd /vagrant; $MAKE_COMMAND"
-  [ -n "$NO_HALT" ] || vagrant halt
+  [ -n "$NO_HALT" ] || vagrant halt $vm
 done
