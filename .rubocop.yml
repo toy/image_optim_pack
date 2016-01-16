@@ -47,5 +47,8 @@ Style/SpaceBeforeBlockBraces:
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: no_comma
+
+Style/TrailingCommaInLiteral:
   EnforcedStyleForMultiline: comma
