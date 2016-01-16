@@ -42,8 +42,9 @@ case
 when bare
   print latest_version
 when current_version
-  if latest_version > current_version
-    puts "#{name} #{latest_version} > #{current_version}"
+  if latest_version != current_version
+    sign = latest_version > current_version ? '>' : '<'
+    puts "#{name} #{latest_version} #{sign} #{current_version}"
   end
 else
   puts "#{name} #{latest_version}"
