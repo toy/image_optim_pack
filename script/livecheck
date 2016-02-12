@@ -35,7 +35,7 @@ current_version = ARGV[1] && version(ARGV[1])
 
 data = get(url)
 versions = data.scan(version_regex).uniq.map{ |match| version(match[0]) }
-abort "No versions found for #{name}" if versions.empty?
+abort "No versions found for #{name} in data:\n#{data}" if versions.empty?
 
 latest_version = versions.max
 case
@@ -52,16 +52,16 @@ end
 
 __END__
 advancecomp:
-  url: http://sourceforge.net/projects/advancemame/rss?path=/advancecomp
+  url: https://sourceforge.net/projects/advancemame/rss?path=/advancecomp
   regexp: /advancecomp/(\d+(?:\.\d+)*)/
 gifsicle:
-  url: http://www.lcdf.org/gifsicle/
+  url: https://www.lcdf.org/gifsicle/
   regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
 jhead:
   url: http://www.sentex.net/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)
 jpegoptim:
-  url: http://www.kokkonen.net/tjko/src/
+  url: https://www.kokkonen.net/tjko/src/
   regexp: jpegoptim-(\d+(?:\.\d+)*)
 jpegarchive:
   url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
@@ -73,16 +73,16 @@ libmozjpeg:
   url: https://github.com/mozilla/mozjpeg/releases.atom
   regexp: <title>mozjpeg v(\d+(?:\.\d+)*)</title>
 libpng:
-  url: http://sourceforge.net/projects/libpng/rss
+  url: https://sourceforge.net/projects/libpng/rss
   regexp: /libpng\d*/(\d+(?:\.\d+)*)/
 libz:
-  url: http://sourceforge.net/projects/libpng/rss?path=/zlib
+  url: https://sourceforge.net/projects/libpng/rss?path=/zlib
   regexp: /zlib/(\d+(?:\.\d+)*)/
 optipng:
-  url: http://sourceforge.net/projects/optipng/rss
+  url: https://sourceforge.net/projects/optipng/rss
   regexp: /OptiPNG/optipng-(\d+(?:\.\d+)*)/
 pngcrush:
-  url: http://sourceforge.net/projects/pmt/rss?path=/pngcrush
+  url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
 pngquant:
   url: https://github.com/pornel/pngquant/releases.atom
