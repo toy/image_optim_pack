@@ -17,8 +17,12 @@ script:
   ; else
     bundle exec rubocop
   ; fi
+before_install:
+  if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install imagemagick; fi
 matrix:
   fast_finish: true
   include:
+    - os: osx
+      rvm: default
     - env: RUBOCOP=true
       rvm: default
