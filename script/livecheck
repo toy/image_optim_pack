@@ -52,8 +52,8 @@ end
 
 __END__
 advancecomp:
-  url: https://sourceforge.net/projects/advancemame/rss?path=/advancecomp
-  regexp: /advancecomp/(\d+(?:\.\d+)*)/
+  url: https://github.com/amadvance/advancecomp/releases.atom
+  regexp: /amadvance/advancecomp/releases/tag/v(\d+(?:\.\d+)*)
 gifsicle:
   url: https://www.lcdf.org/gifsicle/
   regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz

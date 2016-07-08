@@ -64,7 +64,7 @@ $$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
 livecheck-$(call downcase,$1) :; @script/livecheck $(call downcase,$1) $($1_VER)
 endef
 
-$(eval $(call archive,ADVANCECOMP, http://prdownloads.sourceforge.net/advancemame/advancecomp-[VER].tar.gz?download))
+$(eval $(call archive,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
 $(eval $(call archive,GIFSICLE,    http://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
 $(eval $(call archive,JHEAD,       http://www.sentex.net/~mwandel/jhead/jhead-[VER].tar.gz))
 $(eval $(call archive,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/[VER].tar.gz))
