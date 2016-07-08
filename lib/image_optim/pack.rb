@@ -64,10 +64,18 @@ class ImageOptim
     end
 
     # downcased `uname -s`
-    OS = `uname -s`.strip.downcase
+    OS = begin
+      `uname -s`.strip.downcase
+    rescue Errno::ENOENT
+      'unknown'
+    end
 
     # downcased `uname -m`
-    ARCH = `uname -m`.strip.downcase
+    ARCH = begin
+      `uname -m`.strip.downcase
+    rescue Errno::ENOENT
+      'unknown'
+    end
 
     # Path to vendor at root of image_optim_pack
     VENDOR_PATH = FSPath('../../../vendor').expand_path(__FILE__)
