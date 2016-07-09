@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = %w[lib]
 
   s.add_dependency 'image_optim', '~> 0.19'
-  s.add_dependency 'fspath', '~> 2.1'
+  s.add_dependency 'fspath', '>= 2.1', '< 4'
 
   s.add_development_dependency 'versionomy', '~> 0.4.4'
   s.add_development_dependency 'blockenspiel', '~> 0.4.0'
