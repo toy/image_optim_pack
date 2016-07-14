@@ -10,7 +10,7 @@ for arg in "$@"; do
   fi
 done
 
-if [ "$(uname -s | tr A-Z a-z)" != 'darwin' ]; then
+if [ `uname -s` != 'Darwin' ]; then
   echo 'expected to run on Mac OS X'
   exit 1
 fi
