@@ -78,7 +78,7 @@ make update-versions # Update versions in Makefile
 
 make clean # Remove build and output directories for current os/arch
 make clean-all # Remove build root and output root directories
-make clobber # `claen-all` and remove download directory
+make clobber # `clean-all` and remove download directory
 ```
 
 ## Copyright
