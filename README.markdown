@@ -8,7 +8,7 @@
 
 Precompiled binaries for [`image_optim`](https://github.com/toy/image_optim).
 
-Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64) and Linux (i686 and x86\_64).
+Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64), Linux (i686 and x86\_64), FreeBSD (i386 and amd64) and OpenBSD (i386 and amd64).
 
 ## Binaries and libraries
 
@@ -37,6 +37,8 @@ Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64) and Linux (i686 and x
 * [pngquant](http://pngquant.org/) by Kornel Lesiński based on code by Greg Roelofs and Jef Poskanzer after an idea by Stefan Schneider ([license](acknowledgements/pngquant.txt))
 * [zlib](http://zlib.net/) by Jean-Loup Gailly and Mark Adler ([license](acknowledgements/zlib.txt))
 
+**NOTE: On FreeBSD and OpenBSD `make` is not the GNU Make, so `gmake` should be used instead.**
+
 You can download all source code using gnu make download target:
 
 ```sh
@@ -58,23 +60,26 @@ gem 'image_optim_pack'
 
 ## Development
 
-Mac OS X binaries and libraries are built on host, others using vagrant.
+Mac OS X binaries and libraries are built on host, others using [vagrant](https://www.vagrantup.com/).
+
+Boxes for vagrant are built using [veewee](https://github.com/jedi4ever/veewee), check [boxes/Rakefile](boxes/Rakefile) and [boxes/definitions](boxes/definitions).
 
 ```sh
 script/run # Build and test all for all oses and architectures
 script/run NO_HALT=1 # Don't halt VMs after building
 
-make all # Build and copy all to output directory for current os/arch, then test
-make run # => all
+make # Build all tools and copy them to vendor/OS-ARCH for current OS and ARCH, then test
+make all # same
+make run # same
 
-make test # Test bins for current os/arch
-make test -i # Continue if one of bins fail
+make livecheck # Check versions
+make update-versions # Update versions in Makefile
 
 make download # Download archives
 make build # Build all without copying to output directory
 
-make livecheck # Check versions
-make update-versions # Update versions in Makefile
+make test # Test bins for current os/arch
+make test -i # Continue if one of bins fail
 
 make clean # Remove build and output directories for current os/arch
 make clean-all # Remove build root and output root directories
