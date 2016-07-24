@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Feed Makefile to this script to set all variables XXX_VER to latest versions
+
 require 'English'
 
 tty = $stdout.tty?

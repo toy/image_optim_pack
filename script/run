@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Build tools on Mac OS X host and in all vms
+
 set -xe
 
 MAKE_COMMAND='make all -j'
