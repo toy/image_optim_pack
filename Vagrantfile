@@ -1,3 +1,5 @@
+Vagrant.require_version '!= 1.8.5' # OpenBSD can't be halted in 1.8.5
+
 Vagrant.configure('2') do |config|
   # don't mess with keys
   config.ssh.insert_key = false
