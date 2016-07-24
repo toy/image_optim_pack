@@ -19,8 +19,7 @@ class ImageOptim
       # Receive path, use last part for arch and last but one part for os
       def initialize(path)
         @path = FSPath(path)
-        @os = @path.dirname.basename.to_s
-        @arch = @path.basename.to_s
+        @os, @arch = @path.basename.to_s.split('-', 2)
       end
 
       # Return path converted to string
@@ -81,7 +80,7 @@ class ImageOptim
     VENDOR_PATH = FSPath('../../../vendor').expand_path(__FILE__)
 
     # List of paths
-    PATHS = VENDOR_PATH.glob('*/*').map{ |path| Path.new(path) }
+    PATHS = VENDOR_PATH.glob('*-*').map{ |path| Path.new(path) }
 
     class << self
       # Return path to directory with binaries

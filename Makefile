@@ -30,9 +30,9 @@ HOST := $(ARCH)-$(if $(IS_DARWIN),apple,pc)-$(OS)
 
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
-BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)/$(ARCH)
+BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
-OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)/$(ARCH)
+OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
 
 # ====== HELPERS ======
 
