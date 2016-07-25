@@ -25,4 +25,4 @@ matrix:
     - os: osx
       rvm: default
     - env: RUBOCOP=true
-      rvm: default
+      rvm: '2'

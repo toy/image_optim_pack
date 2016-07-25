@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'versionomy', '~> 0.4.4'
   s.add_development_dependency 'blockenspiel', '~> 0.4.0'
   s.add_development_dependency 'rspec', '~> 3.0'
-  if Gem::Version.new(RUBY_VERSION) >= Gem::Version.new('1.9.3')
+  if RUBY_VERSION >= '2.0'
     s.add_development_dependency 'rubocop', '~> 0.36'
   end
 end
