@@ -3,7 +3,32 @@
 require 'yaml'
 require 'uri'
 require 'net/http'
-require 'versionomy'
+require 'rubygems/version'
+
+# Compare versions including libjpeg ones (9b <=> 9)
+class Version
+  include Comparable
+
+  attr_reader :string, :parsed
+  alias_method :to_s, :string
+
+  def initialize(string)
+    @string = string
+    @parsed = begin
+      Gem::Version.new(string)
+    rescue ArgumentError
+      nil
+    end
+  end
+
+  def <=>(other)
+    if parsed && other.parsed
+      parsed <=> other.parsed
+    else
+      string <=> other.string
+    end
+  end
+end
 
 bare = ARGV.delete('--bare')
 
@@ -12,7 +37,7 @@ unless [1, 2].include?(ARGV.length)
 end
 
 def version(string)
-  Versionomy.parse(string)
+  Version.new(string)
 end
 
 def get(url)
