@@ -9,14 +9,17 @@ rvm:
   - jruby-18mode
   - jruby-19mode
   - ree
-script:
-  if [ -z "$RUBOCOP" ]; then
-    make test
-    && bundle exec image_optim --info
-    && bundle exec rspec
-  ; else
-    bundle exec rubocop
-  ; fi
+script: |
+  (
+    set -ex
+    if [ -n "$RUBOCOP" ]; then
+      bundle exec rubocop
+    else
+      make test
+      bundle exec image_optim --info
+      bundle exec rspec
+    fi
+  )
 before_install:
   if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install imagemagick; fi
 matrix:
