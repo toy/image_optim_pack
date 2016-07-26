@@ -21,14 +21,18 @@ OS := $(shell uname -s | tr A-Z a-z)
 ARCH := $(shell uname -m)
 
 IS_DARWIN := $(findstring darwin,$(OS))
+IS_LINUX := $(findstring linux,$(OS))
+IS_BSD := $(findstring bsd,$(OS))
+IS_FREEBSD := $(findstring freebsd,$(OS))
+IS_OPENBSD := $(findstring openbsd,$(OS))
 DLEXT := $(if $(IS_DARWIN),.dylib,.so)
 HOST := $(ARCH)-$(if $(IS_DARWIN),apple,pc)-$(OS)
 
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
-BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)/$(ARCH)
+BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
-OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)/$(ARCH)
+OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
 
 # ====== HELPERS ======
 
@@ -36,6 +40,7 @@ downcase = $(shell echo $1 | tr A-Z a-z)
 
 mkpath := mkdir -p
 ln_s := ln -sf
+tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
 
 # lock using %.lock dir, download to %.tmp rename to %, remove %.lock
 define download
@@ -105,7 +110,10 @@ $(call target-build,$1,$2,$3)
 PRODUCTS += $1
 # copy product to output dir
 $$(OUTPUT_DIR)/$$($1_BASENAME) : $$($1_TARGET)
-	strip $$< -Sx -o $$@
+	temppath=`mktemp tmp.XXXXXXXXXX` && \
+		strip $$< -Sx -o "$$$$temppath" && \
+		chmod 755 "$$$$temppath" && \
+		mv "$$$$temppath" $$@
 # short name target
 $(call downcase,$1) : | $$(OUTPUT_DIR)/$$($1_BASENAME)
 endef
@@ -136,6 +144,7 @@ download-tidy-up :
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
 define check_bin
+	@printf "$1: "
 	@test -f $(OUTPUT_DIR)/$1 || (echo "no $1"; false)
 	@# if bin exists check architecture
 	@test ! -f $(OUTPUT_DIR)/$1 || \
@@ -143,15 +152,15 @@ define check_bin
 		(echo "Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)"; false)
 	@# if bin exists check and output version
 	@test ! -f $(OUTPUT_DIR)/$1 || \
-		$(OUTPUT_DIR)/$1 $2 | fgrep --color $3 || \
+		$(OUTPUT_DIR)/$1 $2 | fgrep -o $3 || \
 		(echo "Expected $3, got $$($(OUTPUT_DIR)/$1 $2)"; false)
 endef
 
 ifdef IS_DARWIN
 test : ARCH_STRING := $(ARCH)
-else ifeq (i686,$(ARCH))
+else ifeq (i386,$(ARCH:i686=i386))
 test : ARCH_STRING := Intel 80386
-else ifeq (x86_64,$(ARCH))
+else ifeq (amd64,$(ARCH:x86_64=amd64))
 test : ARCH_STRING := x86-64
 endif
 test :
@@ -209,18 +218,29 @@ endef
 define clean_untar
 	rm -rf $(@D)
 	$(mkpath) $(@D)
-	tar -C $(@D) --strip-components=1 -m -xzf $<
+	$(tar) -C $(@D) --strip-components=1 -xzf $<
 	touch $(@D)/__$(notdir $<)__
 endef
 
 pkgconfig_pwd = perl -pi -e 's/(?<=dir=).*/$$ENV{PWD}/'
 
-libtool_target_soname = cd $(@D) && perl -pi -e 's/(?<=soname_spec=)".*"/"$(@F)"/' -- libtool
+libtool_target_soname = cd $(@D) && perl -pi -e 's/(?<=soname_spec=)".*"/"$(@F)"/ ; s/(?<=library_names_spec=)".*"/"\\\$$libname\\\$$shared_ext"/' -- libtool
 
-chrpath_origin = $(if $(IS_DARWIN),,chrpath -r '$$ORIGIN' $1)
+ifdef IS_DARWIN
+chrpath_origin =
+else ifdef IS_OPENBSD
+chrpath_origin = perl -pi -e 's/XORIGIN/\$$ORIGIN/' -- $1
+else
+chrpath_origin = chrpath -r '$$ORIGIN' $1
+endif
 
+ifdef IS_LINUX
 XORIGIN := -Wl,-rpath,XORIGIN
-XORIGIN := $(if $(IS_DARWIN),,$(XORIGIN))
+else ifdef IS_BSD
+XORIGIN := -Wl,-rpath,XORIGIN -Wl,-z,origin
+else
+XORIGIN :=
+endif
 
 export CC = gcc
 export CXX = g++
@@ -238,6 +258,12 @@ export LDFLAGS := $(GCC_FLAGS)
 
 ifdef IS_DARWIN
 export MACOSX_DEPLOYMENT_TARGET=10.6
+endif
+
+ifdef IS_BSD
+autotool_version = $(shell printf '%s\n' /usr/local/bin/$1-* | egrep -o '[0-9][^-]+$$' | tail -n 1)
+export AUTOCONF_VERSION := $(call autotool_version,autoconf)
+export AUTOMAKE_VERSION := $(call autotool_version,automake)
 endif
 
 ## advpng
@@ -260,7 +286,8 @@ $(JHEAD_TARGET) :; $(clean_untar)
 ## jpeg-recompress
 $(eval $(call depend-build,JPEG-RECOMPRESS,LIBMOZJPEG))
 $(JPEG-RECOMPRESS_TARGET) :; $(clean_untar)
-	cd $(@D) && $(MAKE) jpeg-recompress CC="$(CC) $(GCC_FLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET)
+	cd $(@D) && $(MAKE) jpeg-recompress CC="$(CC) $(GCC_FLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
+		MAKE=$(MAKE) # fix for bsd in jpeg-archive-2.1.1
 
 ## jpegoptim
 $(eval $(call depend,JPEGOPTIM,LIBJPEG))

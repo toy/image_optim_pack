@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+# Get latest version of tools
+
 require 'yaml'
 require 'uri'
 require 'net/http'
