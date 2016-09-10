@@ -12,7 +12,7 @@ for arg in "$@"; do
   fi
 done
 
-if [ `uname -s` != 'Darwin' ]; then
+if [[ `uname -s` != 'Darwin' ]]; then
   echo 'expected to run on Mac OS X'
   exit 1
 fi
@@ -48,5 +48,5 @@ for vm in $(vagrant status --machine-readable | cut -d, -f2 | sort -u); do
   # rsync files in vendor from the box
   rsync -e "ssh -F $ssh_config" -aR --del $vm:/vagrant/./vendor/$vm .
 
-  [ -n "$NO_HALT" ] || vagrant halt $vm
+  [[ -n "$NO_HALT" ]] || vagrant halt $vm
 done
