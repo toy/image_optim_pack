@@ -33,7 +33,7 @@ for vm in $(vagrant status --machine-readable | cut -d, -f2 | sort -u); do
   rsync -e "ssh -F $ssh_config" -aR --del Makefile download vendor/$vm $vm:/vagrant
 
   # sync time and run make
-  vagrant ssh $vm -c "
+  ssh -F $ssh_config $vm "
     set -ex
     sudo ntpdate pool.ntp.org
 
