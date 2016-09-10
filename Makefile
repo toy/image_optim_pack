@@ -34,6 +34,11 @@ BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
 OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
 
+ERROR_COLOUR=\033[31m
+GREEN_COLOUR=\033[32m
+MAGENTA_COLOUR=\033[35m
+RESET_COLOUR=\033[0m
+
 # ====== HELPERS ======
 
 downcase = $(shell echo $1 | tr A-Z a-z)
@@ -144,22 +149,20 @@ download-tidy-up :
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
 define check_bin
-	@printf "$1: "
-	@test -f $(OUTPUT_DIR)/$1 || (echo "no $1"; false)
-	@# if bin exists check architecture
-	@test ! -f $(OUTPUT_DIR)/$1 || \
-		file -b $(OUTPUT_DIR)/$1 | grep -q '$(ARCH_STRING)' || \
-		(echo "Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)"; false)
-	@# if bin exists check and output version
-	@test ! -f $(OUTPUT_DIR)/$1 || \
-		$(OUTPUT_DIR)/$1 $2 | fgrep -o $3 || \
-		(echo "Expected $3, got $$($(OUTPUT_DIR)/$1 $2)"; false)
+	@test -f $(OUTPUT_DIR)/$1 || \
+		{ printf "$(ERROR_COLOUR)no $1 found$(RESET_COLOUR)\n"; exit 1; }
+	@printf "$1: "; \
+		VERSION=$$($(OUTPUT_DIR)/$1 $2 | fgrep -o $3) || \
+		{ printf "$(ERROR_COLOUR)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(RESET_COLOUR)\n"; exit 1; }; \
+		ARCH=$$(file -b $(OUTPUT_DIR)/$1 | fgrep -o '$(ARCH_STRING)') || \
+		{ printf "$(ERROR_COLOUR)Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)$(RESET_COLOUR)\n"; exit 1; }; \
+		printf "$(GREEN_COLOUR)$$VERSION$(RESET_COLOUR) / $(MAGENTA_COLOUR)$$ARCH$(RESET_COLOUR)\n"
 endef
 
 ifdef IS_DARWIN
 test : ARCH_STRING := $(ARCH)
 else ifeq (i386,$(ARCH:i686=i386))
-test : ARCH_STRING := Intel 80386
+test : ARCH_STRING := 80386
 else ifeq (amd64,$(ARCH:x86_64=amd64))
 test : ARCH_STRING := x86-64
 endif
