@@ -2,7 +2,7 @@
 
 # Build tools on Mac OS X host and in all vms
 
-set -ex
+set -e
 
 MAKE_TASK='all -j'
 
@@ -34,7 +34,8 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'.*|.*/\$1/" Vagrantfile | sort -u); do
 
   # sync time and run make
   ssh -F $ssh_config $vm "
-    set -ex
+    set -e
+
     sudo ntpdate pool.ntp.org
 
     cd /vagrant
