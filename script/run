@@ -21,7 +21,7 @@ for arch in i386 x86_64; do
   make $MAKE_TASK ARCH=$arch
 done
 
-for vm in $(vagrant status --machine-readable | cut -d, -f2 | sort -u); do
+for vm in $(perl -pe "s/.*?'(.+?-.+?)'.*|.*/\$1/" Vagrantfile | sort -u); do
   vagrant up $vm
 
   # create ssh config
