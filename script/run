@@ -6,11 +6,23 @@ set -e
 
 MAKE_TASK='all -j'
 
+filters=()
 for arg in "$@"; do
   if [[ "$arg" =~ ^([A-Z_]+)=(.*)$ ]]; then
     eval "$(printf %q=%q "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}")"
+  else
+    filters+=($arg)
   fi
 done
+filters=$(IFS='|'; echo "${filters[*]}")
+
+passes-filter() {
+  [[ '' = "$filters" ]] || [[ "$1" =~ $filters ]]
+}
+
+header() {
+  printf '\033[1;7m######## %s ########\033[0m\n' "$1"
+}
 
 if [[ `uname -s` != 'Darwin' ]]; then
   echo 'expected to run on Mac OS X'
@@ -18,10 +30,16 @@ if [[ `uname -s` != 'Darwin' ]]; then
 fi
 
 for arch in i386 x86_64; do
+  passes-filter "darwin-$arch" || continue
+  header "darwin-$arch"
+
   make $MAKE_TASK ARCH=$arch
 done
 
 for vm in $(perl -pe "s/.*?'(.+?-.+?)'.*|.*/\$1/" Vagrantfile | sort -u); do
+  passes-filter "$vm" || continue
+  header "$vm"
+
   vagrant up $vm
 
   # create ssh config
