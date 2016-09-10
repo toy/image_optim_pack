@@ -4,6 +4,14 @@ Vagrant.configure('2') do |config|
   # don't mess with keys
   config.ssh.insert_key = false
 
+  # doesn't make sense to check updates for local boxes
+  config.vm.box_check_update = false
+
+  # there are no guest additions
+  config.vm.provider 'virtualbox' do |vb|
+    vb.check_guest_additions = false
+  end
+
   # handle manually using rsync
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
