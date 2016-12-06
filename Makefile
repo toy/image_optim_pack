@@ -13,7 +13,7 @@ LIBPNG_VER := 1.6.26
 LIBZ_VER := 1.2.8
 OPTIPNG_VER := 0.7.6
 PNGCRUSH_VER := 1.8.10
-PNGQUANT_VER := 2.7.1
+PNGQUANT_VER := 2.8.1
 
 # ====== CONSTANTS ======
 
@@ -86,6 +86,12 @@ $(eval $(call archive,LIBZ,        http://prdownloads.sourceforge.net/libpng/zli
 $(eval $(call archive,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive,PNGQUANT,    https://github.com/pornel/pngquant/archive/[VER].tar.gz))
+
+PNGQUANT_GIT := $(DL_DIR)/pngquant.git
+$(PNGQUANT_GIT) :; git clone --recursive https://github.com/pornel/pngquant.git $@
+$(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
+	cd $(PNGQUANT_GIT) && git checkout -q $(PNGQUANT_VER) && git submodule -q update
+	cd $(PNGQUANT_GIT) && tar --exclude=.git -czf $(PNGQUANT_TGZ) .
 
 # ====== PRODUCTS ======
 
