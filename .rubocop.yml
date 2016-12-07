@@ -3,6 +3,9 @@ AllCops:
     - '*.gemspec'
     - Vagrantfile
 
+Bundler/OrderedGems:
+  Enabled: false
+
 Lint/EndAlignment:
   AlignWith: variable
 
