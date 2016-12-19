@@ -85,13 +85,18 @@ $(eval $(call archive,LIBPNG,      http://prdownloads.sourceforge.net/libpng/lib
 $(eval $(call archive,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
-$(eval $(call archive,PNGQUANT,    https://github.com/pornel/pngquant/archive/[VER].tar.gz))
+# $(eval $(call archive,PNGQUANT,    https://github.com/pornel/pngquant/archive/[VER].tar.gz))
 
+PNGQUANT_URL := https://github.com/pornel/pngquant/archive/$(PNGQUANT_VER).tar.gz
+PNGQUANT_DIR := $(BUILD_DIR)/pngquant
+PNGQUANT_TGZ := $(DL_DIR)/pngquant-$(PNGQUANT_VER).tar.gz
+ARCHIVES += PNGQUANT
 PNGQUANT_GIT := $(DL_DIR)/pngquant.git
 $(PNGQUANT_GIT) :; git clone --recursive https://github.com/pornel/pngquant.git $@
 $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
 	cd $(PNGQUANT_GIT) && git checkout -q $(PNGQUANT_VER) && git submodule -q update
 	cd $(PNGQUANT_GIT) && tar --exclude=.git -czf $(PNGQUANT_TGZ) .
+livecheck-pngquant :; @script/livecheck pngquant $(PNGQUANT_VER)
 
 # ====== PRODUCTS ======
 
