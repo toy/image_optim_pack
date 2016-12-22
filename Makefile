@@ -71,7 +71,6 @@ $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER)$(strip $3).tar.gz
 ARCHIVES += $1
 # download archive from url
 $$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
-livecheck-$(call downcase,$1) :; @script/livecheck $(call downcase,$1) $($1_VER)
 endef
 
 $(eval $(call archive,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
@@ -96,7 +95,6 @@ $(PNGQUANT_GIT) :; git clone --recursive https://github.com/pornel/pngquant.git 
 $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
 	cd $(PNGQUANT_GIT) && git checkout -q $(PNGQUANT_VER) && git submodule -q update
 	cd $(PNGQUANT_GIT) && tar --exclude=.git -czf $(PNGQUANT_TGZ) .
-livecheck-pngquant :; @script/livecheck pngquant $(PNGQUANT_VER)
 
 # ====== PRODUCTS ======
 
@@ -189,7 +187,7 @@ test :
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 
-livecheck : $(foreach archive,$(ARCHIVES),livecheck-$(call downcase,$(archive)))
+livecheck :; @$(foreach archive,$(ARCHIVES),script/livecheck $(call downcase,$(archive)) $($(archive)_VER);)
 
 update-versions :
 	cat Makefile | script/update_versions > Makefile.tmp
