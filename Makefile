@@ -63,11 +63,10 @@ ARCHIVES :=
 
 # $1 - name of archive
 # $2 - url of archive with [VER] for replace with version
-# $3 - optional addition to version string
 define archive
-$1_URL := $(subst [VER],$($1_VER)$(strip $3),$(strip $2))
+$1_URL := $(subst [VER],$($1_VER),$(strip $2))
 $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
-$1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER)$(strip $3).tar.gz
+$1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
 ARCHIVES += $1
 # download archive from url
 $$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
