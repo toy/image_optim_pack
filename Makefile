@@ -47,6 +47,12 @@ mkpath := mkdir -p
 ln_s := ln -sf
 tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
 
+# ====== ARCHIVES ======
+
+$(shell $(mkpath) $(DL_DIR)) # just create dl dir
+
+ARCHIVES :=
+
 # lock using %.lock dir, download to %.tmp rename to %, remove %.lock
 define download
 	while ! mkdir $2.lock 2> /dev/null; do sleep 1; done
@@ -55,45 +61,45 @@ define download
 	rm -r $2.lock
 endef
 
-# ====== ARCHIVES ======
-
-$(shell $(mkpath) $(DL_DIR)) # just create dl dir
-
-ARCHIVES :=
+# $1 - name of archive
+define archive
+ARCHIVES += $1
+$1_DIR := $(BUILD_DIR)/$(call downcase,$1)
+$1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
+endef
 
 # $1 - name of archive
 # $2 - url of archive with [VER] for replace with version
-define archive
+define archive-dl
+$(call archive,$1)
 $1_URL := $(subst [VER],$($1_VER),$(strip $2))
-$1_DIR := $(BUILD_DIR)/$(call downcase,$1)
-$1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
-ARCHIVES += $1
 # download archive from url
 $$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
 endef
 
-$(eval $(call archive,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
-$(eval $(call archive,GIFSICLE,    http://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
-$(eval $(call archive,JHEAD,       http://www.sentex.net/~mwandel/jhead/jhead-[VER].tar.gz))
-$(eval $(call archive,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/[VER].tar.gz))
-$(eval $(call archive,JPEGOPTIM,   http://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
-$(eval $(call archive,LIBJPEG,     http://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
-$(eval $(call archive,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
-$(eval $(call archive,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
-$(eval $(call archive,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
-$(eval $(call archive,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
-$(eval $(call archive,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
-# $(eval $(call archive,PNGQUANT,    https://github.com/pornel/pngquant/archive/[VER].tar.gz))
+$(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
+$(eval $(call archive-dl,GIFSICLE,    http://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
+$(eval $(call archive-dl,JHEAD,       http://www.sentex.net/~mwandel/jhead/jhead-[VER].tar.gz))
+$(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/[VER].tar.gz))
+$(eval $(call archive-dl,JPEGOPTIM,   http://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
+$(eval $(call archive-dl,LIBJPEG,     http://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
+$(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
+$(eval $(call archive-dl,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
+$(eval $(call archive-dl,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
+$(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
+$(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
+$(eval $(call archive,PNGQUANT))
 
-PNGQUANT_URL := https://github.com/pornel/pngquant/archive/$(PNGQUANT_VER).tar.gz
-PNGQUANT_DIR := $(BUILD_DIR)/pngquant
-PNGQUANT_TGZ := $(DL_DIR)/pngquant-$(PNGQUANT_VER).tar.gz
-ARCHIVES += PNGQUANT
 PNGQUANT_GIT := $(DL_DIR)/pngquant.git
 $(PNGQUANT_GIT) :; git clone --recursive https://github.com/pornel/pngquant.git $@
 $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
 	cd $(PNGQUANT_GIT) && git checkout -q $(PNGQUANT_VER) && git submodule -q update
 	cd $(PNGQUANT_GIT) && $(tar) --exclude=.git -czf $(PNGQUANT_TGZ) .
+
+download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+
+download-tidy-up :
+	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
 
 # ====== PRODUCTS ======
 
@@ -149,10 +155,6 @@ $(eval $(call target,PNGQUANT))
 
 all : $(call downcase,$(PRODUCTS))
 	$(MAKE) test
-
-download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
-download-tidy-up :
-	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
 
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
