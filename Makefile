@@ -34,10 +34,10 @@ BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
 OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
 
-ERROR_COLOUR=\033[31m
-GREEN_COLOUR=\033[32m
-MAGENTA_COLOUR=\033[35m
-RESET_COLOUR=\033[0m
+ANSI_RED=\033[31m
+ANSI_GREEN=\033[32m
+ANSI_MAGENTA=\033[35m
+ANSI_RESET=\033[0m
 
 # ====== HELPERS ======
 
@@ -159,13 +159,13 @@ build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
 
 define check_bin
 	@test -f $(OUTPUT_DIR)/$1 || \
-		{ printf "$(ERROR_COLOUR)no $1 found$(RESET_COLOUR)\n"; exit 1; }
+		{ printf "$(ANSI_RED)no $1 found$(ANSI_RESET)\n"; exit 1; }
 	@printf "$1: "; \
 		VERSION=$$($(OUTPUT_DIR)/$1 $2 | fgrep -o $3) || \
-		{ printf "$(ERROR_COLOUR)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(RESET_COLOUR)\n"; exit 1; }; \
+		{ printf "$(ANSI_RED)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(ANSI_RESET)\n"; exit 1; }; \
 		ARCH=$$(file -b $(OUTPUT_DIR)/$1 | fgrep -o '$(ARCH_STRING)') || \
-		{ printf "$(ERROR_COLOUR)Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)$(RESET_COLOUR)\n"; exit 1; }; \
-		printf "$(GREEN_COLOUR)$$VERSION$(RESET_COLOUR) / $(MAGENTA_COLOUR)$$ARCH$(RESET_COLOUR)\n"
+		{ printf "$(ANSI_RED)Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)$(ANSI_RESET)\n"; exit 1; }; \
+		printf "$(ANSI_GREEN)$$VERSION$(ANSI_RESET) / $(ANSI_MAGENTA)$$ARCH$(ANSI_RESET)\n"
 endef
 
 ifdef IS_DARWIN
