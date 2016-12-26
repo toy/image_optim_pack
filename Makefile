@@ -310,7 +310,10 @@ $(JPEGOPTIM_TARGET) :; $(clean_untar)
 
 ## jpegtran
 $(eval $(call depend,JPEGTRAN,LIBJPEG))
-$(JPEGTRAN_TARGET) :; # built in $(LIBJPEG_TARGET)
+$(JPEGTRAN_TARGET) :
+	cd $(@D) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
+	cd $(@D) && $(ln_s) .libs/jpegtran .
+	$(call chrpath_origin,$(JPEGTRAN_TARGET))
 
 ## libjpeg
 $(LIBJPEG_TARGET) :; $(clean_untar)
@@ -321,9 +324,7 @@ ifdef IS_DARWIN
 else
 	cd $(@D) && $(MAKE) libjpeg.la
 endif
-	cd $(@D) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
-	cd $(@D) && $(ln_s) .libs/libjpeg$(DLEXT) .libs/jpegtran .
-	$(call chrpath_origin,$(JPEGTRAN_TARGET))
+	cd $(@D) && $(ln_s) .libs/libjpeg$(DLEXT) .
 
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :; $(clean_untar)
