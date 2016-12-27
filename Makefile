@@ -97,9 +97,11 @@ $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
 	rm -r $@.lock
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+.PHONY : download
 
 download-tidy-up :
 	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)) $(PNGQUANT_GIT),$(wildcard $(DL_DIR)/*.*))
+.PHONY : download-tidy-up
 
 # ====== PRODUCTS ======
 
@@ -153,8 +155,10 @@ $(eval $(call target,PNGQUANT))
 
 all : $(call downcase,$(PRODUCTS))
 	$(MAKE) test
+.PHONY : all
 
 build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
+.PHONY : build
 
 define check_bin
 	@test -f $(OUTPUT_DIR)/$1 || \
@@ -185,25 +189,31 @@ test :
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
+.PHONY : test
 
 livecheck :; @$(foreach archive,$(ARCHIVES),script/livecheck $(call downcase,$(archive)) $($(archive)_VER);)
+.PHONY : livecheck
 
 update-versions :
 	cat Makefile | script/update_versions > Makefile.tmp
 	mv Makefile.tmp Makefile
+.PHONY : update-versions
 
 # ====== CLEAN ======
 
 clean :
 	rm -rf $(BUILD_DIR)
 	rm -rf $(OUTPUT_DIR)
+.PHONY : clean
 
 clean-all :
 	rm -rf $(BUILD_ROOT_DIR)
 	rm -rf $(OUTPUT_ROOT_DIR)
+.PHONY : clean-all
 
 clobber : clean-all
 	rm -rf $(DL_DIR)
+.PHONY : clobber
 
 # ====== BUILDING ======
 
