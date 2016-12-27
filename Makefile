@@ -99,7 +99,7 @@ $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 
 download-tidy-up :
-	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
+	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)) $(PNGQUANT_GIT),$(wildcard $(DL_DIR)/*.*))
 
 # ====== PRODUCTS ======
 
