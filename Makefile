@@ -91,8 +91,10 @@ $(eval $(call archive,PNGQUANT))
 PNGQUANT_GIT := $(DL_DIR)/pngquant.git
 $(PNGQUANT_GIT) :; git clone --recursive https://github.com/pornel/pngquant.git $@
 $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
-	cd $(PNGQUANT_GIT) && git checkout -q $(PNGQUANT_VER) && git submodule -q update
+	while ! mkdir $@.lock 2> /dev/null; do sleep 1; done
+	cd $(PNGQUANT_GIT) && git fetch && git checkout -q $(PNGQUANT_VER) && git submodule -q update
 	cd $(PNGQUANT_GIT) && $(tar) --exclude=.git -czf $(PNGQUANT_TGZ) .
+	rm -r $@.lock
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 
