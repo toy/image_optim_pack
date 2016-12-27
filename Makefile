@@ -33,6 +33,7 @@ BUILD_ROOT_DIR := $(CURDIR)/build
 BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
 OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
+$(shell mkdir -p $(DL_DIR) $(BUILD_DIR) $(OUTPUT_DIR))
 
 ANSI_RED=\033[31m
 ANSI_GREEN=\033[32m
@@ -43,13 +44,10 @@ ANSI_RESET=\033[0m
 
 downcase = $(shell echo $1 | tr A-Z a-z)
 
-mkpath := mkdir -p
 ln_s := ln -sf
 tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
 
 # ====== ARCHIVES ======
-
-$(shell $(mkpath) $(DL_DIR)) # just create dl dir
 
 ARCHIVES :=
 
@@ -102,8 +100,6 @@ download-tidy-up :
 	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)) $(PNGQUANT_GIT),$(wildcard $(DL_DIR)/*.*))
 
 # ====== PRODUCTS ======
-
-$(shell $(mkpath) $(OUTPUT_DIR)) # just create output dir
 
 PRODUCTS :=
 
@@ -230,7 +226,7 @@ endef
 
 define clean_untar
 	rm -rf $(@D)
-	$(mkpath) $(@D)
+	mkdir $(@D)
 	$(tar) -C $(@D) --strip-components=1 -xzf $<
 	touch $(@D)/__$(notdir $<)__
 endef
