@@ -71,7 +71,6 @@ script/run darwin 64 # Build only platforms matching darwin or 64
 
 make # Build all tools and copy them to vendor/OS-ARCH for current OS and ARCH, then test
 make all # same
-make run # same
 
 make livecheck # Check versions
 make update-versions # Update versions in Makefile
