@@ -135,14 +135,15 @@ endef
 define target
 $(call target-build,$1,$2,$3)
 PRODUCTS += $1
+$1_DESTINATION := $$(OUTPUT_DIR)/$$($1_BASENAME)
 # copy product to output dir
-$$(OUTPUT_DIR)/$$($1_BASENAME) : $$($1_TARGET)
+$$($1_DESTINATION) : $$($1_TARGET)
 	temppath=`mktemp tmp.XXXXXXXXXX` && \
 		strip $$< -Sx -o "$$$$temppath" && \
 		chmod 755 "$$$$temppath" && \
 		mv "$$$$temppath" $$@
 # short name target
-$(call downcase,$1) : | $$(OUTPUT_DIR)/$$($1_BASENAME)
+$(call downcase,$1) : | $$($1_DESTINATION)
 endef
 
 $(eval $(call target,ADVPNG,ADVANCECOMP))
@@ -242,7 +243,7 @@ endef
 define depend
 $(call depend-build,$1,$2)
 # depend output of this product on output of every specified product
-$$(OUTPUT_DIR)/$$($1_BASENAME) : $(foreach dep,$2,$$(OUTPUT_DIR)/$$($(dep)_BASENAME))
+$$($1_DESTINATION) : $(foreach dep,$2,$$($(dep)_DESTINATION))
 endef
 
 pkgconfig_pwd = perl -pi -e 's/(?<=dir=).*/$$ENV{PWD}/'
