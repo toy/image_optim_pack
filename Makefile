@@ -59,11 +59,21 @@ define download
 	rm -r $2.lock
 endef
 
+define clean_untar
+	rm -rf $(@D)
+	mkdir $(@D)
+	$(tar) -C $(@D) --strip-components=1 -xzf $<
+	touch $(@D)/__$(notdir $<)__
+endef
+
 # $1 - name of archive
 define archive
 ARCHIVES += $1
 $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
 $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
+$1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
+$$($1_EXTRACTED) : $$($1_TGZ)
+	$$(clean_untar)
 endef
 
 # $1 - name of archive
@@ -114,11 +124,9 @@ define target-build
 $1_BASENAME := $(or $3,$(call downcase,$1))
 $1_DIR := $($(or $2,$1)_DIR)
 $1_TGZ := $($(or $2,$1)_TGZ)
+$1_EXTRACTED := $($(or $2,$1)_EXTRACTED)
 $1_TARGET := $$($1_DIR)/$$($1_BASENAME)
-# first dependency on archive
-$$($1_TARGET) $$($1_DIR)/__$$(notdir $$($1_TGZ))__ : $$($1_TGZ)
-# second dependency on check file
-$$($1_TARGET) : $$($1_DIR)/__$$(notdir $$($1_TGZ))__
+$$($1_TARGET) : $$($1_EXTRACTED)
 endef
 
 # $1 - product name
@@ -221,7 +229,8 @@ clobber : clean-all
 # $2 - list of dependency products
 define depend-build
 # depend this product on every specified product
-$$($1_TARGET) : $(foreach dep,$2,$$($(dep)_TARGET))
+$($1_EXTRACTED) : $$(filter-out $($1_EXTRACTED),$(foreach dep,$2,$$($(dep)_EXTRACTED)))
+$($1_TARGET) : $(foreach dep,$2,$$($(dep)_TARGET))
 # add dependent product dir to CPATH, LIBRARY_PATH and PKG_CONFIG_PATH
 $($1_TARGET) : export CPATH := $(subst $(eval) ,:,$(foreach dep,$2,$$($(dep)_DIR)))
 $($1_TARGET) : export LIBRARY_PATH := $$(CPATH)
@@ -234,13 +243,6 @@ define depend
 $(call depend-build,$1,$2)
 # depend output of this product on output of every specified product
 $$(OUTPUT_DIR)/$$($1_BASENAME) : $(foreach dep,$2,$$(OUTPUT_DIR)/$$($(dep)_BASENAME))
-endef
-
-define clean_untar
-	rm -rf $(@D)
-	mkdir $(@D)
-	$(tar) -C $(@D) --strip-components=1 -xzf $<
-	touch $(@D)/__$(notdir $<)__
 endef
 
 pkgconfig_pwd = perl -pi -e 's/(?<=dir=).*/$$ENV{PWD}/'
@@ -289,30 +291,30 @@ endif
 
 ## advpng
 $(eval $(call depend,ADVPNG,LIBZ))
-$(ADVPNG_TARGET) :; $(clean_untar)
+$(ADVPNG_TARGET) :
 	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)"
 	cd $(@D) && $(MAKE) advpng
 	$(call chrpath_origin,$@)
 
 ## gifsicle
-$(GIFSICLE_TARGET) :; $(clean_untar)
+$(GIFSICLE_TARGET) :
 	cd $(@D) && ./configure
 	cd $(@D) && $(MAKE) gifsicle
 	cd $(@D) && $(ln_s) src/gifsicle .
 
 ## jhead
-$(JHEAD_TARGET) :; $(clean_untar)
+$(JHEAD_TARGET) :
 	cd $(@D) && $(MAKE) jhead CC="$(CC) $(GCC_FLAGS)"
 
 ## jpeg-recompress
 $(eval $(call depend-build,JPEG-RECOMPRESS,LIBMOZJPEG))
-$(JPEG-RECOMPRESS_TARGET) :; $(clean_untar)
+$(JPEG-RECOMPRESS_TARGET) :
 	cd $(@D) && $(MAKE) jpeg-recompress CC="$(CC) $(GCC_FLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
 		MAKE=$(MAKE) # fix for bsd in jpeg-archive-2.1.1
 
 ## jpegoptim
 $(eval $(call depend,JPEGOPTIM,LIBJPEG))
-$(JPEGOPTIM_TARGET) :; $(clean_untar)
+$(JPEGOPTIM_TARGET) :
 	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)" --host $(HOST)
 	cd $(@D) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
@@ -325,7 +327,7 @@ $(JPEGTRAN_TARGET) :
 	$(call chrpath_origin,$(JPEGTRAN_TARGET))
 
 ## libjpeg
-$(LIBJPEG_TARGET) :; $(clean_untar)
+$(LIBJPEG_TARGET) :
 	cd $(@D) && ./configure CC="$(CC) $(GCC_FLAGS)"
 	$(libtool_target_soname)
 ifdef IS_DARWIN
@@ -336,7 +338,7 @@ endif
 	cd $(@D) && $(ln_s) .libs/libjpeg$(DLEXT) .
 
 ## libmozjpeg
-$(LIBMOZJPEG_TARGET) :; $(clean_untar)
+$(LIBMOZJPEG_TARGET) :
 	cd $(@D) && autoreconf -fiv
 	cd $(@D) && ./configure --host $(HOST)
 	cd $(@D)/simd && $(MAKE)
@@ -345,7 +347,7 @@ $(LIBMOZJPEG_TARGET) :; $(clean_untar)
 
 ## libpng
 $(eval $(call depend,LIBPNG,LIBZ))
-$(LIBPNG_TARGET) :; $(clean_untar)
+$(LIBPNG_TARGET) :
 	cd $(@D) && ./configure CC="$(CC) $(GCC_FLAGS)"
 	cd $(@D) && $(pkgconfig_pwd) -- *.pc
 	cd $(@D) && perl -pi -e 's/(?<=lpng)\d+//g' -- *.pc # %MAJOR%%MINOR% suffix
@@ -364,14 +366,14 @@ $(LIBZ_TARGET) : export LDSHARED = $(CC) -dynamiclib -install_name @loader_path/
 else
 $(LIBZ_TARGET) : export LDSHARED = $(CC) -shared -Wl,-soname,$(@F),--version-script,zlib.map
 endif
-$(LIBZ_TARGET) :; $(clean_untar)
+$(LIBZ_TARGET) :
 	cd $(@D) && ./configure
 	cd $(@D) && $(pkgconfig_pwd) -- *.pc
 	cd $(@D) && $(MAKE) placebo
 
 ## optipng
 $(eval $(call depend,OPTIPNG,LIBPNG LIBZ))
-$(OPTIPNG_TARGET) :; $(clean_untar)
+$(OPTIPNG_TARGET) :
 	cd $(@D) && ./configure -with-system-libs
 	cd $(@D) && $(MAKE) all LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
 	cd $(@D) && $(ln_s) src/optipng/optipng .
@@ -379,7 +381,7 @@ $(OPTIPNG_TARGET) :; $(clean_untar)
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
-$(PNGCRUSH_TARGET) :; $(clean_untar)
+$(PNGCRUSH_TARGET) :
 	cd $(@D) && rm -f png.h pngconf.h
 	cd $(@D) && $(MAKE) -f Makefile pngcrush \
 		LIBS="-lpng -lz -lm" \
@@ -389,7 +391,7 @@ $(PNGCRUSH_TARGET) :; $(clean_untar)
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
-$(PNGQUANT_TARGET) :; $(clean_untar)
+$(PNGQUANT_TARGET) :
 	cd $(@D) && ./configure --without-cocoa --extra-ldflags="$(XORIGIN)"
 	cd $(@D) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)
