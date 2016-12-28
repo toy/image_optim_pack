@@ -153,11 +153,11 @@ $(eval $(call target,PNGQUANT))
 
 # ====== TARGETS ======
 
-all : $(call downcase,$(PRODUCTS))
-	$(MAKE) test
+all : build
+	@$(MAKE) test
 .PHONY : all
 
-build : $(foreach product,$(PRODUCTS),$($(product)_TARGET))
+build : $(call downcase,$(PRODUCTS))
 .PHONY : build
 
 define check_bin
