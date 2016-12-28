@@ -51,21 +51,6 @@ tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar
 
 ARCHIVES :=
 
-# lock using %.lock dir, download to %.tmp rename to %, remove %.lock
-define download
-	while ! mkdir $2.lock 2> /dev/null; do sleep 1; done
-	wget -q -O $2.tmp $1
-	mv $2.tmp $2
-	rm -r $2.lock
-endef
-
-define clean_untar
-	rm -rf $(@D)
-	mkdir $(@D)
-	$(tar) -C $(@D) --strip-components=1 -xzf $<
-	touch $(@D)/__$(notdir $<)__
-endef
-
 # $1 - name of archive
 define archive
 ARCHIVES += $1
@@ -73,16 +58,22 @@ $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
 $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
 $1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
 $$($1_EXTRACTED) : $$($1_TGZ)
-	$$(clean_untar)
+	rm -rf $$(@D)
+	mkdir $$(@D)
+	$(tar) -C $$(@D) --strip-components=1 -xzf $$<
+	touch $$(@D)/__$$(notdir $$<)__
 endef
 
 # $1 - name of archive
 # $2 - url of archive with [VER] for replace with version
 define archive-dl
 $(call archive,$1)
-$1_URL := $(subst [VER],$($1_VER),$(strip $2))
 # download archive from url
-$$($1_TGZ) :; $$(call download,$$($1_URL),$$@)
+$$($1_TGZ) :
+	while ! mkdir $$@.lock 2> /dev/null; do sleep 1; done
+	wget -q -O $$@.tmp $(subst [VER],$($1_VER),$(strip $2))
+	mv $$@.tmp $$@
+	rm -r $$@.lock
 endef
 
 $(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
