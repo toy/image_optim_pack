@@ -42,6 +42,9 @@ Style/IfUnlessModifier:
 Style/IndentHash:
   EnforcedStyle: consistent
 
+Style/MultilineBlockChain:
+  Enabled: false
+
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%w': '[]'
