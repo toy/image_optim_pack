@@ -194,9 +194,11 @@ test :
 livecheck :; @$(foreach archive,$(ARCHIVES),script/livecheck $(call downcase,$(archive)) $($(archive)_VER);)
 .PHONY : livecheck
 
-update-versions :
-	cat Makefile | script/update_versions > Makefile.tmp
-	mv Makefile.tmp Makefile
+Makefile.updated :
+	cat Makefile | script/update_versions > Makefile.updated
+
+update-versions : Makefile.updated
+	mv Makefile.updated Makefile
 .PHONY : update-versions
 
 # ====== CLEAN ======
