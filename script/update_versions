@@ -2,13 +2,11 @@
 
 # Feed Makefile to this script to set all variables XXX_VER to latest versions
 
-require 'English'
-
 ARGF.map do |line|
   if (name = line[/^([A-Z]+)_VER *:= *.*/, 1])
     Thread.new do
       version = `script/livecheck --bare #{name}`.strip
-      abort unless $CHILD_STATUS.success?
+      abort unless $?.success?
       "#{name}_VER := #{version}\n"
     end
   else

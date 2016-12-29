@@ -62,6 +62,9 @@ Style/SpaceBeforeBlockBraces:
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
+Style/SpecialGlobalVars:
+  Enabled: false
+
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: no_comma
 
