@@ -71,12 +71,12 @@ script/run darwin 64 # Build only platforms matching darwin or 64
 
 make # Build all tools and copy them to vendor/OS-ARCH for current OS and ARCH, then test
 make all # same
-make run # same
 
 make livecheck # Check versions
 make update-versions # Update versions in Makefile
 
 make download # Download archives
+make download-tidy-up # Remove old archives
 make build # Build all without copying to output directory
 
 make test # Test bins for current os/arch

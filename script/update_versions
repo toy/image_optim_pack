@@ -2,18 +2,21 @@
 
 # Feed Makefile to this script to set all variables XXX_VER to latest versions
 
-require 'English'
-
-tty = $stdout.tty?
-
-ARGF.each do |line|
+ARGF.map do |line|
   if (name = line[/^([A-Z]+)_VER *:= *.*/, 1])
-    $stderr << name << ' := ' unless tty
-    latest_version = `script/livecheck --bare #{name}`.strip
-    abort unless $CHILD_STATUS.success?
-    $stderr << latest_version << "\n" unless tty
-    $stdout << "#{name}_VER := #{latest_version}\n"
+    Thread.new do
+      version = `script/livecheck --bare #{name}`.strip
+      abort unless $?.success?
+      "#{name}_VER := #{version}\n"
+    end
   else
-    $stdout << line
+    line
+  end
+end.each do |out|
+  if out.respond_to?(:value)
+    $stderr << out.value unless $stdout.tty?
+    $stdout << out.value
+  else
+    $stdout << out
   end
 end

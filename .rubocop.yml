@@ -42,6 +42,9 @@ Style/IfUnlessModifier:
 Style/IndentHash:
   EnforcedStyle: consistent
 
+Style/MultilineBlockChain:
+  Enabled: false
+
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%w': '[]'
@@ -58,6 +61,9 @@ Style/SpaceBeforeBlockBraces:
 
 Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+Style/SpecialGlobalVars:
+  Enabled: false
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: no_comma

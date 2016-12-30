@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'image_optim'
 require 'image_optim/cmd'
 require 'tempfile'
-require 'English'
 
 describe ImageOptim do
   before do
