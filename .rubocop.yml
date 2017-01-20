@@ -6,20 +6,22 @@ AllCops:
 Bundler/OrderedGems:
   Enabled: false
 
-Lint/EndAlignment:
-  AlignWith: variable
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
 
 Metrics/MethodLength:
   Max: 15
+
+Security/YAMLLoad:
+  Exclude:
+    - script/livecheck
 
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
-
-Style/CaseIndentation:
-  IndentWhenRelativeTo: end
 
 Style/DotPosition:
   EnforcedStyle: trailing
