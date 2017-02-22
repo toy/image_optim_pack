@@ -23,3 +23,6 @@ matrix:
     - env: RUBOCOP=✓
       rvm: '2'
       script: bundle exec rubocop
+    - env: CHECK_RUBIES=✓
+      rvm: '2'
+      script: bundle exec travis_check_rubies
