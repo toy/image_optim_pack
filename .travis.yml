@@ -8,9 +8,9 @@ rvm:
   - '2.2.6'
   - '2.3.3'
   - '2.4.0'
-  - jruby-18mode
-  - jruby-19mode
-  - ree
+  - 'jruby-1.7.26'
+  - 'jruby-9.0.5.0'
+  - 'jruby-9.1.5.0'
 script:
   - make test
   - bundle exec image_optim --info
