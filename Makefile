@@ -4,6 +4,7 @@ all :
 
 ADVANCECOMP_VER := 2.0
 GIFSICLE_VER := 1.90
+GUETZLI_VER := 1.0.1
 JHEAD_VER := 3.00
 JPEGARCHIVE_VER := 2.1.1
 JPEGOPTIM_VER := 1.4.4
@@ -78,6 +79,7 @@ endef
 
 $(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
 $(eval $(call archive-dl,GIFSICLE,    http://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
+$(eval $(call archive-dl,GUETZLI,     https://github.com/google/guetzli/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,JHEAD,       http://www.sentex.net/~mwandel/jhead/jhead-[VER].tar.gz))
 $(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/[VER].tar.gz))
 $(eval $(call archive-dl,JPEGOPTIM,   http://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
@@ -141,6 +143,7 @@ endef
 
 $(eval $(call target,ADVPNG,ADVANCECOMP))
 $(eval $(call target,GIFSICLE,,src/gifsicle))
+$(eval $(call target,GUETZLI,,bin/Release/guetzli))
 $(eval $(call target,JHEAD))
 $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
@@ -184,6 +187,7 @@ test :
 	$(if $(ARCH_STRING),,@echo Detecting 'ARCH $(ARCH) for OS $(OS) undefined'; false)
 	$(call check_bin,advpng,--version 2>&1,$(ADVANCECOMP_VER))
 	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
+	$(call check_bin,guetzli,--version 2>&1,guetzli) # $(GUETZLI_VER)
 	$(call check_bin,jhead,-V,$(JHEAD_VER))
 	$(call check_bin,jpeg-recompress,--version,$(JPEGARCHIVE_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
@@ -269,14 +273,20 @@ export CPPFLAGS = $(GCC_FLAGS)
 export LDFLAGS = $(GCC_FLAGS)
 
 ifdef IS_DARWIN
-export MACOSX_DEPLOYMENT_TARGET := 10.6
+export MACOSX_DEPLOYMENT_TARGET := 10.7
 GCC_FLAGS += -arch $(ARCH)
+C11_FLAGS := -stdlib=libc++
 endif
 
 ifdef IS_BSD
 autotool_version = $(shell printf '%s\n' /usr/local/bin/$1-* | egrep -o '[0-9][^-]+$$' | tail -n 1)
 export AUTOCONF_VERSION := $(call autotool_version,autoconf)
 export AUTOMAKE_VERSION := $(call autotool_version,automake)
+endif
+
+ifdef IS_OPENBSD
+CC11 := egcc
+CXX11 := eg++
 endif
 
 # ====== BUILD TARGETS ======
@@ -292,6 +302,16 @@ $(ADVPNG_TARGET) :
 $(GIFSICLE_TARGET) :
 	cd $(DIR) && ./configure
 	cd $(DIR) && $(MAKE) gifsicle
+
+## guetzli
+$(eval $(call depend,GUETZLI,LIBPNG LIBZ))
+$(GUETZLI_TARGET) :
+	cd $(DIR) && $(MAKE) guetzli \
+		CC="$(or $(CC11),$(CC))" \
+		CXX="$(or $(CXX11),$(CXX))" \
+		CPPFLAGS="$(CPPFLAGS) $(C11_FLAGS)" \
+		LDFLAGS="$(XORIGIN) $(LDFLAGS) $(C11_FLAGS) -lz"
+	$(call chrpath_origin,$@)
 
 ## jhead
 $(JHEAD_TARGET) :

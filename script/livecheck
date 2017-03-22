@@ -175,6 +175,9 @@ advancecomp:
 gifsicle:
   url: https://www.lcdf.org/gifsicle/
   regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
+guetzli:
+  url: https://github.com/google/guetzli/releases.atom
+  regexp: /google/guetzli/releases/tag/v(\d+(?:\.\d+)*)
 jhead:
   url: http://www.sentex.net/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)

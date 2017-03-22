@@ -16,6 +16,7 @@ Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64), Linux (i686 and x86\
 	* contains parts of [7z](http://7-zip.org) by Igor Pavlov with modifications by Andrea Mazzoleni ([license](acknowledgements/7z.txt))
 	* and [zopfli](https://code.google.com/p/zopfli/) by Lode Vandevenne and Jyrki Alakuijala ([license](acknowledgements/zopfli.txt), [contributors](acknowledgements/zopfli-contributors.txt))
 * [gifsicle](http://lcdf.org/gifsicle/) by Eddie Kohler ([GNU GPLv2](acknowledgements/gifsicle.txt))
+* [guetzli](https://github.com/google/guetzli) by Google Inc. ([Apache License, Version 2.0](acknowledgements/gifsicle.txt))
 * [jhead](http://sentex.net/~mwandel/jhead/) by Matthias Wandel ([public domain](acknowledgements/jhead.txt))
 * [jpeg-recompress](https://github.com/danielgtaylor/jpeg-archive) by Daniel G. Taylor ([license](acknowledgements/jpeg-archive.txt))
 	* includes [Image Quality Assessment (IQA)](http://tdistler.com/iqa/) by Tom Distler ([license](acknowledgements/iqa.txt))

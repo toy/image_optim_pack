@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Add guetzli [toy/image_optim#145](https://github.com/toy/image_optim/issues/145) [#8](https://github.com/toy/image_optim_pack/issues/8) [@toy](https://github.com/toy)
+
 ## v0.5.0.20170831 (2017-08-31)
 
 * pngcrush 1.8.13 [@toy](https://github.com/toy)
