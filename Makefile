@@ -376,10 +376,13 @@ $(OPTIPNG_TARGET) :
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
 $(PNGCRUSH_TARGET) :
 	cd $(DIR) && rm -f png.h pngconf.h
-	cd $(DIR) && $(MAKE) -f Makefile pngcrush \
+	cd $(DIR) && $(MAKE) pngcrush \
+		CC="$(CC)" \
+		LD="$(CC)" \
 		LIBS="-lpng -lz -lm" \
-		CFLAGS="$(GCC_FLAGS)" \
-		LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
+		CFLAGS="$(CFLAGS)" \
+		CPPFLAGS="$(CPPFLAGS)" \
+		LDFLAGS="$(XORIGIN) $(LDFLAGS)"
 	$(call chrpath_origin,$@)
 
 ## pngquant
