@@ -129,7 +129,7 @@ PRODUCTS += $1
 $1_DESTINATION := $$(OUTPUT_DIR)/$$($1_BASENAME)
 # copy product to output dir
 $$($1_DESTINATION) : $$($1_TARGET)
-	temppath=`mktemp tmp.XXXXXXXXXX` && \
+	temppath=`mktemp "$(BUILD_DIR)"/tmp.XXXXXXXXXX` && \
 		strip $$< -Sx -o "$$$$temppath" && \
 		chmod 755 "$$$$temppath" && \
 		mv "$$$$temppath" $$@
