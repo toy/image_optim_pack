@@ -299,12 +299,12 @@ $(GIFSICLE_TARGET) :
 
 ## jhead
 $(JHEAD_TARGET) :
-	cd $(DIR) && $(MAKE) jhead CC="$(CC) $(GCC_FLAGS)"
+	cd $(DIR) && $(MAKE) jhead CC="$(CC) $(CFLAGS)"
 
 ## jpeg-recompress
 $(eval $(call depend-build,JPEG-RECOMPRESS,LIBMOZJPEG))
 $(JPEG-RECOMPRESS_TARGET) :
-	cd $(DIR) && $(MAKE) jpeg-recompress CC="$(CC) $(GCC_FLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
+	cd $(DIR) && $(MAKE) jpeg-recompress CC="$(CC) $(CFLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
 		MAKE=$(MAKE) # fix for bsd in jpeg-archive-2.1.1
 
 ## jpegoptim
@@ -322,7 +322,7 @@ $(JPEGTRAN_TARGET) :
 
 ## libjpeg
 $(LIBJPEG_TARGET) :
-	cd $(DIR) && ./configure CC="$(CC) $(GCC_FLAGS)"
+	cd $(DIR) && ./configure CC="$(CC) $(CFLAGS)"
 	cd $(DIR) && $(libtool_target_soname)
 ifdef IS_DARWIN
 	cd $(DIR) && $(MAKE) libjpeg.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
@@ -342,7 +342,7 @@ $(LIBMOZJPEG_TARGET) :
 ## libpng
 $(eval $(call depend,LIBPNG,LIBZ))
 $(LIBPNG_TARGET) :
-	cd $(DIR) && ./configure CC="$(CC) $(GCC_FLAGS)"
+	cd $(DIR) && ./configure CC="$(CC) $(CFLAGS)"
 	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
 	cd $(DIR) && perl -pi -e 's/(?<=lpng)\d+//g' -- *.pc # %MAJOR%%MINOR% suffix
 	cd $(DIR) && $(libtool_target_soname)
@@ -369,7 +369,7 @@ $(LIBZ_TARGET) :
 $(eval $(call depend,OPTIPNG,LIBPNG LIBZ))
 $(OPTIPNG_TARGET) :
 	cd $(DIR) && ./configure -with-system-libs
-	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
+	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(LDFLAGS)"
 	$(call chrpath_origin,$@)
 
 ## pngcrush
