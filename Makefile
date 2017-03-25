@@ -117,6 +117,7 @@ $1_DIR := $($(or $2,$1)_DIR)
 $1_TGZ := $($(or $2,$1)_TGZ)
 $1_EXTRACTED := $($(or $2,$1)_EXTRACTED)
 $1_TARGET := $$($1_DIR)/$$($1_BASENAME)
+$$($1_TARGET) : DIR := $$($1_DIR)
 $$($1_TARGET) : $$($1_EXTRACTED)
 endef
 
@@ -241,7 +242,7 @@ endef
 
 pkgconfig_pwd = perl -pi -e 's/(?<=dir=).*/$$ENV{PWD}/'
 
-libtool_target_soname = cd $(@D) && perl -pi -e 's/(?<=soname_spec=)".*"/"$(@F)"/ ; s/(?<=library_names_spec=)".*"/"\\\$$libname\\\$$shared_ext"/' -- libtool
+libtool_target_soname = perl -pi -e 's/(?<=soname_spec=)".*"/"$(@F)"/ ; s/(?<=library_names_spec=)".*"/"\\\$$libname\\\$$shared_ext"/' -- libtool
 
 ifdef IS_DARWIN
 chrpath_origin =
@@ -286,72 +287,72 @@ endif
 ## advpng
 $(eval $(call depend,ADVPNG,LIBZ))
 $(ADVPNG_TARGET) :
-	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)"
-	cd $(@D) && $(MAKE) advpng
+	cd $(DIR) && ./configure LDFLAGS="$(XORIGIN)"
+	cd $(DIR) && $(MAKE) advpng
 	$(call chrpath_origin,$@)
 
 ## gifsicle
 $(GIFSICLE_TARGET) :
-	cd $(@D) && ./configure
-	cd $(@D) && $(MAKE) gifsicle
-	cd $(@D) && $(ln_s) src/gifsicle .
+	cd $(DIR) && ./configure
+	cd $(DIR) && $(MAKE) gifsicle
+	cd $(DIR) && $(ln_s) src/gifsicle .
 
 ## jhead
 $(JHEAD_TARGET) :
-	cd $(@D) && $(MAKE) jhead CC="$(CC) $(GCC_FLAGS)"
+	cd $(DIR) && $(MAKE) jhead CC="$(CC) $(GCC_FLAGS)"
 
 ## jpeg-recompress
 $(eval $(call depend-build,JPEG-RECOMPRESS,LIBMOZJPEG))
 $(JPEG-RECOMPRESS_TARGET) :
-	cd $(@D) && $(MAKE) jpeg-recompress CC="$(CC) $(GCC_FLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
+	cd $(DIR) && $(MAKE) jpeg-recompress CC="$(CC) $(GCC_FLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
 		MAKE=$(MAKE) # fix for bsd in jpeg-archive-2.1.1
 
 ## jpegoptim
 $(eval $(call depend,JPEGOPTIM,LIBJPEG))
 $(JPEGOPTIM_TARGET) :
-	cd $(@D) && ./configure LDFLAGS="$(XORIGIN)" --host $(HOST)
-	cd $(@D) && $(MAKE) jpegoptim
+	cd $(DIR) && ./configure LDFLAGS="$(XORIGIN)" --host $(HOST)
+	cd $(DIR) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
 
 ## jpegtran
 $(eval $(call depend,JPEGTRAN,LIBJPEG))
 $(JPEGTRAN_TARGET) :
-	cd $(@D) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
-	cd $(@D) && $(ln_s) .libs/jpegtran .
+	cd $(DIR) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
+	cd $(DIR) && $(ln_s) .libs/jpegtran .
 	$(call chrpath_origin,$(JPEGTRAN_TARGET))
 
 ## libjpeg
 $(LIBJPEG_TARGET) :
-	cd $(@D) && ./configure CC="$(CC) $(GCC_FLAGS)"
-	$(libtool_target_soname)
+	cd $(DIR) && ./configure CC="$(CC) $(GCC_FLAGS)"
+	cd $(DIR) && $(libtool_target_soname)
 ifdef IS_DARWIN
-	cd $(@D) && $(MAKE) libjpeg.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
+	cd $(DIR) && $(MAKE) libjpeg.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
 else
-	cd $(@D) && $(MAKE) libjpeg.la
+	cd $(DIR) && $(MAKE) libjpeg.la
 endif
 	cd $(@D) && $(ln_s) .libs/libjpeg$(DLEXT) .
 
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
-	cd $(@D) && autoreconf -fiv
-	cd $(@D) && ./configure --host $(HOST)
-	cd $(@D)/simd && $(MAKE)
-	cd $(@D) && $(MAKE) libjpeg.la
-	cd $(@D) && $(ln_s) .libs/libjpeg.a .
+	cd $(DIR) && autoreconf -fiv
+	cd $(DIR) && ./configure --host $(HOST)
+	cd $(DIR)/simd && $(MAKE)
+	cd $(DIR) && $(MAKE) libjpeg.la
+	cd $(DIR) && $(ln_s) .libs/libjpeg.a .
 
 ## libpng
 $(eval $(call depend,LIBPNG,LIBZ))
 $(LIBPNG_TARGET) :
-	cd $(@D) && ./configure CC="$(CC) $(GCC_FLAGS)"
-	cd $(@D) && $(pkgconfig_pwd) -- *.pc
-	cd $(@D) && perl -pi -e 's/(?<=lpng)\d+//g' -- *.pc # %MAJOR%%MINOR% suffix
-	$(libtool_target_soname)
+	cd $(DIR) && ./configure CC="$(CC) $(GCC_FLAGS)"
+	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
+	cd $(DIR) && perl -pi -e 's/(?<=lpng)\d+//g' -- *.pc # %MAJOR%%MINOR% suffix
+	cd $(DIR) && $(libtool_target_soname)
 ifdef IS_DARWIN
-	cd $(@D) && $(MAKE) libpng16.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
+	cd $(DIR) && $(MAKE) libpng16.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
 else
-	cd $(@D) && $(MAKE) libpng16.la LDFLAGS="$(XORIGIN)"
+	cd $(DIR) && $(MAKE) libpng16.la LDFLAGS="$(XORIGIN)"
 endif
-	cd $(@D) && $(ln_s) .libs/libpng16$(DLEXT) libpng$(DLEXT)
+	cd $(DIR) && $(ln_s) .libs/libpng16$(DLEXT) libpng$(DLEXT)
 	$(call chrpath_origin,$@)
 
 ## libz
@@ -361,23 +362,23 @@ else
 $(LIBZ_TARGET) : export LDSHARED = $(CC) -shared -Wl,-soname,$(@F),--version-script,zlib.map
 endif
 $(LIBZ_TARGET) :
-	cd $(@D) && ./configure
-	cd $(@D) && $(pkgconfig_pwd) -- *.pc
-	cd $(@D) && $(MAKE) placebo
+	cd $(DIR) && ./configure
+	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
+	cd $(DIR) && $(MAKE) placebo
 
 ## optipng
 $(eval $(call depend,OPTIPNG,LIBPNG LIBZ))
 $(OPTIPNG_TARGET) :
-	cd $(@D) && ./configure -with-system-libs
-	cd $(@D) && $(MAKE) all LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
-	cd $(@D) && $(ln_s) src/optipng/optipng .
+	cd $(DIR) && ./configure -with-system-libs
+	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
+	cd $(DIR) && $(ln_s) src/optipng/optipng .
 	$(call chrpath_origin,$@)
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
 $(PNGCRUSH_TARGET) :
-	cd $(@D) && rm -f png.h pngconf.h
-	cd $(@D) && $(MAKE) -f Makefile pngcrush \
+	cd $(DIR) && rm -f png.h pngconf.h
+	cd $(DIR) && $(MAKE) -f Makefile pngcrush \
 		LIBS="-lpng -lz -lm" \
 		CFLAGS="$(GCC_FLAGS)" \
 		LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
@@ -386,6 +387,6 @@ $(PNGCRUSH_TARGET) :
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
 $(PNGQUANT_TARGET) :
-	cd $(@D) && ./configure --without-cocoa --extra-ldflags="$(XORIGIN)"
-	cd $(@D) && $(MAKE) pngquant
+	cd $(DIR) && ./configure --without-cocoa --extra-ldflags="$(XORIGIN)"
+	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)
