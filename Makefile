@@ -110,13 +110,14 @@ PRODUCTS :=
 
 # $1 - product name
 # $2 - archive name ($1 if empty)
-# $3 - basename ($1 if empty)
+# $3 - path ($1 if empty)
 define target-build
-$1_BASENAME := $(or $3,$(call downcase,$1))
+$1_PATH := $(or $3,$(call downcase,$1))
+$1_BASENAME := $$(notdir $$($1_PATH))
 $1_DIR := $($(or $2,$1)_DIR)
 $1_TGZ := $($(or $2,$1)_TGZ)
 $1_EXTRACTED := $($(or $2,$1)_EXTRACTED)
-$1_TARGET := $$($1_DIR)/$$($1_BASENAME)
+$1_TARGET := $$($1_DIR)/$$($1_PATH)
 $$($1_TARGET) : DIR := $$($1_DIR)
 $$($1_TARGET) : $$($1_EXTRACTED)
 endef
@@ -139,16 +140,16 @@ $(call downcase,$1) : | $$($1_DESTINATION)
 endef
 
 $(eval $(call target,ADVPNG,ADVANCECOMP))
-$(eval $(call target,GIFSICLE))
+$(eval $(call target,GIFSICLE,,src/gifsicle))
 $(eval $(call target,JHEAD))
 $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
-$(eval $(call target,JPEGTRAN,LIBJPEG))
+$(eval $(call target,JPEGTRAN,LIBJPEG,.libs/jpegtran))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
-$(eval $(call target,OPTIPNG))
+$(eval $(call target,OPTIPNG,,src/optipng/optipng))
 $(eval $(call target,PNGCRUSH))
 $(eval $(call target,PNGQUANT))
 
@@ -295,7 +296,6 @@ $(ADVPNG_TARGET) :
 $(GIFSICLE_TARGET) :
 	cd $(DIR) && ./configure
 	cd $(DIR) && $(MAKE) gifsicle
-	cd $(DIR) && $(ln_s) src/gifsicle .
 
 ## jhead
 $(JHEAD_TARGET) :
@@ -318,7 +318,6 @@ $(JPEGOPTIM_TARGET) :
 $(eval $(call depend,JPEGTRAN,LIBJPEG))
 $(JPEGTRAN_TARGET) :
 	cd $(DIR) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
-	cd $(DIR) && $(ln_s) .libs/jpegtran .
 	$(call chrpath_origin,$(JPEGTRAN_TARGET))
 
 ## libjpeg
@@ -371,7 +370,6 @@ $(eval $(call depend,OPTIPNG,LIBPNG LIBZ))
 $(OPTIPNG_TARGET) :
 	cd $(DIR) && ./configure -with-system-libs
 	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(GCC_FLAGS)"
-	cd $(DIR) && $(ln_s) src/optipng/optipng .
 	$(call chrpath_origin,$@)
 
 ## pngcrush
