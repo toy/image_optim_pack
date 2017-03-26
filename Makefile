@@ -267,8 +267,6 @@ export CXX = g++
 GCC_FLAGS := -O3
 ifdef IS_DARWIN
 GCC_FLAGS += -arch $(ARCH)
-else
-GCC_FLAGS += -s
 endif
 export CFLAGS := $(GCC_FLAGS)
 export CXXFLAGS := $(GCC_FLAGS)
