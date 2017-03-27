@@ -1,6 +1,8 @@
 AllCops:
   Exclude:
     - '*.gemspec'
+    - 'build/**/*'
+    - 'download/**/*'
     - Vagrantfile
 
 Bundler/OrderedGems:
@@ -65,6 +67,9 @@ Style/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/SymbolArray:
   Enabled: false
 
 Style/TrailingCommaInArguments:

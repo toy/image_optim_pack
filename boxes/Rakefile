@@ -35,9 +35,10 @@ class Box # :nodoc:
   end
 
   def dependencies
-    [definition_path] + Array(definition[:postinstall_files]).map do |path|
+    postinstall_file_paths = Array(definition[:postinstall_files]).map do |path|
       definition_dir + path
     end
+    [definition_path] + postinstall_file_paths
   end
 
   def build
