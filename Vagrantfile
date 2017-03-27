@@ -36,7 +36,7 @@ Vagrant.configure('2') do |config|
       when /^freebsd/
         <<-SH
           set -ex
-          pkg install -y rsync ntp gmake wget gcc chrpath perl5 pkgconf autoconf automake libtool nasm
+          pkg install -y rsync gmake wget gcc chrpath perl5 pkgconf autoconf automake libtool nasm
         SH
       when /^openbsd/
         <<-SH
