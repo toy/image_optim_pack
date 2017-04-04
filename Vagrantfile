@@ -10,6 +10,7 @@ Vagrant.configure('2') do |config|
   # there are no guest additions
   config.vm.provider 'virtualbox' do |vb|
     vb.check_guest_additions = false
+    vb.customize ['modifyvm', :id, '--groups', '/image_optim']
   end
 
   # handle manually using rsync

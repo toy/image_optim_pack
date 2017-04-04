@@ -36,7 +36,7 @@ for arch in i386 x86_64; do
   make $MAKE_TASK ARCH=$arch
 done
 
-for vm in $(perl -pe "s/.*?'(.+?-.+?)'.*|.*/\$1/" Vagrantfile | sort -u); do
+for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile | sort -u); do
   passes-filter "$vm" || continue
   header "$vm"
 
