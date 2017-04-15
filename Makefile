@@ -219,7 +219,7 @@ clobber : clean-all
 	rm -rf $(DL_DIR)
 .PHONY : clobber
 
-# ====== BUILDING ======
+# ====== BUILD HELPERS ======
 
 # $1 - name of product
 # $2 - list of dependency products
@@ -261,6 +261,8 @@ else
 XORIGIN :=
 endif
 
+# ====== ENV ======
+
 export CC := gcc
 export CXX := g++
 
@@ -282,6 +284,8 @@ autotool_version = $(shell printf '%s\n' /usr/local/bin/$1-* | egrep -o '[0-9][^
 export AUTOCONF_VERSION := $(call autotool_version,autoconf)
 export AUTOMAKE_VERSION := $(call autotool_version,automake)
 endif
+
+# ====== BUILD TARGETS ======
 
 ## advpng
 $(eval $(call depend,ADVPNG,LIBZ))
