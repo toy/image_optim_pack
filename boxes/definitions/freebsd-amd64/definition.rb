@@ -5,9 +5,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'FreeBSD_64',
-  :iso_file => 'FreeBSD-9.3-RELEASE-amd64-disc1.iso',
-  :iso_src => 'http://ftp.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/9.3/FreeBSD-9.3-RELEASE-amd64-disc1.iso',
-  :iso_sha256 => '5a3c82653d77bba7d7ded8bd7efbedc09d52cf4045d98ce52a82c9e0f8fa9b0e',
+  :iso_file => 'FreeBSD-10.3-RELEASE-amd64-disc1.iso',
+  :iso_src => 'http://ftp.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/10.3/FreeBSD-10.3-RELEASE-amd64-disc1.iso',
+  :iso_sha256 => 'fef068cf6dea26923ab84b62ba9f21461ca0bdec90a0741c8ffb0e1ca29e410d',
   :iso_download_timeout => '1000',
   :boot_wait => '10',
   :boot_cmd_sequence => [
