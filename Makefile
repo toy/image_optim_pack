@@ -267,16 +267,14 @@ export CC := gcc
 export CXX := g++
 
 GCC_FLAGS := -O3
-ifdef IS_DARWIN
-GCC_FLAGS += -arch $(ARCH)
-endif
-export CFLAGS := $(GCC_FLAGS)
-export CXXFLAGS := $(GCC_FLAGS)
-export CPPFLAGS := $(GCC_FLAGS)
-export LDFLAGS := $(GCC_FLAGS)
+export CFLAGS = $(GCC_FLAGS)
+export CXXFLAGS = $(GCC_FLAGS)
+export CPPFLAGS = $(GCC_FLAGS)
+export LDFLAGS = $(GCC_FLAGS)
 
 ifdef IS_DARWIN
 export MACOSX_DEPLOYMENT_TARGET := 10.6
+GCC_FLAGS += -arch $(ARCH)
 endif
 
 ifdef IS_BSD
