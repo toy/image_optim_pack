@@ -6,7 +6,7 @@ Veewee::Session.declare({
   :hostiocache => 'off',
   :os_type_id => 'OpenBSD',
   :iso_file => 'OpenBSD-5.5-i386.iso',
-  :iso_src => 'http://ftp3.usa.openbsd.org/pub/OpenBSD/5.5/i386/install55.iso',
+  :iso_src => 'https://www.mirrorservice.org/pub/OpenBSD/5.5/i386/install55.iso',
   :iso_sha256 => '43798eb4f459b58062167c24337230e96c78b01887a4be40d89279df379f3565',
   :iso_download_timeout => '1000',
   :boot_wait => '50',
