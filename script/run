@@ -40,7 +40,7 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile 
   passes-filter "$vm" || continue
   header "$vm"
 
-  vagrant up $vm
+  [[ -n "$NO_UP" ]] || vagrant up $vm
 
   # create ssh config
   ssh_config=.vagrant/ssh_config.$vm
