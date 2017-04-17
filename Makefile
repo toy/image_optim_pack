@@ -261,8 +261,8 @@ else
 XORIGIN :=
 endif
 
-export CC = gcc
-export CXX = g++
+export CC := gcc
+export CXX := g++
 
 GCC_FLAGS := -O3
 ifdef IS_DARWIN
@@ -274,7 +274,7 @@ export CPPFLAGS := $(GCC_FLAGS)
 export LDFLAGS := $(GCC_FLAGS)
 
 ifdef IS_DARWIN
-export MACOSX_DEPLOYMENT_TARGET=10.6
+export MACOSX_DEPLOYMENT_TARGET := 10.6
 endif
 
 ifdef IS_BSD
