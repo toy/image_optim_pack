@@ -10,14 +10,15 @@ Vagrant.configure('2') do |config|
   # there are no guest additions
   config.vm.provider 'virtualbox' do |vb|
     vb.check_guest_additions = false
+    vb.customize ['modifyvm', :id, '--groups', '/image_optim']
   end
 
   # handle manually using rsync
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
   {
-    'linux-x86_64'  => 'boxes/centos-amd64.box',
-    'linux-i686'    => 'boxes/centos-i386.box',
+    'linux-x86_64'  => 'ubuntu/trusty64',
+    'linux-i686'    => 'ubuntu/trusty32',
     'freebsd-amd64' => 'boxes/freebsd-amd64.box',
     'freebsd-i386'  => 'boxes/freebsd-i386.box',
     'openbsd-amd64' => 'boxes/openbsd-amd64.box',
@@ -31,17 +32,17 @@ Vagrant.configure('2') do |config|
       when /^linux/
         <<-SH
           set -ex
-          yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm
+          apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm
         SH
       when /^freebsd/
         <<-SH
           set -ex
-          pkg install -y rsync ntp gmake wget gcc chrpath perl5 pkgconf autoconf automake libtool nasm
+          pkg install -y rsync gmake wget gcc chrpath perl5 pkgconf autoconf automake libtool nasm
         SH
       when /^openbsd/
         <<-SH
           set -ex
-          pkg_add -z rsync-- ntp gmake gtar-- wget gcc-4.8.2p2 autoconf-2.69 automake-1.14.1 libtool nasm
+          pkg_add -z rsync-- ntp gmake gtar-- wget g++-4.8.2p2 autoconf-2.69 automake-1.14.1 libtool nasm
           path=/home/vagrant/shared
           mkdir -p $path
           chown vagrant:vagrant $path

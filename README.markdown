@@ -67,6 +67,7 @@ Boxes for vagrant are built using [veewee](https://github.com/jedi4ever/veewee),
 ```sh
 script/run # Build and test all for all oses and architectures
 script/run NO_HALT=1 # Don't halt VMs after building
+script/run NO_UP=1 # Don't start VMs before building (will fail if not already running)
 script/run darwin 64 # Build only platforms matching darwin or 64
 
 make # Build all tools and copy them to vendor/OS-ARCH for current OS and ARCH, then test
