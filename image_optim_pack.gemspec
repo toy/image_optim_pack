@@ -11,6 +11,22 @@ Gem::Specification.new do |s|
   s.rubyforge_project = s.name
 
   s.files         = `git ls-files`.split("\n")
+  if defined?(gem_platform)
+    s.platform = gem_platform
+
+    vendor_dir = {
+      'x86-linux' => 'linux-i686',
+      'x86_64-openbsd' => 'openbsd-amd64',
+    }[gem_platform] || begin
+      gem_platform.sub(/^x86-/, 'i386-').split('-').reverse.join('-')
+    end
+    vendor_path = File.join('vendor', vendor_dir)
+    fail "#{vendor_path} is not a dir" unless File.directory?(vendor_path)
+    s.files.reject! do |path|
+      parts = path.split('/')
+      parts[0] == 'vendor' && parts[1] != vendor_dir
+    end
+  end
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = %w[lib]

@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Add gemspec for each platform to also release per platform gems [@toy](https://github.com/toy)
+
 ## v0.4.0 (2017-04-26)
 
 * pngquant 2.9.1 [@toy](https://github.com/toy)
