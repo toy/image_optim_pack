@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0 (2017-05-06)
+
 * Add gemspec for each platform to also release per platform gems [@toy](https://github.com/toy)
 
 ## v0.4.0 (2017-04-26)
