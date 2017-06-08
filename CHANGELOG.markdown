@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* advpng 2.0 [@toy](https://github.com/toy)
+
 ## v0.5.0 (2017-05-06)
 
 * Add gemspec for each platform to also release per platform gems [@toy](https://github.com/toy)
