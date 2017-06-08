@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0.20170609 (2017-06-09)
+
 * advpng 2.0 [@toy](https://github.com/toy)
 
 ## v0.5.0 (2017-05-06)
