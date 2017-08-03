@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libpng 1.6.31 and pngcrush 1.8.12 [@toy](https://github.com/toy)
+
 ## v0.5.0.20170712 (2017-07-12)
 
 * gifsicle 1.89 [@toy](https://github.com/toy)
