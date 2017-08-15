@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0.20170815 (2017-08-15)
+
 * gifsicle 1.90 [@toy](https://github.com/toy)
 * pngquant 2.10.2 [@toy](https://github.com/toy)
 
