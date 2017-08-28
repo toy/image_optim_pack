@@ -49,11 +49,6 @@ Style/IndentHash:
 Style/MultilineBlockChain:
   Enabled: false
 
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    '%w': '[]'
-    '%W': '[]'
-
 Style/Semicolon:
   AllowAsExpressionSeparator: true
 
