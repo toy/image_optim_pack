@@ -100,7 +100,7 @@ libmozjpeg:
   url: https://github.com/mozilla/mozjpeg/releases.atom
   regexp: <title>mozjpeg v(\d+(?:\.\d+)*)</title>
 libpng:
-  url: https://sourceforge.net/projects/libpng/rss
+  url: https://sourceforge.net/projects/libpng/rss?path=/libpng16
   regexp: /libpng\d*/(\d+(?:\.\d+)*)/
 libz:
   url: https://sourceforge.net/projects/libpng/rss?path=/zlib
