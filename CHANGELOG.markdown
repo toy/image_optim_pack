@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0.20170831 (2017-08-31)
+
 * pngcrush 1.8.13 [@toy](https://github.com/toy)
 
 ## v0.5.0.20170830 (2017-08-30)
