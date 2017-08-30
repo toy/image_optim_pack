@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* pngcrush 1.8.13 [@toy](https://github.com/toy)
+
 ## v0.5.0.20170830 (2017-08-30)
 
 * libpng 1.6.32 [@toy](https://github.com/toy)
