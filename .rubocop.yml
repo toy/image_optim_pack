@@ -61,9 +61,6 @@ Style/Semicolon:
 Style/SignalException:
   EnforcedStyle: semantic
 
-Style/SpecialGlobalVars:
-  Enabled: false
-
 Style/SymbolArray:
   Enabled: false
 

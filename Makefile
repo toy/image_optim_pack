@@ -193,14 +193,10 @@ test :
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 .PHONY : test
 
-livecheck :; @$(foreach archive,$(ARCHIVES),script/livecheck $(call downcase,$(archive)) $($(archive)_VER);)
+livecheck :; @script/livecheck
 .PHONY : livecheck
 
-Makefile.updated :
-	cat Makefile | script/update_versions > Makefile.updated
-
-update-versions : Makefile.updated
-	mv Makefile.updated Makefile
+update-versions :; @script/livecheck --update
 .PHONY : update-versions
 
 # ====== CLEAN ======
