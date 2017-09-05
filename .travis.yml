@@ -16,7 +16,9 @@ script:
   - bundle exec image_optim --info
   - bundle exec rspec
 before_install:
-  if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install imagemagick; fi
+  - gem update --system
+  - gem update bundler
+  - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install imagemagick; fi
 matrix:
   include:
     - dist: trusty
