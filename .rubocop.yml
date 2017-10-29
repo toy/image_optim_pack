@@ -43,9 +43,6 @@ Style/DoubleNegation:
 Style/EmptyCaseCondition:
   Enabled: false
 
-Style/Encoding:
-  Enabled: false
-
 Style/HashSyntax:
   EnforcedStyle: hash_rockets
 
