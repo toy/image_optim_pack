@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* pngquant 2.11.0 [@toy](https://github.com/toy)
+
 ## v0.5.0.20171001 (2017-10-01)
 
 * libpng 1.6.34 [@toy](https://github.com/toy)
