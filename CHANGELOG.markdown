@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* pngquant 2.11.1 [@toy](https://github.com/toy)
+
 ## v0.5.0.20171101 (2017-11-01)
 
 * pngquant 2.11.0 [@toy](https://github.com/toy)
