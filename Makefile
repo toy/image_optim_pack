@@ -383,6 +383,7 @@ $(PNGCRUSH_TARGET) :
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
+$(PNGQUANT_TARGET) : export CFLAGS := $(CFLAGS) $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
 $(PNGQUANT_TARGET) :
 	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN)"
 	cd $(DIR) && $(MAKE) pngquant
