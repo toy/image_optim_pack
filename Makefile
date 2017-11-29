@@ -384,6 +384,6 @@ $(PNGCRUSH_TARGET) :
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
 $(PNGQUANT_TARGET) :
-	cd $(DIR) && ./configure --without-cocoa --extra-ldflags="$(XORIGIN)"
+	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN)"
 	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)
