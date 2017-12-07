@@ -162,15 +162,36 @@ all : build
 build : $(call downcase,$(PRODUCTS))
 .PHONY : build
 
-define check_bin
+define check_exists
 	@test -f $(OUTPUT_DIR)/$1 || \
-		{ printf "$(ANSI_RED)no $1 found$(ANSI_RESET)\n"; exit 1; }
-	@printf "$1: "; \
-		VERSION=$$($(OUTPUT_DIR)/$1 $2 | fgrep -o $3) || \
-		{ printf "$(ANSI_RED)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(ANSI_RESET)\n"; exit 1; }; \
-		ARCH=$$(file -b $(OUTPUT_DIR)/$1 | fgrep -o '$(ARCH_STRING)') || \
-		{ printf "$(ANSI_RED)Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)$(ANSI_RESET)\n"; exit 1; }; \
-		printf "$(ANSI_GREEN)$$VERSION$(ANSI_RESET) / $(ANSI_MAGENTA)$$ARCH$(ANSI_RESET)\n"
+		{ printf "$1: $(ANSI_RED)not found$(ANSI_RESET)\n"; exit 1; }
+endef
+
+define check_version
+	@$(OUTPUT_DIR)/$1 $2 | fgrep -q $3 || \
+		{ printf "$1: $(ANSI_RED)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(ANSI_RESET)\n"; exit 1; }
+endef
+
+define check_arch
+	@file -b $(OUTPUT_DIR)/$1 | fgrep -q '$(ARCH_STRING)' || \
+		{ printf "$1: $(ANSI_RED)Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)$(ANSI_RESET)\n"; exit 1; }
+endef
+
+define check_output
+	@printf "$1: $(ANSI_GREEN)$3$(ANSI_RESET) / $(ANSI_MAGENTA)$(ARCH_STRING)$(ANSI_RESET)\n"
+endef
+
+define check_lib
+	$(call check_exists,$1)
+	$(call check_arch,$1)
+	$(call check_output,$1,,-)
+endef
+
+define check_bin
+	$(call check_exists,$1)
+	$(call check_version,$1,$2,$3)
+	$(call check_arch,$1)
+	$(call check_output,$1,,$3)
 endef
 
 ifdef IS_DARWIN
@@ -188,6 +209,9 @@ test :
 	$(call check_bin,jpeg-recompress,--version,$(JPEGARCHIVE_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
 	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
+	$(call check_lib,libjpeg$(DLEXT))
+	$(call check_lib,libpng$(DLEXT))
+	$(call check_lib,libz$(DLEXT))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
