@@ -162,6 +162,12 @@ all : build
 build : $(call downcase,$(PRODUCTS))
 .PHONY : build
 
+ifdef IS_DARWIN
+ldd := otool -L
+else
+ldd := ldd
+endif
+
 define check_exists
 	@test -f $(OUTPUT_DIR)/$1 || \
 		{ printf "$1: $(ANSI_RED)not found$(ANSI_RESET)\n"; exit 1; }
@@ -181,10 +187,15 @@ define check_output
 	@printf "$1: $(ANSI_GREEN)$3$(ANSI_RESET) / $(ANSI_MAGENTA)$(ARCH_STRING)$(ANSI_RESET)\n"
 endef
 
+define check_shlib
+	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
+endef
+
 define check_lib
 	$(call check_exists,$1)
 	$(call check_arch,$1)
 	$(call check_output,$1,,-)
+	$(call check_shlib,$1)
 endef
 
 define check_bin
@@ -192,6 +203,7 @@ define check_bin
 	$(call check_version,$1,$2,$3)
 	$(call check_arch,$1)
 	$(call check_output,$1,,$3)
+	$(call check_shlib,$1)
 endef
 
 ifdef IS_DARWIN
