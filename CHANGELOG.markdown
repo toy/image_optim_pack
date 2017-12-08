@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0.20171208 (2017-12-08)
+
 * ensure unused libgcc is not dynamically linked with pngquant [@toy](https://github.com/toy)
 * don’t use lcms (colour profiles) in pngquant [@toy](https://github.com/toy)
 * pngquant 2.11.2 [@toy](https://github.com/toy)
