@@ -5,31 +5,34 @@ require 'ostruct'
 require 'terminal-table'
 
 versions = Gems.versions('image_optim_pack').map(&OpenStruct.method(:new))
+
 platforms = versions.map(&:platform).uniq.sort_by do |platform|
   platform.sub('amd64', 'x86_64').split('-').reverse
 end
 
-$stdout << Terminal::Table.new do |table|
-  table.headings = %W[version base\ dls] + platforms.map do |platform|
-    platform.split('-').reverse.join("\n")
+table = Terminal::Table.new
+
+table.headings = %W[version base\ dls] + platforms.map do |platform|
+  platform.split('-').reverse.join("\n")
+end
+
+versions.group_by(&:number).each do |version_number, platform_versions|
+  next if platform_versions.length == 1
+  downloads_by_platform = Hash[platform_versions.map do |version|
+    [version.platform, version.downloads_count]
+  end]
+
+  base_downloads = platform_versions.map(&:downloads_count).min
+
+  platform_values = downloads_by_platform.values_at(*platforms).map do |count|
+    next unless count
+    count == base_downloads ? '=' : format('%+d', count - base_downloads)
   end
+  table << [version_number, base_downloads] + platform_values
+end
 
-  versions.group_by(&:number).each do |version_number, platform_versions|
-    next if platform_versions.length == 1
-    downloads_by_platform = Hash[platform_versions.map do |version|
-      [version.platform, version.downloads_count]
-    end]
+(1...table.number_of_columns).each do |column|
+  table.align_column(column, :right)
+end
 
-    base_downloads = platform_versions.map(&:downloads_count).min
-
-    platform_values = downloads_by_platform.values_at(*platforms).map do |count|
-      next unless count
-      count == base_downloads ? '=' : format('%+d', count - base_downloads)
-    end
-    table << [version_number, base_downloads] + platform_values
-  end
-
-  (1...table.number_of_columns).each do |column|
-    table.align_column(column, :right)
-  end
-end << "\n"
+puts table

@@ -43,11 +43,14 @@ Style/DoubleNegation:
 Style/EmptyCaseCondition:
   Enabled: false
 
+Style/FormatStringToken:
+  Enabled: false
+
 Style/HashSyntax:
   EnforcedStyle: hash_rockets
 
 Style/IfUnlessModifier:
-  MaxLineLength: 40
+  Enabled: false
 
 Style/MultilineBlockChain:
   Enabled: false
