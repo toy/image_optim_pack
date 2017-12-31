@@ -90,7 +90,7 @@ $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/png
 $(eval $(call archive,PNGQUANT))
 
 PNGQUANT_GIT := $(DL_DIR)/pngquant.git
-$(PNGQUANT_GIT) :; git clone --recursive https://github.com/pornel/pngquant.git $@
+$(PNGQUANT_GIT) :; git clone --recursive https://github.com/kornelski/pngquant.git $@
 $(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
 	while ! mkdir $@.lock 2> /dev/null; do sleep 1; done
 	cd $(PNGQUANT_GIT) && git fetch && git checkout -q $(PNGQUANT_VER) && git submodule -q update
