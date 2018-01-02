@@ -299,6 +299,8 @@ export CC := gcc
 export CXX := g++
 
 GCC_FLAGS := -O3
+STATIC_LIBGCC := $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
+
 export CFLAGS = $(GCC_FLAGS)
 export CXXFLAGS = $(GCC_FLAGS)
 export CPPFLAGS = $(GCC_FLAGS)
@@ -419,8 +421,7 @@ $(PNGCRUSH_TARGET) :
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
-$(PNGQUANT_TARGET) : export CFLAGS := $(CFLAGS) $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
 $(PNGQUANT_TARGET) :
-	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN)"
+	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
 	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)
