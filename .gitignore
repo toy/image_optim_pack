@@ -2,7 +2,7 @@
 /download/
 /.vagrant/
 
-/Gemfile.lock
+Gemfile.lock
 /*.gem
 /.bundle
 /tmp/

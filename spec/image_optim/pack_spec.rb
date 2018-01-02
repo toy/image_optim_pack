@@ -37,13 +37,13 @@ describe ImageOptim::Pack do
 
     describe :os do
       it 'returns last but one part of path' do
-        expect(Path.new('path/futureos/Kqbit').os).to eq('futureos')
+        expect(Path.new('path/futureos-K-qbit').os).to eq('futureos')
       end
     end
 
     describe :arch do
       it 'returns last but one part of path' do
-        expect(Path.new('path/futureos/Kqbit').arch).to eq('Kqbit')
+        expect(Path.new('path/futureos-K-qbit').arch).to eq('K-qbit')
       end
     end
 

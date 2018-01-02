@@ -1,0 +1,13 @@
+inherit_from: ../.rubocop.yml
+
+Lint/UnneededSplatExpansion:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: false
+
+Security/Eval:
+  Exclude: [Rakefile]
+
+Style/BracesAroundHashParameters:
+  Enabled: false

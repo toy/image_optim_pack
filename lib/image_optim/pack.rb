@@ -19,8 +19,7 @@ class ImageOptim
       # Receive path, use last part for arch and last but one part for os
       def initialize(path)
         @path = FSPath(path)
-        @os = @path.dirname.basename.to_s
-        @arch = @path.basename.to_s
+        @os, @arch = @path.basename.to_s.split('-', 2)
       end
 
       # Return path converted to string
@@ -64,16 +63,24 @@ class ImageOptim
     end
 
     # downcased `uname -s`
-    OS = `uname -s`.strip.downcase
+    OS = begin
+      `uname -s`.strip.downcase
+    rescue Errno::ENOENT
+      'unknown'
+    end
 
     # downcased `uname -m`
-    ARCH = `uname -m`.strip.downcase
+    ARCH = begin
+      `uname -m`.strip.downcase
+    rescue Errno::ENOENT
+      'unknown'
+    end
 
     # Path to vendor at root of image_optim_pack
     VENDOR_PATH = FSPath('../../../vendor').expand_path(__FILE__)
 
     # List of paths
-    PATHS = VENDOR_PATH.glob('*/*').map{ |path| Path.new(path) }
+    PATHS = VENDOR_PATH.glob('*-*').map{ |path| Path.new(path) }
 
     class << self
       # Return path to directory with binaries
