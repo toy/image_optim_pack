@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* optipng 0.7.7 [@toy](https://github.com/toy)
+
 ## v0.5.0.20171208 (2017-12-08)
 
 * ensure unused libgcc is not dynamically linked with pngquant [@toy](https://github.com/toy)
