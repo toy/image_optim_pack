@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0.20180108 (2018-01-08)
+
 * gifsicle 1.91 [@toy](https://github.com/toy)
 
 ## v0.5.0.20180103 (2018-01-03)
