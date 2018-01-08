@@ -295,8 +295,13 @@ endif
 
 # ====== ENV ======
 
+ifdef IS_DARWIN
+export CC := clang
+export CXX := clang++
+else
 export CC := gcc
 export CXX := g++
+endif
 
 GCC_FLAGS := -O3
 STATIC_LIBGCC := $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
