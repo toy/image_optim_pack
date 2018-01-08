@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* gifsicle 1.91 [@toy](https://github.com/toy)
+
 ## v0.5.0.20180103 (2018-01-03)
 
 * optipng 0.7.7 [@toy](https://github.com/toy)
