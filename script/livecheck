@@ -3,57 +3,175 @@
 require 'yaml'
 require 'uri'
 require 'net/http'
-require 'versionomy'
+require 'openssl'
+require 'rubygems/version'
+require 'fspath'
 
-bare = ARGV.delete('--bare')
+# Fetch and compare latest tool/library versions
+class Livecheck
+  # Commands
+  class Cli
+    VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/
 
-unless [1, 2].include?(ARGV.length)
-  abort 'expected project name and optional current version'
-end
+    def initialize(args)
+      @update = args.delete('--update')
+      abort '--update is the only supported option' unless args.empty?
+    end
 
-def version(string)
-  Versionomy.parse(string)
-end
+    def run
+      dump_changes
 
-def get(url)
-  uri = URI(url)
+      return unless @update
+      return unless livechecks.any?(&:changed?)
 
-  http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = (uri.scheme == 'https')
+      update_changelog
+      update_makefile
+    end
 
-  request = Net::HTTP::Get.new(uri.request_uri)
-  http.request(request).body
-end
+  private
 
-name = ARGV[0].downcase
-config = YAML.load(DATA)[name]
-abort "Livecheck for #{name} was not defined" unless config
+    def dump_changes
+      livechecks.each do |lc|
+        next unless lc.changed?
+        puts "#{lc.name_n_latest_version} (current: #{lc.current_version})"
+      end
+    end
 
-url = config['url']
-version_regex = Regexp.new(config['regexp'])
-current_version = ARGV[1] && version(ARGV[1])
+    def update_changelog
+      changelog = FSPath('CHANGELOG.markdown')
+      lines = changelog.readlines
+      lines.insert(4, "\n") if lines[4] =~ /^## /
+      lines.insert(4, changelog_entry)
+      write(changelog, lines.join(''))
+    end
 
-data = get(url)
-versions = data.scan(version_regex).uniq.map{ |match| version(match[0]) }
-abort "No versions found for #{name} in data:\n#{data}" if versions.empty?
+    def update_makefile
+      content = makefile.read.gsub(VERSION_REGEXP) do
+        livecheck = livechecks_by_name[Regexp.last_match[1].downcase]
+        "#{livecheck.name.upcase}_VER := #{livecheck.latest_version}"
+      end
+      write(makefile, content)
+    end
 
-latest_version = versions.max
-case
-when bare
-  print latest_version
-when current_version
-  if latest_version != current_version
-    sign = latest_version > current_version ? '>' : '<'
-    puts "#{name} #{latest_version} #{sign} #{current_version}"
+    def makefile
+      FSPath('Makefile')
+    end
+
+    def livechecks
+      @livechecks ||= makefile.read.scan(VERSION_REGEXP).map do |name, version|
+        Livecheck.new(name.downcase, version)
+      end
+    end
+
+    def livechecks_by_name
+      @livechecks_by_name ||= Hash[livechecks.map{ |lc| [lc.name, lc] }]
+    end
+
+    def changelog_entry
+      github_user = `git config github.user`.strip
+      changed = livechecks.select(&:changed?)
+      %W[
+        *
+        #{to_sentence(changed.map(&:name_n_latest_version))}
+        [@#{github_user}](https://github.com/#{github_user})
+      ].join(' ') + "\n"
+    end
+
+    def to_sentence(array)
+      case array.length
+      when 0 then ''
+      when 1 then array[0].to_s
+      else "#{array[0...-1].join(', ')} and #{array[-1]}"
+      end
+    end
+
+    def write(path, data)
+      path.temp_file(path.dirname) do |io|
+        io.write data
+        io.path.rename(path)
+      end
+      warn "Wrote #{path}"
+    end
   end
-else
-  puts "#{name} #{latest_version}"
+
+  # Compare versions including libjpeg ones (9b <=> 9)
+  class Version
+    include Comparable
+
+    attr_reader :string, :parsed
+    alias_method :to_s, :string
+
+    def initialize(string)
+      @string = string
+      @parsed = begin
+        Gem::Version.new(string)
+      rescue ArgumentError
+        nil
+      end
+    end
+
+    def <=>(other)
+      if parsed && other.parsed
+        parsed <=> other.parsed
+      else
+        string <=> other.string
+      end
+    end
+  end
+
+  CONFIG = YAML.load(DATA).freeze
+
+  attr_reader :name, :current_version
+
+  def initialize(name, current_version)
+    @name = name
+    @current_version = Version.new(current_version)
+    @fetcher = Thread.new{ fetch_versions.last }
+  end
+
+  def latest_version
+    @fetcher.value
+  end
+
+  def changed?
+    latest_version != current_version
+  end
+
+  def name_n_latest_version
+    "#{name} #{latest_version}"
+  end
+
+private
+
+  def config
+    CONFIG[name] || fail(ArgumentError, "Livecheck for #{name} not defined")
+  end
+
+  def get(url)
+    uri = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = (uri.scheme == 'https')
+    http.request_get(uri.request_uri).body
+  end
+
+  def fetch_versions
+    body = get(config['url'])
+
+    version_regex = Regexp.new(config['regexp'])
+
+    versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
+    fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
+
+    versions
+  end
 end
+
+Livecheck::Cli.new(ARGV).run
 
 __END__
 advancecomp:
-  url: https://sourceforge.net/projects/advancemame/rss?path=/advancecomp
-  regexp: /advancecomp/(\d+(?:\.\d+)*)/
+  url: https://github.com/amadvance/advancecomp/releases.atom
+  regexp: /amadvance/advancecomp/releases/tag/v(\d+(?:\.\d+)*)
 gifsicle:
   url: https://www.lcdf.org/gifsicle/
   regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
@@ -73,7 +191,7 @@ libmozjpeg:
   url: https://github.com/mozilla/mozjpeg/releases.atom
   regexp: <title>mozjpeg v(\d+(?:\.\d+)*)</title>
 libpng:
-  url: https://sourceforge.net/projects/libpng/rss
+  url: https://sourceforge.net/projects/libpng/rss?path=/libpng16
   regexp: /libpng\d*/(\d+(?:\.\d+)*)/
 libz:
   url: https://sourceforge.net/projects/libpng/rss?path=/zlib
@@ -85,5 +203,5 @@ pngcrush:
   url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
 pngquant:
-  url: https://github.com/pornel/pngquant/releases.atom
-  regexp: /pornel/pngquant/releases/tag/(\d+(?:\.\d+)*)
+  url: https://github.com/kornelski/pngquant/releases.atom
+  regexp: /kornelski/pngquant/releases/tag/(\d+(?:\.\d+)*)

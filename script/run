@@ -1,26 +1,71 @@
 #!/usr/bin/env bash
 
-set -xe
+# Build tools on Mac OS X host and in all vms
 
-MAKE_COMMAND='make all -j'
+set -e
 
+MAKE_TASK='all -j'
+
+filters=()
 for arg in "$@"; do
   if [[ "$arg" =~ ^([A-Z_]+)=(.*)$ ]]; then
     eval "$(printf %q=%q "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}")"
+  else
+    filters+=($arg)
   fi
 done
+filters=$(IFS='|'; echo "${filters[*]}")
 
-if [ "$(uname -s | tr A-Z a-z)" != 'darwin' ]; then
+passes-filter() {
+  [[ '' = "$filters" ]] || [[ "$1" =~ $filters ]]
+}
+
+header() {
+  printf '\033[1;7m######## %s ########\033[0m\n' "$1"
+}
+
+if [[ `uname -s` != 'Darwin' ]]; then
   echo 'expected to run on Mac OS X'
   exit 1
 fi
 
 for arch in i386 x86_64; do
-  $MAKE_COMMAND ARCH=$arch
+  passes-filter "darwin-$arch" || continue
+  header "darwin-$arch"
+
+  make $MAKE_TASK ARCH=$arch
 done
 
-for vm in linux_{i686,x86_64}; do
-  vagrant up $vm
-  vagrant ssh $vm -c "cd /vagrant; $MAKE_COMMAND"
-  [ -n "$NO_HALT" ] || vagrant halt $vm
+for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile); do
+  passes-filter "$vm" || continue
+  header "$vm"
+
+  [[ -n "$NO_UP" ]] || vagrant up $vm
+
+  # create ssh config
+  ssh_config=.vagrant/ssh_config.$vm
+  vagrant ssh-config $vm > $ssh_config
+
+  # rsync needed files to the box
+  mkdir -p vendor/$vm
+  rsync -e "ssh -F $ssh_config" -aR --del Makefile download vendor/$vm $vm:/vagrant
+
+  # sync time and run make
+  ssh -F $ssh_config $vm "
+    set -e
+
+    sudo ntpdate pool.ntp.org
+
+    cd /vagrant
+    if make -v 2>&1 | grep -q GNU\ Make; then
+      make $MAKE_TASK
+    else
+      gmake $MAKE_TASK
+    fi
+  "
+
+  # rsync files in vendor from the box
+  rsync -e "ssh -F $ssh_config" -aR --del $vm:/vagrant/./vendor/$vm .
+
+  [[ -n "$NO_HALT" ]] || vagrant halt $vm
 done
