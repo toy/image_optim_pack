@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.0.20180124 (2018-01-24)
+
 * libjpeg 9c and pngquant 2.11.7 [@toy](https://github.com/toy)
 
 ## v0.5.0.20180108 (2018-01-08)
