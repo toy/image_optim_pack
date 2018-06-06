@@ -2,7 +2,8 @@
 
 ## unreleased
 
-* add archive checksum verification [#10](https://github.com/toy/image_optim_pack/issues/10) [@toy](https://github.com/toy)
+* Switching back to centos (6.9) for linux to use more widely compatible glibc during compilation [#12](https://github.com/toy/image_optim_pack/issues/12) [@toy](https://github.com/toy)
+* Add archive checksum verification [#10](https://github.com/toy/image_optim_pack/issues/10) [@toy](https://github.com/toy)
 
 ## v0.5.0.20180605 (2018-06-05)
 
@@ -31,8 +32,8 @@
 
 ## v0.5.0.20171208 (2017-12-08)
 
-* ensure unused libgcc is not dynamically linked with pngquant [@toy](https://github.com/toy)
-* don’t use lcms (colour profiles) in pngquant [@toy](https://github.com/toy)
+* Ensure unused libgcc is not dynamically linked with pngquant [@toy](https://github.com/toy)
+* Don’t use lcms (colour profiles) in pngquant [@toy](https://github.com/toy)
 * pngquant 2.11.2 [@toy](https://github.com/toy)
 * pngquant 2.11.1 [@toy](https://github.com/toy)
 

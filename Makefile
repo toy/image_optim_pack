@@ -61,7 +61,7 @@ downcase = $(shell echo $1 | tr A-Z a-z)
 
 ln_s := ln -sf
 tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
-sha256sum := $(shell if command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
+sha256sum := $(shell if command -v sha256sum >/dev/null 2>&1; then echo sha256sum; elif command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
 
 # ====== ARCHIVES ======
 
