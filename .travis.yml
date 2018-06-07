@@ -19,6 +19,7 @@ before_install:
   - gem update --system
   - gem update bundler
   - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install imagemagick; fi
+  - make ldd-version
 matrix:
   include:
     - dist: trusty

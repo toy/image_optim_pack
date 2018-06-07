@@ -185,6 +185,9 @@ else
 ldd := ldd
 endif
 
+ldd-version :; $(ldd) --version
+.PHONY : ldd-version
+
 define check_exists
 	@test -f $(OUTPUT_DIR)/$1 || \
 		{ printf "$1: $(ANSI_RED)not found$(ANSI_RESET)\n"; exit 1; }
