@@ -87,21 +87,13 @@ $(eval $(call archive-dl,LIBPNG,      http://prdownloads.sourceforge.net/libpng/
 $(eval $(call archive-dl,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
-$(eval $(call archive,PNGQUANT))
-
-PNGQUANT_GIT := $(DL_DIR)/pngquant.git
-$(PNGQUANT_GIT) :; git clone --recursive https://github.com/kornelski/pngquant.git $@
-$(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
-	while ! mkdir $@.lock 2> /dev/null; do sleep 1; done
-	cd $(PNGQUANT_GIT) && git fetch && git checkout -q $(PNGQUANT_VER) && git submodule -q update
-	cd $(PNGQUANT_GIT) && $(tar) --exclude=.git -czf $(PNGQUANT_TGZ) .
-	rm -r $@.lock
+$(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 .PHONY : download
 
 download-tidy-up :
-	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)) $(PNGQUANT_GIT),$(wildcard $(DL_DIR)/*.*))
+	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
 .PHONY : download-tidy-up
 
 # ====== PRODUCTS ======
