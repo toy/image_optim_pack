@@ -32,6 +32,7 @@ Vagrant.configure('2') do |config|
       when /^linux/
         <<-SH
           set -ex
+          apt-get update
           apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm
         SH
       when /^freebsd/
