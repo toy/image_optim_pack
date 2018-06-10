@@ -203,5 +203,5 @@ pngcrush:
   url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
 pngquant:
-  url: https://github.com/kornelski/pngquant/releases.atom
-  regexp: /kornelski/pngquant/releases/tag/(\d+(?:\.\d+)*)
+  url: https://pngquant.org/releases.html
+  regexp: <span itemprop='version'>(\d+(?:\.\d+)*)</span>
