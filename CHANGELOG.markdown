@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.1 (2018-06-10)
+
 * Switching back to centos (6.9) for linux to use more widely compatible glibc during compilation [#12](https://github.com/toy/image_optim_pack/issues/12) [@toy](https://github.com/toy)
 * Add archive checksum verification [#10](https://github.com/toy/image_optim_pack/issues/10) [@toy](https://github.com/toy)
 
