@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* add archive checksum verification [#10](https://github.com/toy/image_optim_pack/issues/10) [@toy](https://github.com/toy)
+
 ## v0.5.0.20180605 (2018-06-05)
 
 * pngquant 2.12.0 [@toy](https://github.com/toy)

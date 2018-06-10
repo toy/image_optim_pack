@@ -15,6 +15,21 @@ OPTIPNG_VER := 0.7.7
 PNGCRUSH_VER := 1.8.13
 PNGQUANT_VER := 2.12.0
 
+# ====== CHECKSUMS ======
+
+ADVANCECOMP_SHA256 := 3ac0875e86a8517011976f04107186d5c60d434954078bc502ee731480933eb8
+GIFSICLE_SHA256 := 0a4ee602aa244cdcdd86a250a6b39c94d8343cf526b8fae862d8a0efc337a800
+JHEAD_SHA256 := 88cc01da018e242fe2e05db73f91b6288106858dd70f27506c4989a575d2895e
+JPEGARCHIVE_SHA256 := 494534f5308f99743f11f3a7c151a8d5ca8a5f1f8b61ea119098511d401bc618
+JPEGOPTIM_SHA256 := 88b1eb64c2a33a2f013f068df8b0331f42c019267401ae3fa28e3277403a5ab7
+LIBJPEG_SHA256 := 650250979303a649e21f87b5ccd02672af1ea6954b911342ea491f351ceb7122
+LIBMOZJPEG_SHA256 := 11823198f3c677b1832fa2dcf702e458f70c959661c4bec9c8922b7c36e94739
+LIBPNG_SHA256 := 574623a4901a9969080ab4a2df9437026c8a87150dfd5c235e28c94b212964a7
+LIBZ_SHA256 := c3e5e9fdd5004dcb542feda5ee4f0ff0744628baf8ed2dd5d66f8ca1197cb1a1
+OPTIPNG_SHA256 := 4f32f233cef870b3f95d3ad6428bfe4224ef34908f1b42b0badf858216654452
+PNGCRUSH_SHA256 := fed0aaf5c098aa8c7f78c75365cd18d7341417326ecbdba547876b7b4f3df4be
+PNGQUANT_SHA256 := 0e540c64bb58c05f2a05b4eaf1d3d165f0d3278500f15abfeac47f93f8fa8fa8
+
 # ====== CONSTANTS ======
 
 OS := $(shell uname -s | tr A-Z a-z)
@@ -46,6 +61,7 @@ downcase = $(shell echo $1 | tr A-Z a-z)
 
 ln_s := ln -sf
 tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
+sha256sum := $(shell if command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
 
 # ====== ARCHIVES ======
 
@@ -59,6 +75,7 @@ $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
 $1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
 $$($1_EXTRACTED) : $$($1_TGZ)
 	rm -rf $$(@D)
+	echo "$$($1_SHA256)  $$($1_TGZ)" | $(sha256sum) -c
 	mkdir $$(@D)
 	$(tar) -C $$(@D) --strip-components=1 -xzf $$<
 	touch $$(@D)/__$$(notdir $$<)__
@@ -95,6 +112,14 @@ download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 download-tidy-up :
 	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
 .PHONY : download-tidy-up
+
+checksum : download
+	@$(sha256sum) $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+.PHONY : checksum
+
+checksum-verify : download
+	@printf '%s  %s\n' $(foreach archive,$(ARCHIVES),$($(archive)_SHA256) $($(archive)_TGZ)) | $(sha256sum) -c
+.PHONY : checksum
 
 # ====== PRODUCTS ======
 
