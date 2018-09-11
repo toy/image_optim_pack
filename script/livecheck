@@ -33,6 +33,7 @@ class Livecheck
     def dump_changes
       livechecks.each do |lc|
         next unless lc.changed?
+
         puts "#{lc.name_n_latest_version} (current: #{lc.current_version})"
       end
     end

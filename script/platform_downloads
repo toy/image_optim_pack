@@ -29,6 +29,7 @@ end
 
 versions.group_by(&:number).each do |version_n, platform_versions|
   next if platform_versions.length == 1
+
   downloads_by_platform = Hash[platform_versions.map do |version|
     [version.platform, version.downloads_count]
   end]
@@ -37,6 +38,7 @@ versions.group_by(&:number).each do |version_n, platform_versions|
 
   platform_values = downloads_by_platform.values_at(*platforms).map do |count|
     next unless count
+
     count == base_downloads ? '=' : format('%+d', count - base_downloads)
   end
   table << [

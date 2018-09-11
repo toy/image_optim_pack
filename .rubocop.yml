@@ -17,6 +17,9 @@ Layout/DotPosition:
 Layout/IndentHash:
   EnforcedStyle: consistent
 
+Layout/RescueEnsureAlignment:
+  Enabled: false
+
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyle: no_space
 
