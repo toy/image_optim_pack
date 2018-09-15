@@ -119,7 +119,7 @@ checksum : download
 
 checksum-verify : download
 	@printf '%s  %s\n' $(foreach archive,$(ARCHIVES),$($(archive)_SHA256) $($(archive)_TGZ)) | $(sha256sum) -c
-.PHONY : checksum
+.PHONY : checksum-verify
 
 # ====== PRODUCTS ======
 
