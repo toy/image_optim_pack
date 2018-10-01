@@ -180,8 +180,8 @@ jhead:
   url: http://www.sentex.net/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)
 jpegoptim:
-  url: https://www.kokkonen.net/tjko/src/
-  regexp: jpegoptim-(\d+(?:\.\d+)*)
+  url: https://github.com/tjko/jpegoptim/releases.atom
+  regexp: <title>RELEASE.(\d+(?:\.\d+)*)</title>
 jpegarchive:
   url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
   regexp: <title>JPEG-Archive (\d+(?:\.\d+)*)</title>
