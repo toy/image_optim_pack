@@ -11,7 +11,7 @@ require 'fspath'
 class Livecheck
   # Commands
   class Cli
-    VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/
+    VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/.freeze
 
     def initialize(args)
       @update = args.delete('--update')
