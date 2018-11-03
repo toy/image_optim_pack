@@ -48,7 +48,7 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile)
 
   # rsync needed files to the box
   mkdir -p vendor/$vm
-  rsync -e "ssh -F $ssh_config" -aR --del Makefile download vendor/$vm $vm:/vagrant
+  rsync -e "ssh -F $ssh_config" -aR --del Makefile checksums.mk download vendor/$vm $vm:/vagrant
 
   # sync time and run make
   ssh -F $ssh_config $vm "
