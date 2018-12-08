@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* libpng 1.6.36 [@toy](https://github.com/toy)
 * pngquant 2.12.2 [@toy](https://github.com/toy)
 * libpng 1.6.35 [@toy](https://github.com/toy)
 
