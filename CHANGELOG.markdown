@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jhead 3.02 [@toy](https://github.com/toy)
+
 ## v0.5.1.20181208 (2018-12-08)
 
 * libpng 1.6.36 [@toy](https://github.com/toy)
