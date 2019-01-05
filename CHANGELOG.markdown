@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jhead 3.03 [@toy](https://github.com/toy)
+
 ## v0.5.1.20181213 (2018-12-13)
 
 * jhead 3.02 [@toy](https://github.com/toy)
