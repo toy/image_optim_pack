@@ -28,13 +28,13 @@ matrix:
       rvm: default
     - os: osx
       rvm: default
-      osx_image: xcode7.3
-    - os: osx
-      rvm: default
       osx_image: xcode8.3
     - os: osx
       rvm: default
-      osx_image: xcode9.3
+      osx_image: xcode9.4
+    - os: osx
+      rvm: default
+      osx_image: xcode10.1
     - env: RUBOCOP=✓
       rvm: '2.5.3'
       script: bundle exec rubocop
