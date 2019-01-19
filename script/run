@@ -24,7 +24,7 @@ header() {
   printf '\033[1;7m######## %s ########\033[0m\n' "$1"
 }
 
-if [[ `uname -s` != 'Darwin' ]]; then
+if [[ $(uname -s) != 'Darwin' ]]; then
   echo 'expected to run on Mac OS X'
   exit 1
 fi
@@ -40,18 +40,18 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile)
   passes-filter "$vm" || continue
   header "$vm"
 
-  [[ -n "$NO_UP" ]] || vagrant up $vm
+  [[ -n "$NO_UP" ]] || vagrant up "$vm"
 
   # create ssh config
-  ssh_config=.vagrant/ssh_config.$vm
-  vagrant ssh-config $vm > $ssh_config
+  ssh_config=".vagrant/ssh_config.$vm"
+  vagrant ssh-config "$vm" > "$ssh_config"
 
   # rsync needed files to the box
-  mkdir -p vendor/$vm
-  rsync -e "ssh -F $ssh_config" -aR --del Makefile checksums.mk download vendor/$vm $vm:/vagrant
+  mkdir -p "vendor/$vm"
+  rsync -e "ssh -F $ssh_config" -aR --del Makefile checksums.mk download "vendor/$vm" "$vm:/vagrant"
 
   # sync time and run make
-  ssh -F $ssh_config $vm "
+  ssh -F "$ssh_config" "$vm" "
     set -e
 
     sudo ntpdate pool.ntp.org
@@ -65,7 +65,7 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile)
   "
 
   # rsync files in vendor from the box
-  rsync -e "ssh -F $ssh_config" -aR --del $vm:/vagrant/./vendor/$vm .
+  rsync -e "ssh -F $ssh_config" -aR --del "$vm:/vagrant/./vendor/$vm" .
 
-  [[ -n "$NO_HALT" ]] || vagrant halt $vm
+  [[ -n "$NO_HALT" ]] || vagrant halt "$vm"
 done
