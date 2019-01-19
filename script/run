@@ -30,10 +30,27 @@ if [[ $(uname -s) != 'Darwin' ]]; then
 fi
 
 for arch in i386 x86_64; do
-  passes-filter "darwin-$arch" || continue
-  header "darwin-$arch"
+  platform="darwin-$arch"
+  passes-filter "$platform" || continue
+  header "$platform"
 
-  make $MAKE_TASK ARCH=$arch
+  build_dir=~_image_optim/pack
+
+  mkdir -p "vendor/$platform"
+
+  sudo -u _image_optim bash -c "
+    set -e
+
+    mkdir -p '$build_dir'
+    cd '$build_dir'
+
+    ln -nsf '$PWD/Makefile' '$PWD/checksums.mk' '$PWD/download' .
+    rsync -aR --del '$PWD/./vendor/$platform' .
+
+    make $MAKE_TASK ARCH=$arch
+  "
+
+  rsync -aR --del "$build_dir/./vendor/$platform" .
 done
 
 for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile); do
