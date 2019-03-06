@@ -17,8 +17,8 @@ Vagrant.configure('2') do |config|
   config.vm.synced_folder '.', '/vagrant', disabled: true
 
   {
-    'linux-x86_64'  => 'ubuntu/trusty64',
-    'linux-i686'    => 'ubuntu/trusty32',
+    'linux-x86_64'  => 'boxes/centos-amd64.box',
+    'linux-i686'    => 'boxes/centos-i386.box',
     'freebsd-amd64' => 'boxes/freebsd-amd64.box',
     'freebsd-i386'  => 'boxes/freebsd-i386.box',
     'openbsd-amd64' => 'boxes/openbsd-amd64.box',
@@ -32,7 +32,12 @@ Vagrant.configure('2') do |config|
       when /^linux/
         <<-SH
           set -ex
-          apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm
+          if command -v apt-get; then
+            apt-get update
+            apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm
+          else
+            yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm
+          fi
         SH
       when /^freebsd/
         <<-SH

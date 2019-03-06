@@ -2,18 +2,22 @@ all :
 
 # ====== VERSIONS ======
 
-ADVANCECOMP_VER := 2.0
-GIFSICLE_VER := 1.90
-JHEAD_VER := 3.00
+ADVANCECOMP_VER := 2.1
+GIFSICLE_VER := 1.91
+JHEAD_VER := 3.03
 JPEGARCHIVE_VER := 2.1.1
-JPEGOPTIM_VER := 1.4.4
-LIBJPEG_VER := 9b
+JPEGOPTIM_VER := 1.4.6
+LIBJPEG_VER := 9c
 LIBMOZJPEG_VER := 3.1
-LIBPNG_VER := 1.6.34
+LIBPNG_VER := 1.6.36
 LIBZ_VER := 1.2.11
-OPTIPNG_VER := 0.7.6
+OPTIPNG_VER := 0.7.7
 PNGCRUSH_VER := 1.8.13
-PNGQUANT_VER := 2.11.2
+PNGQUANT_VER := 2.12.2
+
+# ====== CHECKSUMS ======
+
+include checksums.mk
 
 # ====== CONSTANTS ======
 
@@ -46,6 +50,7 @@ downcase = $(shell echo $1 | tr A-Z a-z)
 
 ln_s := ln -sf
 tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
+sha256sum := $(shell if command -v sha256sum >/dev/null 2>&1; then echo sha256sum; elif command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
 
 # ====== ARCHIVES ======
 
@@ -59,6 +64,7 @@ $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
 $1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
 $$($1_EXTRACTED) : $$($1_TGZ)
 	rm -rf $$(@D)
+	echo "$$($1_SHA256)  $$($1_TGZ)" | $(sha256sum) -c
 	mkdir $$(@D)
 	$(tar) -C $$(@D) --strip-components=1 -xzf $$<
 	touch $$(@D)/__$$(notdir $$<)__
@@ -87,22 +93,26 @@ $(eval $(call archive-dl,LIBPNG,      http://prdownloads.sourceforge.net/libpng/
 $(eval $(call archive-dl,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
-$(eval $(call archive,PNGQUANT))
-
-PNGQUANT_GIT := $(DL_DIR)/pngquant.git
-$(PNGQUANT_GIT) :; git clone --recursive https://github.com/kornelski/pngquant.git $@
-$(PNGQUANT_TGZ) : $(PNGQUANT_GIT)
-	while ! mkdir $@.lock 2> /dev/null; do sleep 1; done
-	cd $(PNGQUANT_GIT) && git fetch && git checkout -q $(PNGQUANT_VER) && git submodule -q update
-	cd $(PNGQUANT_GIT) && $(tar) --exclude=.git -czf $(PNGQUANT_TGZ) .
-	rm -r $@.lock
+$(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 .PHONY : download
 
 download-tidy-up :
-	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)) $(PNGQUANT_GIT),$(wildcard $(DL_DIR)/*.*))
+	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
 .PHONY : download-tidy-up
+
+checksum : download
+	@$(sha256sum) $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+.PHONY : checksum
+
+checksum-verify : download
+	@printf '%s  %s\n' $(foreach archive,$(ARCHIVES),$($(archive)_SHA256) $($(archive)_TGZ)) | $(sha256sum) -c
+.PHONY : checksum-verify
+
+checksum-update : download
+	@printf '%s := %s\n' $(foreach archive,$(ARCHIVES),$(archive)_SHA256 $(shell $(sha256sum) $($(archive)_TGZ) | cut -d ' ' -f 1)) > checksums.mk
+.PHONY : checksum-update
 
 # ====== PRODUCTS ======
 
@@ -168,6 +178,9 @@ else
 ldd := ldd
 endif
 
+ldd-version :; $(ldd) --version
+.PHONY : ldd-version
+
 define check_exists
 	@test -f $(OUTPUT_DIR)/$1 || \
 		{ printf "$1: $(ANSI_RED)not found$(ANSI_RESET)\n"; exit 1; }
@@ -232,7 +245,9 @@ test :
 livecheck :; @script/livecheck
 .PHONY : livecheck
 
-update-versions :; @script/livecheck --update
+update-versions :
+	script/livecheck --update
+	make checksum-update
 .PHONY : update-versions
 
 # ====== CLEAN ======
@@ -295,10 +310,17 @@ endif
 
 # ====== ENV ======
 
+ifdef IS_DARWIN
+export CC := clang
+export CXX := clang++
+else
 export CC := gcc
 export CXX := g++
+endif
 
 GCC_FLAGS := -O3
+STATIC_LIBGCC := $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
+
 export CFLAGS = $(GCC_FLAGS)
 export CXXFLAGS = $(GCC_FLAGS)
 export CPPFLAGS = $(GCC_FLAGS)
@@ -419,8 +441,7 @@ $(PNGCRUSH_TARGET) :
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
-$(PNGQUANT_TARGET) : export CFLAGS := $(CFLAGS) $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
 $(PNGQUANT_TARGET) :
-	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN)"
+	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
 	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)

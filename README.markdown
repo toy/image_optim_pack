@@ -1,7 +1,7 @@
 [![Gem Version](https://img.shields.io/gem/v/image_optim_pack.svg?style=flat)](https://rubygems.org/gems/image_optim_pack)
 [![Build Status](https://img.shields.io/travis/toy/image_optim_pack/master.svg?style=flat)](https://travis-ci.org/toy/image_optim_pack)
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/toy/image_optim_pack.svg?style=flat)](https://codeclimate.com/github/toy/image_optim_pack)
-[![Dependency Status](https://img.shields.io/gemnasium/toy/image_optim_pack.svg?style=flat)](https://gemnasium.com/toy/image_optim_pack)
+[![Depfu](https://badges.depfu.com/badges/bf227ee8e4f77217ae440955acfadde0/overview.svg)](https://depfu.com/github/toy/image_optim_pack)
 [![Inch CI](https://inch-ci.org/github/toy/image_optim_pack.svg?branch=master&style=flat)](https://inch-ci.org/github/toy/image_optim_pack)
 
 # image\_optim\_pack
@@ -9,6 +9,8 @@
 Precompiled binaries for [`image_optim`](https://github.com/toy/image_optim).
 
 Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64), Linux (i686 and x86\_64), FreeBSD (i386 and amd64) and OpenBSD (i386 and amd64).
+
+A test application with latest `image_optim` and `image_optim_pack` is available on heroku: https://iopack.herokuapp.com/.
 
 ## Binaries and libraries
 
@@ -90,4 +92,4 @@ make clobber # `clean-all` and remove download directory
 
 ## Copyright
 
-Copyright (c) 2014-2017 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
+Copyright (c) 2014-2019 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.

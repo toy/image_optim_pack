@@ -2,13 +2,20 @@
 
 Gem::Specification.new do |s|
   s.name        = 'image_optim_pack'
-  s.version     = '0.5.0.20171208'
+  s.version     = '0.5.1.20190105'
   s.summary     = %q{Precompiled binaries for image_optim: advpng, gifsicle, jhead, jpeg-recompress, jpegoptim, jpegtran, optipng, pngcrush, pngquant}
   s.homepage    = "http://github.com/toy/#{s.name}"
   s.authors     = ['Ivan Kuchin']
   s.license     = 'MIT'
 
   s.rubyforge_project = s.name
+
+  s.metadata = {
+    'bug_tracker_uri'   => "https://github.com/toy/#{s.name}/issues",
+    'changelog_uri'     => "https://github.com/toy/#{s.name}/blob/master/CHANGELOG.markdown",
+    'documentation_uri' => "https://www.rubydoc.info/gems/#{s.name}/#{s.version}",
+    'source_code_uri'   => "https://github.com/toy/#{s.name}",
+  }
 
   s.files         = `git ls-files`.split("\n")
   if defined?(gem_platform)
@@ -35,7 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'fspath', '>= 2.1', '< 4'
 
   s.add_development_dependency 'rspec', '~> 3.0'
-  if RUBY_VERSION >= '2.1'
-    s.add_development_dependency 'rubocop', '~> 0.52'
+  if RUBY_VERSION >= '2.2'
+    s.add_development_dependency 'rubocop', '~> 0.59'
   end
 end
