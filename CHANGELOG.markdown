@@ -2,10 +2,54 @@
 
 ## unreleased
 
+## v0.5.1.20190105 (2019-01-05)
+
+* jhead 3.03 [@toy](https://github.com/toy)
+
+## v0.5.1.20181213 (2018-12-13)
+
+* jhead 3.02 [@toy](https://github.com/toy)
+
+## v0.5.1.20181208 (2018-12-08)
+
+* libpng 1.6.36 [@toy](https://github.com/toy)
+* pngquant 2.12.2 [@toy](https://github.com/toy)
+* libpng 1.6.35 [@toy](https://github.com/toy)
+
+## v0.5.1 (2018-06-10)
+
+* Switching back to centos (6.9) for linux to use more widely compatible glibc during compilation [#12](https://github.com/toy/image_optim_pack/issues/12) [@toy](https://github.com/toy)
+* Add archive checksum verification [#10](https://github.com/toy/image_optim_pack/issues/10) [@toy](https://github.com/toy)
+
+## v0.5.0.20180605 (2018-06-05)
+
+* pngquant 2.12.0 [@toy](https://github.com/toy)
+
+## v0.5.0.20180419 (2018-04-19)
+
+* jpegoptim 1.4.6 [@toy](https://github.com/toy)
+
+## v0.5.0.20180401 (2018-04-01)
+
+* jpegoptim 1.4.5 [@toy](https://github.com/toy)
+* advancecomp 2.1 [@toy](https://github.com/toy)
+
+## v0.5.0.20180124 (2018-01-24)
+
+* libjpeg 9c and pngquant 2.11.7 [@toy](https://github.com/toy)
+
+## v0.5.0.20180108 (2018-01-08)
+
+* gifsicle 1.91 [@toy](https://github.com/toy)
+
+## v0.5.0.20180103 (2018-01-03)
+
+* optipng 0.7.7 [@toy](https://github.com/toy)
+
 ## v0.5.0.20171208 (2017-12-08)
 
-* ensure unused libgcc is not dynamically linked with pngquant [@toy](https://github.com/toy)
-* don’t use lcms (colour profiles) in pngquant [@toy](https://github.com/toy)
+* Ensure unused libgcc is not dynamically linked with pngquant [@toy](https://github.com/toy)
+* Don’t use lcms (colour profiles) in pngquant [@toy](https://github.com/toy)
 * pngquant 2.11.2 [@toy](https://github.com/toy)
 * pngquant 2.11.1 [@toy](https://github.com/toy)
 

@@ -7,6 +7,7 @@ require 'progress'
 class BodyProgress # :nodoc:
   def initialize(path, &block)
     fail ArgumentError, 'block required' unless block
+
     @io = File.open(path)
     Progress.start(path, File.size(path)) do
       yield self
@@ -94,6 +95,7 @@ end
 task :atlas => :dotenv do
   token = ENV['ATLAS_TOKEN'].to_s
   fail 'ATLAS_TOKEN missing' if token.empty?
+
   Atlas.configure do |config|
     config.access_token = token
   end

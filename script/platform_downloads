@@ -10,14 +10,26 @@ platforms = versions.map(&:platform).uniq.sort_by do |platform|
   platform.sub('amd64', 'x86_64').split('-').reverse
 end
 
+version_time = begin
+  time_pairs = versions.group_by(&:number).map do |version_n, platform_versions|
+    [version_n, platform_versions.map{ |v| Time.parse(v.created_at) }.min]
+  end.sort
+  time_pairs << [nil, Time.now]
+
+  time_pairs.each_cons(2).map do |(version_n, created_at), (_, next_created_at)|
+    [version_n, next_created_at - created_at]
+  end.to_h
+end
+
 table = Terminal::Table.new
 
-table.headings = %W[version base\ dls] + platforms.map do |platform|
+table.headings = %W[version days base\ dls] + platforms.map do |platform|
   platform.split('-').reverse.join("\n")
 end
 
-versions.group_by(&:number).each do |version_number, platform_versions|
+versions.group_by(&:number).each do |version_n, platform_versions|
   next if platform_versions.length == 1
+
   downloads_by_platform = Hash[platform_versions.map do |version|
     [version.platform, version.downloads_count]
   end]
@@ -26,9 +38,14 @@ versions.group_by(&:number).each do |version_number, platform_versions|
 
   platform_values = downloads_by_platform.values_at(*platforms).map do |count|
     next unless count
+
     count == base_downloads ? '=' : format('%+d', count - base_downloads)
   end
-  table << [version_number, base_downloads] + platform_values
+  table << [
+    version_n,
+    (version_time[version_n] / (24 * 60 * 60)).round,
+    base_downloads,
+  ] + platform_values
 end
 
 (1...table.number_of_columns).each do |column|

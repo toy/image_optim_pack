@@ -11,7 +11,7 @@ require 'fspath'
 class Livecheck
   # Commands
   class Cli
-    VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/
+    VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/.freeze
 
     def initialize(args)
       @update = args.delete('--update')
@@ -33,6 +33,7 @@ class Livecheck
     def dump_changes
       livechecks.each do |lc|
         next unless lc.changed?
+
         puts "#{lc.name_n_latest_version} (current: #{lc.current_version})"
       end
     end
@@ -179,8 +180,8 @@ jhead:
   url: http://www.sentex.net/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)
 jpegoptim:
-  url: https://www.kokkonen.net/tjko/src/
-  regexp: jpegoptim-(\d+(?:\.\d+)*)
+  url: https://github.com/tjko/jpegoptim/releases.atom
+  regexp: <title>RELEASE.(\d+(?:\.\d+)*)</title>
 jpegarchive:
   url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
   regexp: <title>JPEG-Archive (\d+(?:\.\d+)*)</title>
@@ -203,5 +204,5 @@ pngcrush:
   url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
 pngquant:
-  url: https://github.com/kornelski/pngquant/releases.atom
-  regexp: /kornelski/pngquant/releases/tag/(\d+(?:\.\d+)*)
+  url: https://pngquant.org/releases.html
+  regexp: <span itemprop='version'>(\d+(?:\.\d+)*)</span>
