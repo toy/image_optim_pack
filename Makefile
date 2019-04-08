@@ -327,8 +327,9 @@ export CPPFLAGS = $(GCC_FLAGS)
 export LDFLAGS = $(GCC_FLAGS)
 
 ifdef IS_DARWIN
-export MACOSX_DEPLOYMENT_TARGET := 10.6
+export MACOSX_DEPLOYMENT_TARGET := 10.7
 GCC_FLAGS += -arch $(ARCH)
+CXXFLAGS += -stdlib=libc++
 endif
 
 ifdef IS_BSD
