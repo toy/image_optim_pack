@@ -157,6 +157,7 @@ $(eval $(call target,JHEAD))
 $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
 $(eval $(call target,JPEGTRAN,LIBMOZJPEG,.libs/jpegtran))
+$(eval $(call target,CJPEG,LIBMOZJPEG,.libs/cjpeg))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
 $(eval $(call target,LIBMOZJPEG,,libjpeg.62$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
@@ -237,7 +238,8 @@ test :
 	$(call check_bin,jhead,-V,$(JHEAD_VER))
 	$(call check_bin,jpeg-recompress,--version,$(JPEGARCHIVE_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
-	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
+	$(call check_bin,jpegtran,-v - 2>&1,$(LIBMOZJPEG_VER))
+	$(call check_bin,cjpeg,-v - 2>&1,$(LIBMOZJPEG_VER))
 	$(call check_lib,libjpeg$(DLEXT))
 	$(call check_lib,libjpeg.62$(DLEXT))
 	$(call check_lib,libpng$(DLEXT))
@@ -375,11 +377,15 @@ $(JPEGOPTIM_TARGET) :
 	cd $(DIR) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
 
-## jpegtran
-$(eval $(call depend,JPEGTRAN,LIBJPEG))
+## jpegtran, cjpeg
+$(eval $(call depend,JPEGTRAN,LIBMOZJPEG))
 $(JPEGTRAN_TARGET) :
-	cd $(DIR) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
-	$(call chrpath_origin,$(JPEGTRAN_TARGET))
+	cd $(DIR) && $(MAKE) jpegtran
+	cd $(DIR) && $(MAKE) cjpeg
+ifdef IS_DARWIN
+	install_name_tool -change /opt/mozjpeg/lib/libjpeg.62$(DLEXT) @loader_path/libjpeg.62$(DLEXT) $(DIR)/.libs/jpegtran
+	install_name_tool -change /opt/mozjpeg/lib/libjpeg.62$(DLEXT) @loader_path/libjpeg.62$(DLEXT) $(DIR)/.libs/cjpeg
+endif
 
 ## libjpeg
 $(LIBJPEG_TARGET) :
