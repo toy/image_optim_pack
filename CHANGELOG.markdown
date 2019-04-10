@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.2 (2019-04-10)
+
 * Use libc++ instead of libstdc++ on darwin and set deployment target to 10.7 [#15](https://github.com/toy/image_optim_pack/issues/15) [@toy](https://github.com/toy)
 * Switch to openbsd 5.9 [@toy](https://github.com/toy)
 
