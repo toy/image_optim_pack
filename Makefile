@@ -8,7 +8,7 @@ JHEAD_VER := 3.03
 JPEGARCHIVE_VER := 2.1.1
 JPEGOPTIM_VER := 1.4.6
 LIBJPEG_VER := 9c
-LIBMOZJPEG_VER := 3.1
+LIBMOZJPEG_VER := 3.3.1
 LIBPNG_VER := 1.6.36
 LIBZ_VER := 1.2.11
 OPTIPNG_VER := 0.7.7
@@ -154,8 +154,9 @@ $(eval $(call target,GIFSICLE,,src/gifsicle))
 $(eval $(call target,JHEAD))
 $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
-$(eval $(call target,JPEGTRAN,LIBJPEG,.libs/jpegtran))
+$(eval $(call target,JPEGTRAN,LIBMOZJPEG,.libs/jpegtran))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
+$(eval $(call target,LIBMOZJPEG,,libjpeg.62$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
@@ -201,7 +202,7 @@ define check_output
 endef
 
 define check_shlib
-	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
+	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/opt|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
 endef
 
 define check_lib
@@ -235,6 +236,7 @@ test :
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
 	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
 	$(call check_lib,libjpeg$(DLEXT))
+	$(call check_lib,libjpeg.62$(DLEXT))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
@@ -327,8 +329,9 @@ export CPPFLAGS = $(GCC_FLAGS)
 export LDFLAGS = $(GCC_FLAGS)
 
 ifdef IS_DARWIN
-export MACOSX_DEPLOYMENT_TARGET := 10.6
+export MACOSX_DEPLOYMENT_TARGET := 10.9
 GCC_FLAGS += -arch $(ARCH)
+CXXFLAGS += -stdlib=libc++
 endif
 
 ifdef IS_BSD
@@ -391,6 +394,7 @@ $(LIBMOZJPEG_TARGET) :
 	cd $(DIR) && ./configure --host $(HOST)
 	cd $(DIR)/simd && $(MAKE)
 	cd $(DIR) && $(MAKE) libjpeg.la
+	cd $(DIR) && $(ln_s) .libs/libjpeg.62$(DLEXT) .
 	cd $(DIR) && $(ln_s) .libs/libjpeg.a .
 
 ## libpng
