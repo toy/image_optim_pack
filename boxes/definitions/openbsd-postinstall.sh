@@ -7,8 +7,8 @@ export PKG_PATH=http://ftp3.usa.openbsd.org/pub/OpenBSD/`uname -r`/packages/`arc
 echo "export PKG_PATH=$PKG_PATH" >> /root/.profile
 echo "export PKG_PATH=$PKG_PATH" >> /home/vagrant/.profile
 
-# install bash and wget
-pkg_add bash wget
+# install bash, wget and sudo
+pkg_add -z bash wget sudo--
 
 # set vagrant shell to bash
 usermod -s /usr/local/bin/bash vagrant

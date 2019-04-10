@@ -48,10 +48,10 @@ Vagrant.configure('2') do |config|
         <<-SH
           set -ex
           pkg_add -z rsync-- ntp gmake gtar-- wget g++-4.8.2p2 autoconf-2.69 automake-1.14.1 libtool nasm
-          path=/home/vagrant/shared
-          mkdir -p $path
-          chown vagrant:vagrant $path
-          ln -nfs $path /vagrant
+          real_workdir_path=/home/vagrant/shared
+          mkdir -p $real_workdir_path
+          chown vagrant:vagrant $real_workdir_path
+          ln -nfs $real_workdir_path /vagrant
         SH
       end
 
