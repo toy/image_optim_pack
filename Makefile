@@ -15,7 +15,7 @@ OPTIPNG_VER := 0.7.7
 PNGCRUSH_VER := 1.8.13
 PNGQUANT_VER := 2.12.2
 ZOPFLIPNG_VER := 1.0.2
-GUETZLI_VER := 1.0.1
+GUETZLI_VER := 1.0.2
 
 # ====== CHECKSUMS ======
 
@@ -97,7 +97,7 @@ $(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng
 $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
 $(eval $(call archive-dl,ZOPFLIPNG,   https://github.com/google/zopfli/archive/zopfli-[VER].tar.gz))
-$(eval $(call archive-dl,GUETZLI,     https://github.com/google/guetzli/archive/v[VER].tar.gz))
+$(eval $(call archive-dl,GUETZLI,     https://github.com/m0n9oose/guetzli/archive/v[VER].tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 .PHONY : download
@@ -251,7 +251,7 @@ test :
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 	$(call check_bin,zopflipng,v,ZopfliPNG)
-	$(call check_bin,guetzli,v,Guetzli)
+	$(call check_bin,guetzli,--version,$(GUETZLI_VER))
 .PHONY : test
 
 livecheck :; @script/livecheck
