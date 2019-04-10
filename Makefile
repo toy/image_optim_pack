@@ -16,6 +16,7 @@ PNGCRUSH_VER := 1.8.13
 PNGQUANT_VER := 2.12.2
 ZOPFLIPNG_VER := 1.0.2
 GUETZLI_VER := 1.0.2
+OXIPNG_VER := 2.2.1
 
 # ====== CHECKSUMS ======
 
@@ -98,6 +99,7 @@ $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/png
 $(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
 $(eval $(call archive-dl,ZOPFLIPNG,   https://github.com/google/zopfli/archive/zopfli-[VER].tar.gz))
 $(eval $(call archive-dl,GUETZLI,     https://github.com/m0n9oose/guetzli/archive/v[VER].tar.gz))
+$(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/archive/v[VER].tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 .PHONY : download
@@ -170,6 +172,7 @@ $(eval $(call target,PNGCRUSH))
 $(eval $(call target,PNGQUANT))
 $(eval $(call target,ZOPFLIPNG))
 $(eval $(call target,GUETZLI,,bin/Release/guetzli))
+$(eval $(call target,OXIPNG,,target/release/oxipng))
 
 # ====== TARGETS ======
 
@@ -252,6 +255,7 @@ test :
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 	$(call check_bin,zopflipng,v,ZopfliPNG)
 	$(call check_bin,guetzli,--version,$(GUETZLI_VER))
+	$(call check_bin,oxipng,--version,$(OXIPNG_VER))
 .PHONY : test
 
 livecheck :; @script/livecheck
@@ -473,4 +477,9 @@ $(ZOPFLIPNG_TARGET) :
 $(eval $(call depend,GUETZLI,LIBPNG LIBZ))
 $(GUETZLI_TARGET) :
 	cd $(DIR) && $(MAKE) guetzli
+	$(call chrpath_origin,$@)
+
+## oxipng
+$(OXIPNG_TARGET) :
+	cd $(DIR) && cargo build --release
 	$(call chrpath_origin,$@)
