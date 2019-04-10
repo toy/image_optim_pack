@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Switch to openbsd 5.9 [@toy](https://github.com/toy)
+
 ## v0.5.1.20190105 (2019-01-05)
 
 * jhead 3.03 [@toy](https://github.com/toy)
