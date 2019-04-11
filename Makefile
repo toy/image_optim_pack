@@ -35,6 +35,8 @@ IS_OPENBSD := $(findstring openbsd,$(OS))
 DLEXT := $(if $(IS_DARWIN),.dylib,.so)
 HOST := $(ARCH)-$(if $(IS_DARWIN),apple,pc)-$(OS)
 
+LIBJPEG62 := $(if $(IS_DARWIN),libjpeg.62.dylib,libjpeg.so.62)
+
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
 BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
@@ -163,7 +165,7 @@ $(eval $(call target,JPEGOPTIM))
 $(eval $(call target,JPEGTRAN,LIBMOZJPEG,.libs/jpegtran))
 $(eval $(call target,CJPEG,LIBMOZJPEG,.libs/cjpeg))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
-$(eval $(call target,LIBMOZJPEG,,libjpeg.62$(DLEXT)))
+$(eval $(call target,LIBMOZJPEG,,$(LIBJPEG62)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
@@ -247,7 +249,7 @@ test :
 	$(call check_bin,jpegtran,-v - 2>&1,$(LIBMOZJPEG_VER))
 	$(call check_bin,cjpeg,-v - 2>&1,$(LIBMOZJPEG_VER))
 	$(call check_lib,libjpeg$(DLEXT))
-	$(call check_lib,libjpeg.62$(DLEXT))
+	$(call check_lib,$(LIBJPEG62))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
@@ -391,8 +393,8 @@ $(JPEGTRAN_TARGET) :
 	cd $(DIR) && $(MAKE) jpegtran
 	cd $(DIR) && $(MAKE) cjpeg
 ifdef IS_DARWIN
-	install_name_tool -change /opt/mozjpeg/lib/libjpeg.62$(DLEXT) @loader_path/libjpeg.62$(DLEXT) $(DIR)/.libs/jpegtran
-	install_name_tool -change /opt/mozjpeg/lib/libjpeg.62$(DLEXT) @loader_path/libjpeg.62$(DLEXT) $(DIR)/.libs/cjpeg
+	install_name_tool -change /opt/mozjpeg/lib/$(LIBJPEG62) @loader_path/$(LIBJPEG62) $(DIR)/.libs/jpegtran
+	install_name_tool -change /opt/mozjpeg/lib/$(LIBJPEG62) @loader_path/$(LIBJPEG62) $(DIR)/.libs/cjpeg
 endif
 
 ## libjpeg
@@ -412,7 +414,7 @@ $(LIBMOZJPEG_TARGET) :
 	cd $(DIR) && ./configure --host $(HOST)
 	cd $(DIR)/simd && $(MAKE)
 	cd $(DIR) && $(MAKE) libjpeg.la
-	cd $(DIR) && $(ln_s) .libs/libjpeg.62$(DLEXT) .
+	cd $(DIR) && $(ln_s) .libs/$(LIBJPEG62) .
 	cd $(DIR) && $(ln_s) .libs/libjpeg.a .
 
 ## libpng
