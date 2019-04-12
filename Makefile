@@ -280,6 +280,10 @@ clobber : clean-all
 	rm -rf $(DL_DIR)
 .PHONY : clobber
 
+info :
+	@echo "Darwin: $(IS_DARWIN)\nLinux: $(IS_LINUX)\nBSD: $(IS_BSD)\nFreeBSD: $(IS_FREEBSD)\nOpenBSD: $(IS_OPENBSD)\nHost: $(HOST)"
+.PHONY : info
+
 # ====== BUILD HELPERS ======
 
 # $1 - name of product
@@ -383,14 +387,24 @@ $(JPEGOPTIM_TARGET) :
 	cd $(DIR) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
 
-## jpegtran, cjpeg
+## jpegtran
 $(eval $(call depend,JPEGTRAN,LIBMOZJPEG))
 $(JPEGTRAN_TARGET) :
 	cd $(DIR) && $(MAKE) jpegtran
-	cd $(DIR) && $(MAKE) cjpeg
 ifdef IS_DARWIN
 	install_name_tool -change /opt/mozjpeg/lib/$(LIBJPEG62) @loader_path/$(LIBJPEG62) $(DIR)/.libs/jpegtran
+else
+	$(call chrpath_origin,$@)
+endif
+
+## cjpeg
+$(eval $(call depend,CJPEG,LIBMOZJPEG))
+$(CJPEG_TARGET) :
+	cd $(DIR) && $(MAKE) cjpeg
+ifdef IS_DARWIN
 	install_name_tool -change /opt/mozjpeg/lib/$(LIBJPEG62) @loader_path/$(LIBJPEG62) $(DIR)/.libs/cjpeg
+else
+	$(call chrpath_origin,$@)
 endif
 
 ## libjpeg
@@ -407,9 +421,14 @@ endif
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
 	cd $(DIR) && autoreconf -fiv
+ifdef IS_DARWIN
 	cd $(DIR) && ./configure --host $(HOST)
 	cd $(DIR)/simd && $(MAKE)
 	cd $(DIR) && $(MAKE) libjpeg.la
+else
+	cd $(DIR) && ./configure LDFLAGS='-Wl,-rpath=\$$ORIGIN'
+	cd $(DIR) && $(MAKE)
+endif
 	cd $(DIR) && $(ln_s) .libs/$(LIBJPEG62) .
 	cd $(DIR) && $(ln_s) .libs/libjpeg.a .
 
@@ -462,15 +481,12 @@ $(PNGQUANT_TARGET) :
 ## zopflipng
 $(ZOPFLIPNG_TARGET) :
 	cd $(DIR) && $(MAKE) zopflipng
-	$(call chrpath_origin,$@)
 
 ## guetzli
 $(eval $(call depend,GUETZLI,LIBPNG LIBZ))
 $(GUETZLI_TARGET) :
 	cd $(DIR) && $(MAKE) guetzli
-	$(call chrpath_origin,$@)
 
 ## oxipng
 $(OXIPNG_TARGET) :
 	cd $(DIR) && cargo build --release
-	$(call chrpath_origin,$@)
