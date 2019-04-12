@@ -11,7 +11,6 @@ LIBJPEG_VER := 9c
 LIBMOZJPEG_VER := 3.3.1
 LIBPNG_VER := 1.6.36
 LIBZ_VER := 1.2.11
-OPTIPNG_VER := 0.7.7
 PNGCRUSH_VER := 1.8.13
 PNGQUANT_VER := 2.12.2
 ZOPFLIPNG_VER := 1.0.2
@@ -96,7 +95,6 @@ $(eval $(call archive-dl,LIBJPEG,     http://www.ijg.org/files/jpegsrc.v[VER].ta
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
-$(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
 $(eval $(call archive-dl,ZOPFLIPNG,   https://github.com/google/zopfli/archive/zopfli-[VER].tar.gz))
@@ -169,7 +167,6 @@ $(eval $(call target,LIBMOZJPEG,,$(LIBJPEG62)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
-$(eval $(call target,OPTIPNG,,src/optipng/optipng))
 $(eval $(call target,PNGCRUSH))
 $(eval $(call target,PNGQUANT))
 $(eval $(call target,ZOPFLIPNG))
@@ -252,7 +249,6 @@ test :
 	$(call check_lib,$(LIBJPEG62))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
-	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 	$(call check_bin,zopflipng,v,ZopfliPNG)
@@ -442,13 +438,6 @@ $(LIBZ_TARGET) :
 	cd $(DIR) && ./configure
 	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
 	cd $(DIR) && $(MAKE) placebo
-
-## optipng
-$(eval $(call depend,OPTIPNG,LIBPNG LIBZ))
-$(OPTIPNG_TARGET) :
-	cd $(DIR) && ./configure -with-system-libs
-	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(LDFLAGS)"
-	$(call chrpath_origin,$@)
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
