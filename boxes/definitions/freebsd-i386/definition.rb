@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Veewee::Session.declare({
   :cpu_count => '1',
   :memory_size => '512',
