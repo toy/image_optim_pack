@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* pngquant 2.12.3 [@toy](https://github.com/toy)
+
 ## v0.5.2.20190428 (2019-04-28)
 
 * gifsicle 1.92 and libpng 1.6.37 [@toy](https://github.com/toy)
