@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.3 (2019-05-25)
+
 * pngquant 2.12.3 [@toy](https://github.com/toy)
 * Enable frozen string literals [@toy](https://github.com/toy)
 
