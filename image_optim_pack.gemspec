@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   if defined?(gemspec_path)
     gem_os, gem_cpu = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
 
-    s.platform = [gem_cpu, gem_os]
+    s.platform = Gem::Platform.new([gem_cpu, gem_os])
 
     cpu_aliases = {
       'x86' => %w[i386 i686],

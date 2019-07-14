@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Fix specifying platform in gemspec for platform specific gems [@toy](https://github.com/toy)
+
 ## v0.5.4 (2019-07-14)
 
 * Remove deprecated `rubyforge_project` attribute from gemspec [rubygems/rubygems#2436](https://github.com/rubygems/rubygems/pull/2436) [@toy](https://github.com/toy)
