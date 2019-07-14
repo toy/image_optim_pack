@@ -16,17 +16,31 @@ Gem::Specification.new do |s|
   }
 
   s.files         = `git ls-files`.split("\n")
-  if defined?(gem_platform)
-    s.platform = gem_platform
+  if defined?(gemspec_path)
+    gem_os, gem_cpu = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
 
-    vendor_dir = {
-      'x86-linux' => 'linux-i686',
-      'x86_64-openbsd' => 'openbsd-amd64',
-    }[gem_platform] || begin
-      gem_platform.sub(/^x86-/, 'i386-').split('-').reverse.join('-')
+    s.platform = [gem_cpu, gem_os]
+
+    cpu_aliases = {
+      'x86' => %w[i386 i686],
+      'x86_64' => %w[x86_64 amd64],
+    }[gem_cpu] || [gem_cpu]
+
+    possible_vendor_dirs = cpu_aliases.map do |cpu_alias|
+      "#{gem_os}-#{cpu_alias}"
     end
-    vendor_path = File.join('vendor', vendor_dir)
-    fail "#{vendor_path} is not a dir" unless File.directory?(vendor_path)
+
+    existing_vendor_dirs = possible_vendor_dirs.select do |vendor_dir|
+      File.directory?(File.join('vendor', vendor_dir))
+    end
+
+    vendor_dir = if existing_vendor_dirs.length == 1
+      existing_vendor_dirs.first
+    else
+      message = existing_vendor_dirs.empty? ? 'no vendor dir' : 'multiple vendor dirs'
+      fail "#{message} found for os #{gem_os} and cpu #{gem_cpu} out of: #{possible_vendor_dirs.join(', ')}"
+    end
+
     s.files.reject! do |path|
       parts = path.split('/')
       parts[0] == 'vendor' && parts[1] != vendor_dir
