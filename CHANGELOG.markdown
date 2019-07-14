@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Remove deprecated `rubyforge_project` attribute from gemspec [rubygems/rubygems#2436](https://github.com/rubygems/rubygems/pull/2436) [@toy](https://github.com/toy)
+
 ## v0.5.3 (2019-05-25)
 
 * pngquant 2.12.3 [@toy](https://github.com/toy)
