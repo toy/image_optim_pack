@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Ignore dotfiles alongside libraries when selecting path with compatible binaries [@toy](https://github.com/toy)
+
 ## v0.5.5 (2019-07-14)
 
 * Fix specifying platform in gemspec for platform specific gems [@toy](https://github.com/toy)

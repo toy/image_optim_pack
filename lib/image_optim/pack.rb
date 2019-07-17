@@ -60,7 +60,7 @@ class ImageOptim
 
       # All children except those starting with 'lib'
       def bin_paths
-        path.children.reject{ |child| child.basename.to_s =~ /^lib/ }
+        path.children.reject{ |child| child.basename.to_s.start_with?('lib', '.') }
       end
     end
 
