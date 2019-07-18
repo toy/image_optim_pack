@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.5.6 (2019-07-18)
+
 * Ignore dotfiles alongside libraries when selecting path with compatible binaries [@toy](https://github.com/toy)
 
 ## v0.5.5 (2019-07-14)
