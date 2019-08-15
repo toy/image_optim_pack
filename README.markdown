@@ -8,7 +8,7 @@
 
 Precompiled binaries for [`image_optim`](https://github.com/toy/image_optim).
 
-Contains binaries for Mac OS X (>= 10.6, i386 and x86\_64), Linux (i686 and x86\_64), FreeBSD (i386 and amd64) and OpenBSD (i386 and amd64).
+Contains binaries for Mac OS X (>= 10.7, i386 and x86\_64) and Linux (i686 and x86\_64).
 
 A test application with latest `image_optim` and `image_optim_pack` is available on heroku: https://iopack.herokuapp.com/.
 

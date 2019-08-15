@@ -1,5 +1,3 @@
-Vagrant.require_version '!= 1.8.5' # OpenBSD can't be halted in 1.8.5
-
 Vagrant.configure('2') do |config|
   # don't mess with keys
   config.ssh.insert_key = false
@@ -19,10 +17,6 @@ Vagrant.configure('2') do |config|
   {
     'linux-x86_64'  => 'boxes/centos-amd64.box',
     'linux-i686'    => 'boxes/centos-i386.box',
-    'freebsd-amd64' => 'boxes/freebsd-amd64.box',
-    'freebsd-i386'  => 'boxes/freebsd-i386.box',
-    'openbsd-amd64' => 'boxes/openbsd-amd64.box',
-    'openbsd-i386'  => 'boxes/openbsd-i386.box',
   }.each do |name, location|
     config.vm.define name do |machine|
       machine.vm.hostname = name.gsub('_', '-')
@@ -38,20 +32,6 @@ Vagrant.configure('2') do |config|
           else
             yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm
           fi
-        SH
-      when /^freebsd/
-        <<-SH
-          set -ex
-          pkg install -y rsync gmake wget gcc chrpath perl5 pkgconf autoconf automake libtool nasm
-        SH
-      when /^openbsd/
-        <<-SH
-          set -ex
-          pkg_add -z rsync-- ntp gmake gtar-- wget g++-4.8.2p2 autoconf-2.69 automake-1.14.1 libtool nasm
-          real_workdir_path=/home/vagrant/shared
-          mkdir -p $real_workdir_path
-          chown vagrant:vagrant $real_workdir_path
-          ln -nfs $real_workdir_path /vagrant
         SH
       end
 
