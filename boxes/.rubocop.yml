@@ -1,6 +1,6 @@
 inherit_from: ../.rubocop.yml
 
-Lint/UnneededSplatExpansion:
+Lint/RedundantSplatExpansion:
   Enabled: false
 
 Metrics/LineLength:
