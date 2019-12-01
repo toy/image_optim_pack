@@ -14,7 +14,7 @@ Layout/AccessModifierIndentation:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/RescueEnsureAlignment:
