@@ -178,7 +178,7 @@ gifsicle:
   url: https://www.lcdf.org/gifsicle/
   regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
 jhead:
-  url: http://www.sentex.net/~mwandel/jhead/
+  url: https://www.sentex.ca/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)
 jpegoptim:
   url: https://github.com/tjko/jpegoptim/releases.atom
