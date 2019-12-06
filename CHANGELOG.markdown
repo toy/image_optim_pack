@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Update jhead source and use https where possible [@toy](https://github.com/toy)
+
 ## v0.6.0 (2019-08-15)
 
 * Remove FreeBSD and OpenBSD binaries/platforms [#16](https://github.com/toy/image_optim_pack/issues/16) [@toy](https://github.com/toy)

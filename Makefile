@@ -83,17 +83,17 @@ $$($1_TGZ) :
 endef
 
 $(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
-$(eval $(call archive-dl,GIFSICLE,    http://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
+$(eval $(call archive-dl,GIFSICLE,    https://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
 $(eval $(call archive-dl,JHEAD,       https://www.sentex.ca/~mwandel/jhead/jhead-[VER].tar.gz))
 $(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/[VER].tar.gz))
-$(eval $(call archive-dl,JPEGOPTIM,   http://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
-$(eval $(call archive-dl,LIBJPEG,     http://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
+$(eval $(call archive-dl,JPEGOPTIM,   https://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
+$(eval $(call archive-dl,LIBJPEG,     https://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
-$(eval $(call archive-dl,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
-$(eval $(call archive-dl,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
-$(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
-$(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
-$(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
+$(eval $(call archive-dl,LIBPNG,      https://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
+$(eval $(call archive-dl,LIBZ,        https://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
+$(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
+$(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
+$(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 .PHONY : download

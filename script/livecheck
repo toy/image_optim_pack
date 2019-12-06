@@ -187,7 +187,7 @@ jpegarchive:
   url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
   regexp: <title>JPEG-Archive (\d+(?:\.\d+)*)</title>
 libjpeg:
-  url: http://www.ijg.org/files/
+  url: https://www.ijg.org/files/
   regexp: jpegsrc.v(.*?).tar.gz
 libmozjpeg:
   url: https://github.com/mozilla/mozjpeg/releases.atom
