@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.6.0.20191208 (2019-12-08)
+
 * jhead 3.04 [@toy](https://github.com/toy)
 * Update jhead source and use https where possible [@toy](https://github.com/toy)
 
