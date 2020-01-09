@@ -65,7 +65,7 @@ class Livecheck
     end
 
     def livechecks_by_name
-      @livechecks_by_name ||= Hash[livechecks.map{ |lc| [lc.name, lc] }]
+      @livechecks_by_name ||= Hash[livechecks.map { |lc| [lc.name, lc] }]
     end
 
     def changelog_entry
@@ -160,7 +160,7 @@ private
 
     version_regex = Regexp.new(config['regexp'])
 
-    versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
+    versions = body.scan(version_regex).map { |match| Version.new(*match) }.sort
     fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
 
     versions
@@ -171,26 +171,26 @@ Livecheck::Cli.new(ARGV).run
 
 __END__
 advancecomp:
-  url: https://github.com/amadvance/advancecomp/releases.atom
-  regexp: /amadvance/advancecomp/releases/tag/v(\d+(?:\.\d+)*)
+  url: https://api.github.com/repos/amadvance/advancecomp/releases/latest
+  regexp: v(\d+(?:\.\d+)*)
 gifsicle:
   url: https://www.lcdf.org/gifsicle/
   regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
 jhead:
-  url: http://www.sentex.net/~mwandel/jhead/
+  url: https://www.sentex.ca/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)
 jpegoptim:
   url: https://github.com/tjko/jpegoptim/releases.atom
   regexp: <title>RELEASE.(\d+(?:\.\d+)*)</title>
 jpegarchive:
-  url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
-  regexp: <title>JPEG-Archive (\d+(?:\.\d+)*)</title>
+  url: https://api.github.com/repos/danielgtaylor/jpeg-archive/releases/latest
+  regexp: v(\d+(?:\.\d+)*)
 libjpeg:
   url: http://www.ijg.org/files/
   regexp: jpegsrc.v(.*?).tar.gz
 libmozjpeg:
-  url: https://github.com/mozilla/mozjpeg/releases.atom
-  regexp: <title>mozjpeg v(\d+(?:\.\d+)*)</title>
+  url: https://api.github.com/repos/mozilla/mozjpeg/releases/latest
+  regexp: v(\d+(?:\.\d+)*)
 libpng:
   url: https://sourceforge.net/projects/libpng/rss?path=/libpng16
   regexp: /libpng\d*/(\d+(?:\.\d+)*)/
@@ -203,3 +203,12 @@ pngcrush:
 pngquant:
   url: https://pngquant.org/releases.html
   regexp: <span itemprop='version'>(\d+(?:\.\d+)*)</span>
+zopflipng:
+  url: https://api.github.com/repos/google/zopfli/releases/latest
+  regexp: zopfli-(\d+(?:\.\d+)*)
+guetzli:
+  url: https://api.github.com/repos/google/guetzli/releases/latest
+  regexp: v(\d+(?:\.\d+)*)
+oxipng:
+  url: https://api.github.com/repos/shssoichiro/oxipng/releases/latest
+  regexp: v(\d+(?:\.\d+)*)
