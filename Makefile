@@ -3,17 +3,19 @@ all :
 # ====== VERSIONS ======
 
 ADVANCECOMP_VER := 2.1
-GIFSICLE_VER := 1.91
+GIFSICLE_VER := 1.92
 JHEAD_VER := 3.03
 JPEGARCHIVE_VER := 2.1.1
 JPEGOPTIM_VER := 1.4.6
 LIBJPEG_VER := 9c
-LIBMOZJPEG_VER := 3.1
-LIBPNG_VER := 1.6.36
+LIBMOZJPEG_VER := 3.3.1
+LIBPNG_VER := 1.6.37
 LIBZ_VER := 1.2.11
-OPTIPNG_VER := 0.7.7
 PNGCRUSH_VER := 1.8.13
 PNGQUANT_VER := 2.12.2
+ZOPFLIPNG_VER := 1.0.2
+GUETZLI_VER := 1.0.2
+OXIPNG_VER := 2.2.1
 
 # ====== CHECKSUMS ======
 
@@ -31,6 +33,8 @@ IS_FREEBSD := $(findstring freebsd,$(OS))
 IS_OPENBSD := $(findstring openbsd,$(OS))
 DLEXT := $(if $(IS_DARWIN),.dylib,.so)
 HOST := $(ARCH)-$(if $(IS_DARWIN),apple,pc)-$(OS)
+
+LIBJPEG62 := $(if $(IS_DARWIN),libjpeg.62.dylib,libjpeg.so.62)
 
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
@@ -91,9 +95,11 @@ $(eval $(call archive-dl,LIBJPEG,     http://www.ijg.org/files/jpegsrc.v[VER].ta
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBPNG,      http://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBZ,        http://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
-$(eval $(call archive-dl,OPTIPNG,     http://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,PNGCRUSH,    http://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGQUANT,    http://pngquant.org/pngquant-[VER]-src.tar.gz))
+$(eval $(call archive-dl,ZOPFLIPNG,   https://github.com/google/zopfli/archive/zopfli-[VER].tar.gz))
+$(eval $(call archive-dl,GUETZLI,     https://github.com/m0n9oose/guetzli/archive/v[VER].tar.gz))
+$(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/archive/v[VER].tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
 .PHONY : download
@@ -154,14 +160,18 @@ $(eval $(call target,GIFSICLE,,src/gifsicle))
 $(eval $(call target,JHEAD))
 $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
-$(eval $(call target,JPEGTRAN,LIBJPEG,.libs/jpegtran))
+$(eval $(call target,JPEGTRAN,LIBMOZJPEG,.libs/jpegtran))
+$(eval $(call target,CJPEG,LIBMOZJPEG,.libs/cjpeg))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
+$(eval $(call target,LIBMOZJPEG,,$(LIBJPEG62)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
-$(eval $(call target,OPTIPNG,,src/optipng/optipng))
 $(eval $(call target,PNGCRUSH))
 $(eval $(call target,PNGQUANT))
+$(eval $(call target,ZOPFLIPNG))
+$(eval $(call target,GUETZLI,,bin/Release/guetzli))
+$(eval $(call target,OXIPNG,,target/release/oxipng))
 
 # ====== TARGETS ======
 
@@ -201,7 +211,7 @@ define check_output
 endef
 
 define check_shlib
-	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
+	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/opt|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
 endef
 
 define check_lib
@@ -233,13 +243,17 @@ test :
 	$(call check_bin,jhead,-V,$(JHEAD_VER))
 	$(call check_bin,jpeg-recompress,--version,$(JPEGARCHIVE_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
-	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
+	$(call check_bin,jpegtran,-v - 2>&1,$(LIBMOZJPEG_VER))
+	$(call check_bin,cjpeg,-v - 2>&1,$(LIBMOZJPEG_VER))
 	$(call check_lib,libjpeg$(DLEXT))
+	$(call check_lib,$(LIBJPEG62))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
-	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
+	$(call check_bin,zopflipng,v,ZopfliPNG)
+	$(call check_bin,guetzli,--version,$(GUETZLI_VER))
+	$(call check_bin,oxipng,--version,$(OXIPNG_VER))
 .PHONY : test
 
 livecheck :; @script/livecheck
@@ -265,6 +279,10 @@ clean-all :
 clobber : clean-all
 	rm -rf $(DL_DIR)
 .PHONY : clobber
+
+info :
+	@echo "Darwin: $(IS_DARWIN)\nLinux: $(IS_LINUX)\nBSD: $(IS_BSD)\nFreeBSD: $(IS_FREEBSD)\nOpenBSD: $(IS_OPENBSD)\nHost: $(HOST)"
+.PHONY : info
 
 # ====== BUILD HELPERS ======
 
@@ -327,8 +345,9 @@ export CPPFLAGS = $(GCC_FLAGS)
 export LDFLAGS = $(GCC_FLAGS)
 
 ifdef IS_DARWIN
-export MACOSX_DEPLOYMENT_TARGET := 10.6
+export MACOSX_DEPLOYMENT_TARGET := 10.9
 GCC_FLAGS += -arch $(ARCH)
+CXXFLAGS += -stdlib=libc++
 endif
 
 ifdef IS_BSD
@@ -369,10 +388,24 @@ $(JPEGOPTIM_TARGET) :
 	$(call chrpath_origin,$@)
 
 ## jpegtran
-$(eval $(call depend,JPEGTRAN,LIBJPEG))
+$(eval $(call depend,JPEGTRAN,LIBMOZJPEG))
 $(JPEGTRAN_TARGET) :
-	cd $(DIR) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
-	$(call chrpath_origin,$(JPEGTRAN_TARGET))
+	cd $(DIR) && $(MAKE) jpegtran
+ifdef IS_DARWIN
+	install_name_tool -change /opt/mozjpeg/lib/$(LIBJPEG62) @loader_path/$(LIBJPEG62) $(DIR)/.libs/jpegtran
+else
+	$(call chrpath_origin,$@)
+endif
+
+## cjpeg
+$(eval $(call depend,CJPEG,LIBMOZJPEG))
+$(CJPEG_TARGET) :
+	cd $(DIR) && $(MAKE) cjpeg
+ifdef IS_DARWIN
+	install_name_tool -change /opt/mozjpeg/lib/$(LIBJPEG62) @loader_path/$(LIBJPEG62) $(DIR)/.libs/cjpeg
+else
+	$(call chrpath_origin,$@)
+endif
 
 ## libjpeg
 $(LIBJPEG_TARGET) :
@@ -388,9 +421,15 @@ endif
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
 	cd $(DIR) && autoreconf -fiv
+ifdef IS_DARWIN
 	cd $(DIR) && ./configure --host $(HOST)
 	cd $(DIR)/simd && $(MAKE)
 	cd $(DIR) && $(MAKE) libjpeg.la
+else
+	cd $(DIR) && ./configure LDFLAGS='-Wl,-rpath=\$$ORIGIN'
+	cd $(DIR) && $(MAKE)
+endif
+	cd $(DIR) && $(ln_s) .libs/$(LIBJPEG62) .
 	cd $(DIR) && $(ln_s) .libs/libjpeg.a .
 
 ## libpng
@@ -419,13 +458,6 @@ $(LIBZ_TARGET) :
 	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
 	cd $(DIR) && $(MAKE) placebo
 
-## optipng
-$(eval $(call depend,OPTIPNG,LIBPNG LIBZ))
-$(OPTIPNG_TARGET) :
-	cd $(DIR) && ./configure -with-system-libs
-	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(LDFLAGS)"
-	$(call chrpath_origin,$@)
-
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
 $(PNGCRUSH_TARGET) :
@@ -445,3 +477,16 @@ $(PNGQUANT_TARGET) :
 	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
 	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)
+
+## zopflipng
+$(ZOPFLIPNG_TARGET) :
+	cd $(DIR) && $(MAKE) zopflipng
+
+## guetzli
+$(eval $(call depend,GUETZLI,LIBPNG LIBZ))
+$(GUETZLI_TARGET) :
+	cd $(DIR) && $(MAKE) guetzli
+
+## oxipng
+$(OXIPNG_TARGET) :
+	cd $(DIR) && cargo build --release

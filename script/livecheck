@@ -197,9 +197,6 @@ libpng:
 libz:
   url: https://sourceforge.net/projects/libpng/rss?path=/zlib
   regexp: /zlib/(\d+(?:\.\d+)*)/
-optipng:
-  url: https://sourceforge.net/projects/optipng/rss
-  regexp: /OptiPNG/optipng-(\d+(?:\.\d+)*)/
 pngcrush:
   url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
