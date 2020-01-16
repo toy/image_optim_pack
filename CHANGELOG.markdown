@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.6.0.20200116 (2020-01-16)
+
 * libjpeg 9d [@toy](https://github.com/toy)
 
 ## v0.6.0.20191208 (2019-12-08)
