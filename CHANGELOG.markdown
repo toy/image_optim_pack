@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jpegarchive 2.2.0 and libmozjpeg 3.3.1 [@toy](https://github.com/toy)
+
 ## v0.6.0.20200116 (2020-01-16)
 
 * libjpeg 9d [@toy](https://github.com/toy)
