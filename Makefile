@@ -85,7 +85,7 @@ endef
 $(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
 $(eval $(call archive-dl,GIFSICLE,    https://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
 $(eval $(call archive-dl,JHEAD,       https://www.sentex.ca/~mwandel/jhead/jhead-[VER].tar.gz))
-$(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/[VER].tar.gz))
+$(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,JPEGOPTIM,   https://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
 $(eval $(call archive-dl,LIBJPEG,     https://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
