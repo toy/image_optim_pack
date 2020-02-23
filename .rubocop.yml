@@ -17,6 +17,9 @@ Layout/DotPosition:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
+Layout/LineLength:
+  Max: 120
+
 Layout/RescueEnsureAlignment:
   Enabled: false
 
@@ -29,9 +32,6 @@ Layout/SpaceInsideHashLiteralBraces:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*_spec.rb
-
-Metrics/LineLength:
-  Max: 120
 
 Metrics/MethodLength:
   Max: 15
@@ -52,8 +52,17 @@ Style/EmptyCaseCondition:
 Style/FormatStringToken:
   Enabled: false
 
+Style/HashEachMethods:
+  Enabled: true
+
 Style/HashSyntax:
   EnforcedStyle: hash_rockets
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
+  Enabled: false
 
 Style/IfUnlessModifier:
   Enabled: false

@@ -1,13 +1,10 @@
 inherit_from: ../.rubocop.yml
 
-Lint/RedundantSplatExpansion:
+Layout/LineLength:
   Enabled: false
 
-Metrics/LineLength:
+Lint/RedundantSplatExpansion:
   Enabled: false
 
 Security/Eval:
   Exclude: [Rakefile]
-
-Style/BracesAroundHashParameters:
-  Enabled: false
