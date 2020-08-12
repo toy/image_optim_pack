@@ -72,11 +72,7 @@ class Livecheck
     def changelog_entry
       github_user = `git config github.user`.strip
       changed = livechecks.select(&:changed?)
-      %W[
-        *
-        #{to_sentence(changed.map(&:name_n_latest_version))}
-        [@#{github_user}](https://github.com/#{github_user})
-      ].join(' ') + "\n"
+      "* #{to_sentence(changed.map(&:name_n_latest_version))} [@#{github_user}](https://github.com/#{github_user})\n"
     end
 
     def to_sentence(array)
