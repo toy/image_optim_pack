@@ -15,10 +15,11 @@ describe ImageOptim do
   images_dir = FSPath.new(image_optim_root) / 'spec/images'
   test_images = images_dir.glob('**/*.*')
 
-  isolated_options_base = {:skip_missing_workers => false}
-  ImageOptim::Worker.klasses.each do |klass|
-    isolated_options_base[klass.bin_sym] = false
-  end
+  isolated_options_base = Hash[
+    ImageOptim::Worker.klasses.map do |klass|
+      [klass.bin_sym, false]
+    end
+  ].merge(:skip_missing_workers => false)
 
   ImageOptim::Worker.klasses.each do |worker_klass|
     next if [:pngout, :svgo].include?(worker_klass.bin_sym)
