@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* pngquant 2.13.0 [@toy](https://github.com/toy)
+
 ## v0.6.0.20200215 (2020-02-15)
 
 * jpegarchive 2.2.0 and libmozjpeg 3.3.1 [@toy](https://github.com/toy)
