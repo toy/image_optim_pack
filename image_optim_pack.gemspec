@@ -54,7 +54,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'fspath', '>= 2.1', '< 4'
 
   s.add_development_dependency 'rspec', '~> 3.0'
-  if RUBY_VERSION >= '2.2'
-    s.add_development_dependency 'rubocop', '~> 0.59', '!= 0.78.0'
+  if RUBY_VERSION >= '2.4'
+    s.add_development_dependency 'rubocop', '~> 1.0'
   end
 end
