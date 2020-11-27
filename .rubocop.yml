@@ -74,6 +74,9 @@ Style/IfUnlessModifier:
 Style/MultilineBlockChain:
   Enabled: false
 
+Style/RedundantArgument:
+  Enabled: false
+
 Style/Semicolon:
   AllowAsExpressionSeparator: true
 
