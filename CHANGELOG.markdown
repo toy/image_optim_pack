@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* Switch to centos 7 for linux builds as 6.9 is outdated [@toy](https://github.com/toy)
 * pngquant 2.13.1 [@toy](https://github.com/toy)
 
 ## v0.6.0.20201024 (2020-10-24)

@@ -7,9 +7,9 @@ Veewee::Session.declare({
   :disk_format => 'VDI',
   :hostiocache => 'off',
   :os_type_id => 'RedHat',
-  :iso_file => 'CentOS-6.9-i386-minimal.iso',
-  :iso_src => 'http://artfiles.org/centos.org/6.9/isos/i386/CentOS-6.9-i386-minimal.iso',
-  :iso_sha256 => 'e104b3bc2261e40c020e4047d31a4454a00435787c54fb0a376261f9348382b7',
+  :iso_file => 'CentOS-7-i386-Minimal-2009.iso',
+  :iso_src => 'http://linux.darkpenguin.net/distros/CentOS-AltArch/7.9.2009/isos/i386/CentOS-7-i386-Minimal-2009.iso',
+  :iso_sha256 => 'bcbde5d345c5013fa618c38380765547be01a354883b3055f32d7067dd7b5bca',
   :iso_download_timeout => '1000',
   :boot_wait => '10',
   :boot_cmd_sequence => [
