@@ -29,7 +29,7 @@ if [[ $(uname -s) != 'Darwin' ]]; then
   exit 1
 fi
 
-for arch in i386 x86_64; do
+for arch in x86_64; do
   platform="darwin-$arch"
   passes-filter "$platform" || continue
   header "$platform"
