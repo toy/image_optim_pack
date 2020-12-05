@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* libmozjpeg 4.0.0 [@toy](https://github.com/toy)
 * Set darwin deployment target to 10.9 [@toy](https://github.com/toy)
 * Remove 32 bit (i386) binaries/platform on darwin [@toy](https://github.com/toy)
 * Switch to centos 7 for linux builds as 6.9 is outdated [@toy](https://github.com/toy)

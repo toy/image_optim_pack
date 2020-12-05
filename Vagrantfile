@@ -28,9 +28,9 @@ Vagrant.configure('2') do |config|
           set -ex
           if command -v apt-get; then
             apt-get update
-            apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm
+            apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake
           else
-            yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm
+            yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm cmake
           fi
         SH
       end
