@@ -11,7 +11,8 @@ rvm:
   - '2.5.8'
   - '2.6.6'
   - '2.7.2'
-  - 'jruby-9.2.11.1'
+  - '3.0.0'
+  - 'jruby-9.2.14.0'
 script:
   - make test
   - bundle exec image_optim --info
