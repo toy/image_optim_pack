@@ -37,3 +37,5 @@ matrix:
     - env: CHECK_RUBIES=1
       rvm: '2.6.6'
       script: bundle exec travis_check_rubies
+  allow_failures:
+    - rvm: 'jruby-9.2.14.0'
