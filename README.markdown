@@ -92,4 +92,4 @@ make clobber # `clean-all` and remove download directory
 
 ## Copyright
 
-Copyright (c) 2014-2020 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
+Copyright (c) 2014-2021 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
