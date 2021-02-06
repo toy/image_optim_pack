@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libmozjpeg 4.0.2 [@toy](https://github.com/toy)
+
 ## v0.7.0 (2020-12-05)
 
 * libmozjpeg 4.0.0 [@toy](https://github.com/toy)
