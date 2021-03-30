@@ -37,9 +37,7 @@ class Box # :nodoc:
 private
 
   def definition
-    @definition ||= begin
-      eval definition_path.read.sub('Veewee::Session.declare', '{}.merge')
-    end
+    @definition ||= eval definition_path.read.sub('Veewee::Session.declare', '{}.merge')
   end
 
   def assert_box_created
