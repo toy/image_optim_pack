@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* pngquant 2.14.1 [@toy](https://github.com/toy)
 * libmozjpeg 4.0.3 [@toy](https://github.com/toy)
 
 ## v0.7.0.20210206 (2021-02-06)
