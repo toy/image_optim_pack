@@ -3,6 +3,7 @@ AllCops:
     - '*.gemspec'
     - 'build/**/*'
     - 'download/**/*'
+    - 'vendor/bundle/**/*'
     - Vagrantfile
   NewCops: enable
 
