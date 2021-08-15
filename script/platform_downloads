@@ -24,7 +24,7 @@ end
 
 table = Terminal::Table.new
 
-table.headings = %W[version days base\ dls] + platforms.map do |platform|
+table.headings = ['version', 'days', 'base dls'] + platforms.map do |platform|
   platform.split('-').reverse.join("\n")
 end
 
