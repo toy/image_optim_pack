@@ -38,11 +38,11 @@ versions.group_by(&:number).each do |version_n, platform_versions|
   base_downloads = platform_versions.map(&:downloads_count).min
 
   platform_values = downloads_by_platform.values_at(*platforms).map do |count|
-    next unless count
+    next '' unless count
 
     count == base_downloads ? '=' : format('%+d', count - base_downloads)
   end
-  table << [
+  table.add_row [
     version_n,
     (version_time[version_n] / (24 * 60 * 60)).round,
     base_downloads,
