@@ -13,7 +13,7 @@ LIBPNG_VER := 1.6.37
 LIBZ_VER := 1.2.11
 OPTIPNG_VER := 0.7.7
 PNGCRUSH_VER := 1.8.13
-PNGQUANT_VER := 2.15.1
+PNGQUANT_VER := 2.16.0
 
 # ====== CHECKSUMS ======
 
@@ -49,7 +49,7 @@ ANSI_RESET=\033[0m
 downcase = $(shell echo $1 | tr A-Z a-z)
 
 ln_s := ln -sf
-tar := $(shell if command -v gtar >/dev/null 2>&1; then echo gtar; else echo tar; fi)
+tar := $(shell if command -v bsdtar >/dev/null 2>&1; then echo bsdtar; else echo tar; fi)
 sha256sum := $(shell if command -v sha256sum >/dev/null 2>&1; then echo sha256sum; elif command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
 
 # ====== ARCHIVES ======
