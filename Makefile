@@ -37,7 +37,6 @@ BUILD_ROOT_DIR := $(CURDIR)/build
 BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
 OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
-$(shell mkdir -p $(DL_DIR) $(BUILD_DIR) $(OUTPUT_DIR))
 
 ANSI_RED=\033[31m
 ANSI_GREEN=\033[32m
@@ -63,6 +62,7 @@ $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
 $1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
 $1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
 $$($1_EXTRACTED) : $$($1_TGZ)
+	mkdir -p $(BUILD_DIR)
 	rm -rf $$(@D)
 	echo "$$($1_SHA256)  $$($1_TGZ)" | $(sha256sum) -c
 	mkdir $$(@D)
@@ -76,6 +76,7 @@ define archive-dl
 $(call archive,$1)
 # download archive from url
 $$($1_TGZ) :
+	mkdir -p $(DL_DIR)
 	while ! mkdir $$@.lock 2> /dev/null; do sleep 1; done
 	wget -q -O $$@.tmp $(subst [VER],$($1_VER),$(strip $2))
 	mv $$@.tmp $$@
@@ -141,6 +142,7 @@ PRODUCTS += $1
 $1_DESTINATION := $$(OUTPUT_DIR)/$$($1_BASENAME)
 # copy product to output dir
 $$($1_DESTINATION) : $$($1_TARGET)
+	mkdir -p $(OUTPUT_DIR)
 	temppath=`mktemp "$(BUILD_DIR)"/tmp.XXXXXXXXXX` && \
 		strip $$< -Sx -o "$$$$temppath" && \
 		chmod 755 "$$$$temppath" && \
