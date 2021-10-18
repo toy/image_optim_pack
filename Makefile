@@ -47,7 +47,6 @@ ANSI_RESET=\033[0m
 
 downcase = $(shell echo $1 | tr A-Z a-z)
 
-ln_s := ln -sf
 tar := $(shell if command -v bsdtar >/dev/null 2>&1; then echo bsdtar; else echo tar; fi)
 sha256sum := $(shell if command -v sha256sum >/dev/null 2>&1; then echo sha256sum; elif command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
 
@@ -386,7 +385,7 @@ ifdef IS_DARWIN
 else
 	cd $(DIR) && $(MAKE) libjpeg.la
 endif
-	cd $(DIR) && $(ln_sf) .libs/libjpeg$(DLEXT) .
+	cd $(DIR) && ln -sf .libs/libjpeg$(DLEXT) .
 
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
@@ -405,7 +404,7 @@ ifdef IS_DARWIN
 else
 	cd $(DIR) && $(MAKE) libpng16.la LDFLAGS="$(XORIGIN)"
 endif
-	cd $(DIR) && $(ln_s) .libs/libpng16$(DLEXT) libpng$(DLEXT)
+	cd $(DIR) && ln -sf .libs/libpng16$(DLEXT) libpng$(DLEXT)
 	$(call chrpath_origin,$@)
 
 ## libz
