@@ -187,6 +187,9 @@ jpegarchive:
 libjpeg:
   url: https://www.ijg.org/files/
   regexp: jpegsrc.v(.*?).tar.gz
+liblcms:
+  url: https://sourceforge.net/projects/lcms/rss?path=/lcms
+  regexp: /lcms/(\d+(?:\.\d+)*)/
 libmozjpeg:
   url: https://github.com/mozilla/mozjpeg/releases.atom
   regexp: <id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>

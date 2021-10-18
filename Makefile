@@ -8,6 +8,7 @@ JHEAD_VER := 3.04
 JPEGARCHIVE_VER := 2.2.0
 JPEGOPTIM_VER := 1.4.6
 LIBJPEG_VER := 9d
+LIBLCMS_VER := 2.12
 LIBMOZJPEG_VER := 4.0.3
 LIBPNG_VER := 1.6.37
 LIBZ_VER := 1.2.11
@@ -89,6 +90,7 @@ $(eval $(call archive-dl,JHEAD,       https://www.sentex.ca/~mwandel/jhead/jhead
 $(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,JPEGOPTIM,   https://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
 $(eval $(call archive-dl,LIBJPEG,     https://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
+$(eval $(call archive-dl,LIBLCMS,     https://prdownloads.sourceforge.net/lcms/lcms2-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBPNG,      https://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBZ,        https://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
@@ -159,6 +161,7 @@ $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
 $(eval $(call target,JPEGTRAN,LIBJPEG,.libs/jpegtran))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
+$(eval $(call target,LIBLCMS,,liblcms2$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
@@ -239,6 +242,7 @@ test :
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
 	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
 	$(call check_lib,libjpeg$(DLEXT))
+	$(call check_lib,liblcms2$(DLEXT))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
@@ -391,6 +395,18 @@ else
 endif
 	cd $(DIR) && ln -sf .libs/libjpeg$(DLEXT) .
 
+## liblcms
+$(LIBLCMS_TARGET) :
+	cd $(DIR) && ./configure
+	cd $(DIR) && $(libtool_target_soname)
+ifdef IS_DARWIN
+	cd $(DIR)/src && make liblcms2.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
+else
+	cd $(DIR)/src && make liblcms2.la LDFLAGS="$(XORIGIN)"
+endif
+	cd $(DIR) && ln -sf include/lcms2.h .
+	cd $(DIR) && ln -sf src/.libs/liblcms2$(DLEXT) .
+
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
 	cd $(DIR) && cmake -DPNG_SUPPORTED=0 .
@@ -447,8 +463,8 @@ $(PNGCRUSH_TARGET) :
 	$(call chrpath_origin,$@)
 
 ## pngquant
-$(eval $(call depend,PNGQUANT,LIBPNG LIBZ))
+$(eval $(call depend,PNGQUANT,LIBLCMS LIBPNG LIBZ))
 $(PNGQUANT_TARGET) :
-	cd $(DIR) && ./configure --without-cocoa --without-lcms2 --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
+	cd $(DIR) && ./configure --without-cocoa --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
 	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)

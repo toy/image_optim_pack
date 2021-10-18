@@ -28,6 +28,7 @@ A test application with latest `image_optim` and `image_optim_pack` is available
 * [libjpeg-turbo](https://www.libjpeg-turbo.org/) by libjpeg-turbo Project ([license](acknowledgements/libjpeg-turbo.txt))
 	* based on libjpeg, see above
 	* includes [x86 SIMD extension for IJG JPEG library](https://cetus.sakura.ne.jp/softlab/jpeg-x86simd/jpegsimd.html) by Miyasaka Masaru ([license](acknowledgements/libjpeg-x86-simd.txt))
+* [liblcms2](https://littlecms.com) by Marti Maria ([license](acknowledgements/liblcms2.txt))
 * [libpng](http://libpng.org/pub/png/) by Guy Eric Schalnat, Andreas Dilger, Glenn Randers-Pehrson and others ([license](acknowledgements/libpng.txt))
 * [mozjpeg](https://github.com/mozilla/mozjpeg) by Mozilla Research ([license](acknowledgements/mozjpeg.txt))
 	* base on libjpeg and libjpeg-turbo, see above
