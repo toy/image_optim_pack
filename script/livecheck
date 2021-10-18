@@ -199,6 +199,9 @@ libz:
 optipng:
   url: https://sourceforge.net/projects/optipng/rss
   regexp: /OptiPNG/optipng-(\d+(?:\.\d+)*)/
+oxipng:
+  url: https://github.com/shssoichiro/oxipng/releases.atom
+  regexp: <id>tag:github.com,2008:Repository/\d+/v(\d+(?:\.\d+)*)</id>
 pngcrush:
   url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/

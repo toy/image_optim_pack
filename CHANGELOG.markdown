@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Add [oxipng](https://github.com/shssoichiro/oxipng) (v5.0.0), switch to ubuntu/xenial32 for 32 bit [@toy](https://github.com/toy)
+
 ## v0.7.0.20211002 (2021-10-02)
 
 * pngquant 2.16.0 [@toy](https://github.com/toy)

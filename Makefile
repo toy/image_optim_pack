@@ -12,6 +12,7 @@ LIBMOZJPEG_VER := 4.0.3
 LIBPNG_VER := 1.6.37
 LIBZ_VER := 1.2.11
 OPTIPNG_VER := 0.7.7
+OXIPNG_VER := 5.0.0
 PNGCRUSH_VER := 1.8.13
 PNGQUANT_VER := 2.16.0
 
@@ -92,6 +93,7 @@ $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive
 $(eval $(call archive-dl,LIBPNG,      https://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBZ,        https://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
+$(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/archive/refs/tags/v[VER].tar.gz))
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
 
@@ -161,6 +163,7 @@ $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
 $(eval $(call target,OPTIPNG,,src/optipng/optipng))
+$(eval $(call target,OXIPNG,,target/release/oxipng))
 $(eval $(call target,PNGCRUSH))
 $(eval $(call target,PNGQUANT))
 
@@ -239,6 +242,7 @@ test :
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
+	$(call check_bin,oxipng,--version,$(OXIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 .PHONY : test
@@ -424,6 +428,10 @@ $(OPTIPNG_TARGET) :
 	cd $(DIR) && ./configure -with-system-libs
 	cd $(DIR) && $(MAKE) all LDFLAGS="$(XORIGIN) $(LDFLAGS)"
 	$(call chrpath_origin,$@)
+
+## oxipng
+$(OXIPNG_TARGET) :
+	cd $(DIR) && cargo build --release
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))

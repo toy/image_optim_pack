@@ -38,7 +38,7 @@ for arch in x86_64; do
 
   mkdir -p "vendor/$platform"
 
-  sudo -u _image_optim bash -c "
+  sudo -u _image_optim --set-home bash -c "
     set -e
 
     mkdir -p '$build_dir'
@@ -53,7 +53,7 @@ for arch in x86_64; do
   rsync -aR --del "$build_dir/./vendor/$platform" .
 done
 
-for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile); do
+for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile | uniq); do
   passes-filter "$vm" || continue
   header "$vm"
 

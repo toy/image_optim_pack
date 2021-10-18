@@ -34,6 +34,7 @@ A test application with latest `image_optim` and `image_optim_pack` is available
 * [optipng](http://optipng.sourceforge.net/) by Cosmin Truta ([license](acknowledgements/optipng.txt), [authors](acknowledgements/optipng-authors.txt))
 	* contains code based in part on the work of Miyasaka Masaru for BMP support ([license](acknowledgements/bmp2png.txt))
 	* and David Koblas for GIF support ([license](acknowledgements/gifread.txt))
+* [oxipng](https://github.com/shssoichiro/oxipng) by Joshua Holmer ([license](acknowledgements/oxipng.txt))
 * [pngcrush](https://pmt.sourceforge.io/pngcrush/) by Glenn Randers-Pehrson, portions by Greg Roelofs ([license](acknowledgements/pngcrush.txt))
 	* contains [cexcept](http://www.nicemice.net/cexcept/) interface by Adam M. Costello and Cosmin Truta ([license](acknowledgements/cexcept.txt))
 * [pngquant](https://pngquant.org/) by Kornel Lesiński based on code by Greg Roelofs and Jef Poskanzer after an idea by Stefan Schneider ([license](acknowledgements/pngquant.txt))
