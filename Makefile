@@ -386,7 +386,7 @@ ifdef IS_DARWIN
 else
 	cd $(DIR) && $(MAKE) libjpeg.la
 endif
-	cd $(@D) && $(ln_s) .libs/libjpeg$(DLEXT) .
+	cd $(DIR) && $(ln_sf) .libs/libjpeg$(DLEXT) .
 
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
