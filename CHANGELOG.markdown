@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.8.0 (2021-10-20)
+
 * Add [lcms2](https://littlecms.com) colour management library for pngquant [@toy](https://github.com/toy)
 * Add [oxipng](https://github.com/shssoichiro/oxipng) (v5.0.0), switch to ubuntu/xenial32 for 32 bit [@toy](https://github.com/toy)
 
