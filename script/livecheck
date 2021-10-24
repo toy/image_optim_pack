@@ -179,7 +179,7 @@ jhead:
   url: https://www.sentex.ca/~mwandel/jhead/
   regexp: jhead-(\d+(?:\.\d+)*)
 jpegoptim:
-  url: https://github.com/tjko/jpegoptim/releases.atom
+  url: https://github.com/tjko/jpegoptim/tags.atom
   regexp: <id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>
 jpegarchive:
   url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
