@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.8.0.20211116 (2021-11-16)
+
 * oxipng 5.0.1 [@toy](https://github.com/toy)
 
 ## v0.8.0 (2021-10-20)
