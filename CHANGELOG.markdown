@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* oxipng 5.0.1 [@toy](https://github.com/toy)
+
 ## v0.8.0 (2021-10-20)
 
 * Add [lcms2](https://littlecms.com) colour management library for pngquant [@toy](https://github.com/toy)
