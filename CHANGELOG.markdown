@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* liblcms 2.13 [@toy](https://github.com/toy)
+
 ## v0.8.0.20220117 (2022-01-17)
 
 * libjpeg 9e and pngquant 2.17.0 [@toy](https://github.com/toy)
