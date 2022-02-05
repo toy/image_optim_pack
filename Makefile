@@ -266,6 +266,7 @@ DOCKER_TAG := $(shell date +%Y%m%d)
 
 docker-build : download
 	@docker build \
+		--pull \
 		$(foreach archive,$(ARCHIVES),--build-arg $(archive)_VER=$($(archive)_VER) --build-arg $(archive)_SHA256=$($(archive)_SHA256)) \
 		-t $(DOCKER_IMAGE):$(DOCKER_TAG) \
 		-t $(DOCKER_IMAGE):latest \
