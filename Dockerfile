@@ -1,4 +1,4 @@
-FROM alpine:3.12 as base
+FROM alpine as base
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /tmp
 
@@ -85,7 +85,7 @@ ARG JPEGARCHIVE_SHA256
 COPY download/jpegarchive-$JPEGARCHIVE_VER.tar.gz download/
 RUN ./extract jpegarchive && \
     cd build/jpegarchive && \
-    make install
+    CFLAGS=-fcommon make install
 
 FROM libjpeg as jpegoptim
 ARG JPEGOPTIM_VER
@@ -105,7 +105,7 @@ RUN ./extract optipng && \
     ./configure && \
     make install
 
-FROM rust:1.55-alpine3.13 as oxipng
+FROM rust:1-alpine as oxipng
 RUN apk add --no-cache build-base
 COPY script/extract ./
 ARG OXIPNG_VER
