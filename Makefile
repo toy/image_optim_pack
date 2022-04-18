@@ -78,6 +78,7 @@ $(call archive,$1)
 # download archive from url
 $$($1_TGZ) :
 	mkdir -p $(DL_DIR)
+	test -w $(DL_DIR)
 	while ! mkdir $$@.lock 2> /dev/null; do sleep 1; done
 	wget -q -O $$@.tmp $(subst [VER],$($1_VER),$(strip $2))
 	mv $$@.tmp $$@
