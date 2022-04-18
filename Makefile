@@ -2,11 +2,11 @@ all :
 
 # ====== VERSIONS ======
 
-ADVANCECOMP_VER := 2.1
+ADVANCECOMP_VER := 2.3
 GIFSICLE_VER := 1.93
 JHEAD_VER := 3.04
 JPEGARCHIVE_VER := 2.2.0
-JPEGOPTIM_VER := 1.4.6
+JPEGOPTIM_VER := 1.4.7
 LIBJPEG_VER := 9e
 LIBLCMS_VER := 2.13
 LIBMOZJPEG_VER := 4.0.3
@@ -89,7 +89,7 @@ $(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/r
 $(eval $(call archive-dl,GIFSICLE,    https://www.lcdf.org/gifsicle/gifsicle-[VER].tar.gz))
 $(eval $(call archive-dl,JHEAD,       https://www.sentex.ca/~mwandel/jhead/jhead-[VER].tar.gz))
 $(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/v[VER].tar.gz))
-$(eval $(call archive-dl,JPEGOPTIM,   https://www.kokkonen.net/tjko/src/jpegoptim-[VER].tar.gz))
+$(eval $(call archive-dl,JPEGOPTIM,   https://github.com/tjko/jpegoptim/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBJPEG,     https://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
 $(eval $(call archive-dl,LIBLCMS,     https://prdownloads.sourceforge.net/lcms/lcms2-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
