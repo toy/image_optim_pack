@@ -36,9 +36,9 @@ version_time = begin
   end.sort
   time_pairs << [nil, Time.now]
 
-  time_pairs.each_cons(2).map do |(version_n, created_at), (_, next_created_at)|
+  time_pairs.each_cons(2).to_h do |(version_n, created_at), (_, next_created_at)|
     [version_n, next_created_at - created_at]
-  end.to_h
+  end
 end
 
 table = Terminal::Table.new
