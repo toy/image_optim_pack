@@ -60,9 +60,9 @@ ARCHIVES :=
 define archive
 ARCHIVES += $1
 $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
-$1_TGZ := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
-$1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_TGZ))__
-$$($1_EXTRACTED) : $$($1_TGZ)
+$1_ARC := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
+$1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_ARC))__
+$$($1_EXTRACTED) : $$($1_ARC)
 	mkdir -p $(BUILD_DIR)
 	rm -rf $$(@D)
 	echo "$$($1_SHA256)  $$<" | $(sha256sum) -c
@@ -76,7 +76,7 @@ endef
 define archive-dl
 $(call archive,$1)
 # download archive from url
-$$($1_TGZ) :
+$$($1_ARC) :
 	mkdir -p $(DL_DIR)
 	test -w $(DL_DIR)
 	while ! mkdir $$@.lock 2> /dev/null; do sleep 1; done
@@ -100,23 +100,23 @@ $(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/arch
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
 
-download : $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+download : $(foreach archive,$(ARCHIVES),$($(archive)_ARC))
 .PHONY : download
 
 download-tidy-up :
-	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_TGZ)),$(wildcard $(DL_DIR)/*.*))
+	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_ARC)),$(wildcard $(DL_DIR)/*.*))
 .PHONY : download-tidy-up
 
 checksum : download
-	@$(sha256sum) $(foreach archive,$(ARCHIVES),$($(archive)_TGZ))
+	@$(sha256sum) $(foreach archive,$(ARCHIVES),$($(archive)_ARC))
 .PHONY : checksum
 
 checksum-verify : download
-	@printf '%s  %s\n' $(foreach archive,$(ARCHIVES),$($(archive)_SHA256) $($(archive)_TGZ)) | $(sha256sum) -c
+	@printf '%s  %s\n' $(foreach archive,$(ARCHIVES),$($(archive)_SHA256) $($(archive)_ARC)) | $(sha256sum) -c
 .PHONY : checksum-verify
 
 checksum-update : download
-	@printf '%s := %s\n' $(foreach archive,$(ARCHIVES),$(archive)_SHA256 $(shell $(sha256sum) $($(archive)_TGZ) | cut -d ' ' -f 1)) > checksums.mk
+	@printf '%s := %s\n' $(foreach archive,$(ARCHIVES),$(archive)_SHA256 $(shell $(sha256sum) $($(archive)_ARC) | cut -d ' ' -f 1)) > checksums.mk
 .PHONY : checksum-update
 
 # ====== PRODUCTS ======
@@ -130,7 +130,7 @@ define target-build
 $1_PATH := $(or $3,$(call downcase,$1))
 $1_BASENAME := $$(notdir $$($1_PATH))
 $1_DIR := $($(or $2,$1)_DIR)
-$1_TGZ := $($(or $2,$1)_TGZ)
+$1_ARC := $($(or $2,$1)_ARC)
 $1_EXTRACTED := $($(or $2,$1)_EXTRACTED)
 $1_TARGET := $$($1_DIR)/$$($1_PATH)
 $$($1_TARGET) : DIR := $$($1_DIR)
