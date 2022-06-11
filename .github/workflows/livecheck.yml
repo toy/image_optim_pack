@@ -1,0 +1,10 @@
+name: livecheck
+on:
+  schedule:
+  - cron: 34 5 * * *
+jobs:
+  livecheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: make livecheck
