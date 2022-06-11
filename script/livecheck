@@ -20,10 +20,9 @@ class Livecheck
     end
 
     def run
-      dump_changes
-
-      return unless @update
       return unless livechecks.any?(&:changed?)
+
+      exit 1 unless @update
 
       update_changelog
       update_makefile
