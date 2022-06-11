@@ -175,5 +175,5 @@ COPY --from=liblcms     /usr/local/lib/liblcms2.so.2   /usr/local/lib/
 
 RUN npm -g install svgo
 RUN gem install --no-document image_optim
-ENTRYPOINT ["dumb-init", "image_optim", "--skip-missing-workers"]
+ENTRYPOINT ["dumb-init", "image_optim"]
 CMD ["--help"]
