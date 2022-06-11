@@ -287,15 +287,19 @@ docker-build : download
 		$(foreach archive,$(ARCHIVES),--build-arg $(archive)_VER=$($(archive)_VER) --build-arg $(archive)_SHA256=$($(archive)_SHA256)) \
 		-t $(DOCKER_IMAGE):latest \
 		.
-.PHONY : docker-build
-
-docker-tag : docker-build
 	@docker tag \
 		$(DOCKER_IMAGE):latest \
 		$(DOCKER_IMAGE):$(DOCKER_TAG)
-.PHONY : docker-tag
+.PHONY : docker-build
 
-docker-push : docker-tag
+docker-test : docker-build
+	@docker run \
+		--rm \
+		$(DOCKER_IMAGE):latest \
+		--info
+.PHONY : docker-test
+
+docker-push : docker-test
 	@docker push $(DOCKER_IMAGE):latest
 	@docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
 .PHONY : docker-push
