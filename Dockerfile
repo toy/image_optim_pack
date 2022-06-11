@@ -145,6 +145,9 @@ RUN ./extract pngquant && \
 FROM base as image_optim
 RUN apk add --no-cache libstdc++ ruby npm perl dumb-init
 
+COPY README.markdown /
+COPY acknowledgements /acknowledgements
+
 COPY --from=advancecomp /usr/local/bin/advpng          /usr/local/bin/
 COPY --from=gifsicle    /usr/local/bin/gifsicle        /usr/local/bin/
 COPY --from=jhead       /usr/local/bin/jhead           /usr/local/bin/
