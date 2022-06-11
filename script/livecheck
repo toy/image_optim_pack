@@ -208,6 +208,9 @@ oxipng:
 pngcrush:
   url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
   regexp: /pngcrush/(\d+(?:\.\d+)*)/
+pngout:
+  url: http://www.jonof.id.au/kenutils.html
+  regexp: /files/kenutils/pngout-(\d{8})-linux.tar.gz
 pngquant:
   url: https://pngquant.org/releases.html
   regexp: <span itemprop='version'>(\d+(?:\.\d+)*)</span>

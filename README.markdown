@@ -38,6 +38,9 @@ A test application with latest `image_optim` and `image_optim_pack` is available
 * [oxipng](https://github.com/shssoichiro/oxipng) by Joshua Holmer ([license](acknowledgements/oxipng.txt))
 * [pngcrush](https://pmt.sourceforge.io/pngcrush/) by Glenn Randers-Pehrson, portions by Greg Roelofs ([license](acknowledgements/pngcrush.txt))
 	* contains [cexcept](http://www.nicemice.net/cexcept/) interface by Adam M. Costello and Cosmin Truta ([license](acknowledgements/cexcept.txt))
+* [pngout](http://advsys.net/ken/utils.htm) by Ken Silverman ([license](acknowledgements/pngout.txt))
+	* Linux and BSD ports by Jonathon Fowler (http://www.jonof.id.au/pngout)
+	* Mac OS X port by Ken Silverman, with assistance by Jonathon Fowler
 * [pngquant](https://pngquant.org/) by Kornel Lesiński based on code by Greg Roelofs and Jef Poskanzer after an idea by Stefan Schneider ([license](acknowledgements/pngquant.txt))
 * [zlib](https://zlib.net/) by Jean-Loup Gailly and Mark Adler ([license](acknowledgements/zlib.txt))
 

@@ -15,6 +15,9 @@ LIBZ_VER := 1.2.11
 OPTIPNG_VER := 0.7.7
 OXIPNG_VER := 5.0.1
 PNGCRUSH_VER := 1.8.13
+PNGOUT_VER := 20200115
+PNGOUT_LINUX_VER := $(PNGOUT_VER)
+PNGOUT_DARWIN_VER := $(PNGOUT_VER)
 PNGQUANT_VER := 2.17.0
 
 # ====== CHECKSUMS ======
@@ -57,10 +60,11 @@ sha256sum := $(shell if command -v sha256sum >/dev/null 2>&1; then echo sha256su
 ARCHIVES :=
 
 # $1 - name of archive
+# $2 - extension to use (instead of default tar.gz)
 define archive
 ARCHIVES += $1
 $1_DIR := $(BUILD_DIR)/$(call downcase,$1)
-$1_ARC := $(DL_DIR)/$(call downcase,$1)-$($1_VER).tar.gz
+$1_ARC := $(DL_DIR)/$(call downcase,$1)-$($1_VER).$(or $2,tar.gz)
 $1_EXTRACTED := $$($1_DIR)/__$$(notdir $$($1_ARC))__
 $$($1_EXTRACTED) : $$($1_ARC)
 	mkdir -p $(BUILD_DIR)
@@ -73,8 +77,9 @@ endef
 
 # $1 - name of archive
 # $2 - url of archive with [VER] for replace with version
+# $3 - extension to use
 define archive-dl
-$(call archive,$1)
+$(call archive,$1,$3)
 # download archive from url
 $$($1_ARC) :
 	mkdir -p $(DL_DIR)
@@ -98,6 +103,8 @@ $(eval $(call archive-dl,LIBZ,        https://prdownloads.sourceforge.net/libpng
 $(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/archive/refs/tags/v[VER].tar.gz))
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
+$(eval $(call archive-dl,PNGOUT_LINUX,http://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz))
+$(eval $(call archive-dl,PNGOUT_DARWIN,http://www.jonof.id.au/files/kenutils/pngout-[VER]-macos.zip,zip))
 $(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_ARC))
@@ -140,6 +147,7 @@ endef
 # $1 - product name
 # $2 - archive name ($1 if empty)
 # $3 - basename ($1 if empty)
+# $4 - don't strip the target
 define target
 $(call target-build,$1,$2,$3)
 PRODUCTS += $1
@@ -148,7 +156,7 @@ $1_DESTINATION := $$(OUTPUT_DIR)/$$($1_BASENAME)
 $$($1_DESTINATION) : $$($1_TARGET)
 	mkdir -p $(OUTPUT_DIR)
 	temppath=`mktemp "$(BUILD_DIR)"/tmp.XXXXXXXXXX` && \
-		strip $$< -Sx -o "$$$$temppath" && \
+		$(if $4,cp $$< "$$$$temppath",strip $$< -Sx -o "$$$$temppath") && \
 		chmod 755 "$$$$temppath" && \
 		mv "$$$$temppath" $$@
 # short name target
@@ -169,6 +177,11 @@ $(eval $(call target,LIBZ,,libz$(DLEXT)))
 $(eval $(call target,OPTIPNG,,src/optipng/optipng))
 $(eval $(call target,OXIPNG,,target/release/oxipng))
 $(eval $(call target,PNGCRUSH))
+ifdef IS_DARWIN
+$(eval $(call target,PNGOUT,PNGOUT_DARWIN,,NOSTRIP))
+else
+$(eval $(call target,PNGOUT,PNGOUT_LINUX,,NOSTRIP))
+endif
 $(eval $(call target,PNGQUANT))
 
 # ====== TARGETS ======
@@ -195,7 +208,7 @@ define check_exists
 endef
 
 define check_version
-	@$(OUTPUT_DIR)/$1 $2 | fgrep -q $3 || \
+	@$(OUTPUT_DIR)/$1 $2 | fgrep -q "$3" || \
 		{ printf "$1: $(ANSI_RED)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(ANSI_RESET)\n"; exit 1; }
 endef
 
@@ -249,6 +262,7 @@ test :
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,oxipng,--version,$(OXIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
+	$(call check_bin,pngout,2>&1,$(shell perl -mTime::Piece -e 'print Time::Piece->strptime("$(PNGOUT_VER)", "%Y%m%d")->strftime("%b %e %Y")'))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 .PHONY : test
 
@@ -486,6 +500,13 @@ $(PNGCRUSH_TARGET) :
 		CPPFLAGS="$(CPPFLAGS)" \
 		LDFLAGS="$(XORIGIN) $(LDFLAGS)"
 	$(call chrpath_origin,$@)
+
+## pngout
+$(PNGOUT_TARGET) :
+ifdef IS_LINUX
+	cd $(DIR) && ln -sf $(ARCH:x86_64=amd64)/pngout .
+endif
+	cd $(DIR) && touch pngout
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBLCMS LIBPNG LIBZ))
