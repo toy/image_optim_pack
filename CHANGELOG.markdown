@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.9.0 (2022-06-11)
+
 * Add [pngout](http://advsys.net/ken/utils.htm) (since January 2021 license allows redistrubition for freely distributed non-commercial projects) [#24](https://github.com/toy/image_optim_pack/issues/24) [@toy](https://github.com/toy)
 
 ## v0.8.0.20220418 (2022-04-18)
