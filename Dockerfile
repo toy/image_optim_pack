@@ -125,6 +125,14 @@ RUN ./extract pngcrush && \
     make && \
     install -c pngcrush /usr/local/bin
 
+FROM build as pngout
+ARG PNGOUT_LINUX_STATIC_VER
+ARG PNGOUT_LINUX_STATIC_SHA256
+COPY download/pngout_linux_static-$PNGOUT_LINUX_STATIC_VER.tar.gz download/
+RUN ./extract pngout_linux_static && \
+    cd build/pngout_linux_static && \
+    cp amd64/pngout-static /usr/local/bin/pngout
+
 FROM liblcms as pngquant
 ARG PNGQUANT_VER
 ARG PNGQUANT_SHA256
@@ -157,6 +165,7 @@ COPY --from=libjpeg     /usr/local/bin/jpegtran        /usr/local/bin/
 COPY --from=optipng     /usr/local/bin/optipng         /usr/local/bin/
 COPY --from=oxipng      /usr/local/bin/oxipng          /usr/local/bin/
 COPY --from=pngcrush    /usr/local/bin/pngcrush        /usr/local/bin/
+COPY --from=pngout      /usr/local/bin/pngout          /usr/local/bin/
 COPY --from=pngquant    /usr/local/bin/pngquant        /usr/local/bin/
 
 COPY --from=libjpeg     /usr/local/lib/libjpeg.so.9    /usr/local/lib/

@@ -17,6 +17,7 @@ OXIPNG_VER := 5.0.1
 PNGCRUSH_VER := 1.8.13
 PNGOUT_VER := 20200115
 PNGOUT_LINUX_VER := $(PNGOUT_VER)
+PNGOUT_LINUX_STATIC_VER := $(PNGOUT_VER)
 PNGOUT_DARWIN_VER := $(PNGOUT_VER)
 PNGQUANT_VER := 2.17.0
 
@@ -104,6 +105,7 @@ $(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipn
 $(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/archive/refs/tags/v[VER].tar.gz))
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGOUT_LINUX,http://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz))
+$(eval $(call archive-dl,PNGOUT_LINUX_STATIC,http://www.jonof.id.au/files/kenutils/pngout-[VER]-linux-static.tar.gz))
 $(eval $(call archive-dl,PNGOUT_DARWIN,http://www.jonof.id.au/files/kenutils/pngout-[VER]-macos.zip,zip))
 $(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
 
