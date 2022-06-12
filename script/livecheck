@@ -20,6 +20,8 @@ class Livecheck
     end
 
     def run
+      dump_changes
+
       return unless livechecks.any?(&:changed?)
 
       exit 1 unless @update
