@@ -264,7 +264,7 @@ test :
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,oxipng,--version,$(OXIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
-	$(call check_bin,pngout,2>&1,$(shell perl -mTime::Piece -e 'print Time::Piece->strptime("$(PNGOUT_VER)", "%Y%m%d")->strftime("%b %e %Y")'))
+	$(call check_bin,pngout,2>&1 | head -n 1,$(shell perl -mTime::Piece -e 'print Time::Piece->strptime("$(PNGOUT_VER)", "%Y%m%d")->strftime("%b %e %Y")'))
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 .PHONY : test
 
