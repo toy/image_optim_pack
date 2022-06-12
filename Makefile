@@ -206,21 +206,21 @@ ldd-version :; $(ldd) --version
 
 define check_exists
 	@test -f $(OUTPUT_DIR)/$1 || \
-		{ printf "$1: $(ANSI_RED)not found$(ANSI_RESET)\n"; exit 1; }
+		{ printf "%s: $(ANSI_RED)not found$(ANSI_RESET)\n" "$1"; exit 1; }
 endef
 
 define check_version
 	@$(OUTPUT_DIR)/$1 $2 | fgrep -q "$3" || \
-		{ printf "$1: $(ANSI_RED)Expected $3, got $$($(OUTPUT_DIR)/$1 $2)$(ANSI_RESET)\n"; exit 1; }
+		{ printf "%s: $(ANSI_RED)Expected %s, got %s$(ANSI_RESET)\n" "$1" "$3" "$$($(OUTPUT_DIR)/$1 $2)"; exit 1; }
 endef
 
 define check_arch
 	@file -b $(OUTPUT_DIR)/$1 | fgrep -q '$(ARCH_STRING)' || \
-		{ printf "$1: $(ANSI_RED)Expected $(ARCH_STRING), got $$(file -b $(OUTPUT_DIR)/$1)$(ANSI_RESET)\n"; exit 1; }
+		{ printf "%s: $(ANSI_RED)Expected %s, got %s$(ANSI_RESET)\n" "$1" "$(ARCH_STRING)" "$$(file -b $(OUTPUT_DIR)/$1)"; exit 1; }
 endef
 
 define check_output
-	@printf "$1: $(ANSI_GREEN)$3$(ANSI_RESET) / $(ANSI_MAGENTA)$(ARCH_STRING)$(ANSI_RESET)\n"
+	@printf "%s: $(ANSI_GREEN)%s$(ANSI_RESET) / $(ANSI_MAGENTA)%s$(ANSI_RESET)\n" "$1" "$3" "$(ARCH_STRING)"
 endef
 
 define check_shlib
