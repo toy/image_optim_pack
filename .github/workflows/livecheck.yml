@@ -11,4 +11,9 @@ jobs:
       with:
         ruby-version: '3.1'
         bundler-cache: true
-    - run: bundle exec make livecheck
+    - uses: nick-fields/retry@v2
+      with:
+        timeout_minutes: 10
+        max_attempts: 10
+        retry_wait_seconds: 60
+        command: bundle exec make livecheck
