@@ -28,6 +28,9 @@ class Livecheck
 
       update_changelog
       update_makefile
+    rescue StandardError => e
+      warn e
+      exit 2
     end
 
   private
