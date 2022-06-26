@@ -2,6 +2,12 @@ name: livecheck
 on:
   schedule:
   - cron: 34 5 * * *
+  workflow_dispatch:
+    inputs:
+      retry:
+        description: 'Retry attempt'
+        required: true
+        type: number
 jobs:
   livecheck:
     runs-on: ubuntu-latest
@@ -11,9 +17,22 @@ jobs:
       with:
         ruby-version: '3.1'
         bundler-cache: true
-    - uses: nick-fields/retry@v2
-      with:
-        timeout_minutes: 10
-        max_attempts: 10
-        retry_wait_seconds: 60
-        command: bundle exec make livecheck
+    - run: |
+        bundle exec make livecheck || if (( $? == 1 )); then
+          exit 1
+        else
+          echo '::set-output name=RETRY::1'
+        fi
+      id: livecheck
+    - if: ${{ steps.livecheck.outputs.RETRY }}
+      env:
+        RETRY: ${{ inputs.retry }}
+        RETRIES: 3
+        GITHUB_TOKEN: ${{ secrets.RETRY_TOKEN }}
+      run: |
+        if (( ${RETRY:-0} < $RETRIES )); then
+          sleep 30
+          gh workflow run livecheck --repo $GITHUB_REPOSITORY --ref $GITHUB_REF_NAME -f retry=$(( $RETRY + 1 ))
+        else
+          exit 1
+        fi

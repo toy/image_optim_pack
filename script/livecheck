@@ -151,20 +151,11 @@ private
     CONFIG[name] || fail(ArgumentError, "Livecheck for #{name} not defined")
   end
 
-  def get(url, retry_wait_seconds = [5, 10, 15, 30, 60, 3 * 60])
+  def get(url)
     uri = URI(url)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = (uri.scheme == 'https')
     http.request_get(uri.request_uri).body
-  rescue Errno::ENETUNREACH => e
-    seconds = retry_wait_seconds.shift
-    raise unless seconds
-
-    warn "Got #{e}"
-    warn "Waiting #{seconds}s before retry"
-    sleep seconds
-    warn 'Retrying'
-    retry
   end
 
   def fetch_versions
