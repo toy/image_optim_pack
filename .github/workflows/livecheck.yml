@@ -27,11 +27,11 @@ jobs:
     - if: ${{ steps.livecheck.outputs.RETRY }}
       env:
         RETRY: ${{ inputs.retry }}
-        RETRIES: 3
+        RETRIES: 10
         GITHUB_TOKEN: ${{ secrets.RETRY_TOKEN }}
       run: |
         if (( ${RETRY:-0} < $RETRIES )); then
-          sleep 30
+          sleep 60
           gh workflow run livecheck --repo $GITHUB_REPOSITORY --ref $GITHUB_REF_NAME -f retry=$(( $RETRY + 1 ))
         else
           exit 1
