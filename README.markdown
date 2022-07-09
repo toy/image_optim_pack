@@ -1,5 +1,8 @@
 [![Gem Version](https://img.shields.io/gem/v/image_optim_pack?logo=rubygems)](https://rubygems.org/gems/image_optim_pack)
 [![Build Status](https://img.shields.io/github/workflow/status/toy/image_optim_pack/check/master?logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/check.yml)
+[![Rubocop](https://img.shields.io/github/workflow/status/toy/image_optim_pack/rubocop/master?label=rubocop&logo=rubocop)](https://github.com/toy/image_optim_pack/actions/workflows/rubocop.yml)
+[![Docker build](https://img.shields.io/github/workflow/status/toy/image_optim_pack/docker-build?label=docker+build&logo=docker)](https://github.com/toy/image_optim_pack/actions/workflows/docker-build.yml)
+[![Livecheck](https://img.shields.io/github/workflow/status/toy/image_optim_pack/livecheck/master?label=livecheck&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/livecheck.yml)
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/toy/image_optim_pack?logo=codeclimate)](https://codeclimate.com/github/toy/image_optim_pack)
 [![Depfu](https://img.shields.io/depfu/toy/image_optim_pack)](https://depfu.com/github/toy/image_optim_pack)
 [![Inch CI](https://inch-ci.org/github/toy/image_optim_pack.svg?branch=master)](https://inch-ci.org/github/toy/image_optim_pack)
