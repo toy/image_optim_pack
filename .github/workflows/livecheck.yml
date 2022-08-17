@@ -31,7 +31,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.RETRY_TOKEN }}
       run: |
         if (( ${RETRY:-0} < $RETRIES )); then
-          sleep 60
+          sleep 300
           gh workflow run livecheck --repo $GITHUB_REPOSITORY --ref $GITHUB_REF_NAME -f retry=$(( $RETRY + 1 ))
         else
           exit 1
