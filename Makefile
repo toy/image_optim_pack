@@ -268,9 +268,6 @@ test :
 	$(call check_bin,pngquant,--help,$(PNGQUANT_VER))
 .PHONY : test
 
-livecheck :; @script/livecheck
-.PHONY : livecheck
-
 update-versions :
 	script/livecheck --update
 	make checksum-update
