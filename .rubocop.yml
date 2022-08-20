@@ -64,6 +64,8 @@ Style/HashEachMethods:
   Enabled: true
 
 Style/HashSyntax:
+  Exclude:
+    - script/livecheck
   EnforcedStyle: hash_rockets
 
 Style/HashTransformKeys:

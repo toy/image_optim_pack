@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'yaml'
 require 'uri'
 require 'net/http'
 require 'openssl'
@@ -10,6 +9,69 @@ require 'fspath'
 
 # Fetch and compare latest tool/library versions
 class Livecheck
+  CONFIG = {
+    advancecomp: {
+      url: 'https://github.com/amadvance/advancecomp/releases.atom',
+      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    },
+    gifsicle: {
+      url: 'https://www.lcdf.org/gifsicle/',
+      regexp: /gifsicle-(\d+(?:\.\d+)*)\.tar\.gz/,
+    },
+    jhead: {
+      url: 'https://www.sentex.ca/~mwandel/jhead/',
+      regexp: /jhead-(\d+(?:\.\d+)*)/,
+    },
+    jpegoptim: {
+      url: 'https://github.com/tjko/jpegoptim/tags.atom',
+      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    },
+    jpegarchive: {
+      url: 'https://github.com/danielgtaylor/jpeg-archive/releases.atom',
+      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    },
+    libjpeg: {
+      url: 'https://www.ijg.org/files/',
+      regexp: /jpegsrc.v(.*?).tar.gz/,
+    },
+    liblcms: {
+      url: 'https://sourceforge.net/projects/lcms/rss?path=/lcms',
+      regexp: %r{/lcms/(\d+(?:\.\d+)*)/},
+    },
+    libmozjpeg: {
+      url: 'https://github.com/mozilla/mozjpeg/releases.atom',
+      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    },
+    libpng: {
+      url: 'https://sourceforge.net/projects/libpng/rss?path=/libpng16',
+      regexp: %r{/libpng\d*/(\d+(?:\.\d+)*)/},
+    },
+    libz: {
+      url: 'https://sourceforge.net/projects/libpng/rss?path=/zlib',
+      regexp: %r{/zlib/(\d+(?:\.\d+)*)/},
+    },
+    optipng: {
+      url: 'https://sourceforge.net/projects/optipng/rss',
+      regexp: %r{/OptiPNG/optipng-(\d+(?:\.\d+)*)/},
+    },
+    oxipng: {
+      url: 'https://github.com/shssoichiro/oxipng/releases.atom',
+      regexp: %r{<id>tag:github.com,2008:Repository/\d+/v(\d+(?:\.\d+)*)</id>},
+    },
+    pngcrush: {
+      url: 'https://sourceforge.net/projects/pmt/rss?path=/pngcrush',
+      regexp: %r{/pngcrush/(\d+(?:\.\d+)*)/},
+    },
+    pngout: {
+      url: 'http://www.jonof.id.au/kenutils.html',
+      regexp: %r{/files/kenutils/pngout-(\d{8})-linux.tar.gz},
+    },
+    pngquant: {
+      url: 'https://pngquant.org/releases.html',
+      regexp: %r{<span itemprop='version'>(\d+(?:\.\d+)*)</span>},
+    },
+  }.freeze
+
   # Commands
   class Cli
     VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/.freeze
@@ -123,8 +185,6 @@ class Livecheck
     end
   end
 
-  CONFIG = YAML.load(DATA).freeze
-
   attr_reader :name, :current_version
 
   def initialize(name, current_version)
@@ -148,7 +208,7 @@ class Livecheck
 private
 
   def config
-    CONFIG[name] || fail(ArgumentError, "Livecheck for #{name} not defined")
+    CONFIG[name.to_sym] || fail(ArgumentError, "Livecheck for #{name} not defined")
   end
 
   def get(url)
@@ -159,9 +219,9 @@ private
   end
 
   def fetch_versions
-    body = get(config['url'])
+    body = get(config[:url])
 
-    version_regex = Regexp.new(config['regexp'])
+    version_regex = config[:regexp]
 
     versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
     fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
@@ -171,50 +231,3 @@ private
 end
 
 Livecheck::Cli.new(ARGV).run
-
-__END__
-advancecomp:
-  url: https://github.com/amadvance/advancecomp/releases.atom
-  regexp: <id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>
-gifsicle:
-  url: https://www.lcdf.org/gifsicle/
-  regexp: gifsicle-(\d+(?:\.\d+)*)\.tar\.gz
-jhead:
-  url: https://www.sentex.ca/~mwandel/jhead/
-  regexp: jhead-(\d+(?:\.\d+)*)
-jpegoptim:
-  url: https://github.com/tjko/jpegoptim/tags.atom
-  regexp: <id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>
-jpegarchive:
-  url: https://github.com/danielgtaylor/jpeg-archive/releases.atom
-  regexp: <id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>
-libjpeg:
-  url: https://www.ijg.org/files/
-  regexp: jpegsrc.v(.*?).tar.gz
-liblcms:
-  url: https://sourceforge.net/projects/lcms/rss?path=/lcms
-  regexp: /lcms/(\d+(?:\.\d+)*)/
-libmozjpeg:
-  url: https://github.com/mozilla/mozjpeg/releases.atom
-  regexp: <id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>
-libpng:
-  url: https://sourceforge.net/projects/libpng/rss?path=/libpng16
-  regexp: /libpng\d*/(\d+(?:\.\d+)*)/
-libz:
-  url: https://sourceforge.net/projects/libpng/rss?path=/zlib
-  regexp: /zlib/(\d+(?:\.\d+)*)/
-optipng:
-  url: https://sourceforge.net/projects/optipng/rss
-  regexp: /OptiPNG/optipng-(\d+(?:\.\d+)*)/
-oxipng:
-  url: https://github.com/shssoichiro/oxipng/releases.atom
-  regexp: <id>tag:github.com,2008:Repository/\d+/v(\d+(?:\.\d+)*)</id>
-pngcrush:
-  url: https://sourceforge.net/projects/pmt/rss?path=/pngcrush
-  regexp: /pngcrush/(\d+(?:\.\d+)*)/
-pngout:
-  url: http://www.jonof.id.au/kenutils.html
-  regexp: /files/kenutils/pngout-(\d{8})-linux.tar.gz
-pngquant:
-  url: https://pngquant.org/releases.html
-  regexp: <span itemprop='version'>(\d+(?:\.\d+)*)</span>
