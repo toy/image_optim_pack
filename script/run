@@ -57,7 +57,9 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile 
   passes-filter "$vm" || continue
   header "$vm"
 
-  [[ -n "$NO_UP" ]] || vagrant up "$vm"
+  if [[ -z "$NO_UP" ]]; then
+    vagrant status "$vm" | grep -q running || vagrant up "$vm"
+  fi
 
   # create ssh config
   ssh_config=".vagrant/ssh_config.$vm"
