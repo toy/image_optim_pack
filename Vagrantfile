@@ -46,6 +46,10 @@ Vagrant.configure('2') do |config|
 
           apt-get update
           apt-get -y dist-upgrade
+
+          if [ $(lsb_release -r | egrep -o '[0-9]+' | head -1) -lt 18 ]; then
+            do-release-upgrade -f DistUpgradeViewNonInteractive
+          fi
         else
           set -ex
 
