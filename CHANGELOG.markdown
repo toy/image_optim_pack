@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* oxipng 6.0.0 [@toy](https://github.com/toy)
+
 ## v0.9.1 (2022-08-29)
 
 * libmozjpeg 4.1.1 [@toy](https://github.com/toy)
