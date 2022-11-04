@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.9.1.20221104 (2022-11-04)
+
 * liblcms 2.14 [@toy](https://github.com/toy)
 
 ## v0.9.1.20220917 (2022-09-17)
