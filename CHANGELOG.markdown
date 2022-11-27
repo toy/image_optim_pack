@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.9.1.20221127 (2022-11-27)
+
 * advancecomp 2.4 and libpng 1.6.39 [@toy](https://github.com/toy)
 
 ## v0.9.1.20221104 (2022-11-04)
