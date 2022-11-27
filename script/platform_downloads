@@ -45,7 +45,7 @@ table = Terminal::Table.new
 
 table.headings = ['version', 'days', 'base dls'] + platforms.map do |platform|
   platform.split('-').reverse.join("\n")
-end
+end + ['total']
 
 versions.group_by(&:number).each do |version_n, platform_versions|
   next if platform_versions.length == 1
@@ -65,7 +65,7 @@ versions.group_by(&:number).each do |version_n, platform_versions|
     version_n,
     (version_time[version_n] / (24 * 60 * 60)).round,
     base_downloads,
-  ] + platform_values
+  ] + platform_values + [downloads_by_platform.values.sum]
 end
 
 (1...table.number_of_columns).each do |column|
