@@ -277,28 +277,30 @@ update-versions :
 
 DOCKER_IMAGE := ghcr.io/toy/image_optim
 DOCKER_TAG := $(shell date +%Y%m%d)
+DOCKER_FILE := Dockerfile
 
 docker-build : download
 	@docker build \
 		--pull \
 		$(foreach archive,$(ARCHIVES),--build-arg $(archive)_VER=$($(archive)_VER) --build-arg $(archive)_SHA256=$($(archive)_SHA256)) \
-		-t $(DOCKER_IMAGE):latest \
+		-t $(DOCKER_IMAGE):latest$(DOCKER_TAG_SUFFIX) \
+		-f $(DOCKER_FILE) \
 		.
 	@docker tag \
-		$(DOCKER_IMAGE):latest \
-		$(DOCKER_IMAGE):$(DOCKER_TAG)
+		$(DOCKER_IMAGE):latest$(DOCKER_TAG_SUFFIX) \
+		$(DOCKER_IMAGE):$(DOCKER_TAG)$(DOCKER_TAG_SUFFIX)
 .PHONY : docker-build
 
 docker-test : docker-build
 	@docker run \
 		--rm \
-		$(DOCKER_IMAGE):latest \
+		$(DOCKER_IMAGE):latest$(DOCKER_TAG_SUFFIX) \
 		--info
 .PHONY : docker-test
 
 docker-push : docker-test
-	@docker push $(DOCKER_IMAGE):latest
-	@docker push $(DOCKER_IMAGE):$(DOCKER_TAG)
+	@docker push $(DOCKER_IMAGE):latest$(DOCKER_TAG_SUFFIX)
+	@docker push $(DOCKER_IMAGE):$(DOCKER_TAG)$(DOCKER_TAG_SUFFIX)
 .PHONY : docker-push
 
 # ====== CLEAN ======
