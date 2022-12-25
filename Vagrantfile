@@ -44,6 +44,7 @@ Vagrant.configure('2') do |config|
         if command -v apt-get; then
           set -ex
 
+          apt remove unattended-upgrades
           apt-get update
           apt-get -y dist-upgrade
 
