@@ -491,7 +491,7 @@ $(OPTIPNG_TARGET) :
 
 ## oxipng
 $(OXIPNG_TARGET) :
-	cd $(DIR) && cargo build --release
+	cd $(DIR) && cargo build --release --frozen
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
