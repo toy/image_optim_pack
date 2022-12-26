@@ -29,6 +29,7 @@ Vagrant.configure('2') do |config|
 
           apt-get update
           apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake cargo
+          apt-get -y remove unattended-upgrades
         else
           set -ex
 
@@ -44,7 +45,6 @@ Vagrant.configure('2') do |config|
         if command -v apt-get; then
           set -ex
 
-          apt remove unattended-upgrades
           apt-get update
           apt-get -y dist-upgrade
 
