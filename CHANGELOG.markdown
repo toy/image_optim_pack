@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* oxipng 8.0.0 [@toy](https://github.com/toy)
+
 ## v0.9.1.20221210 (2022-12-10)
 
 * oxipng 7.0.0 [@toy](https://github.com/toy)
