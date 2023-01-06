@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jpegoptim 1.5.1 [@toy](https://github.com/toy)
+
 ## v0.9.1.20221226 (2022-12-26)
 
 * oxipng 8.0.0 [@toy](https://github.com/toy)
