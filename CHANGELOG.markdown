@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* advancecomp 2.5 [@toy](https://github.com/toy)
+
 ## v0.9.1.20230107 (2023-01-07)
 
 * jpegoptim 1.5.1 [@toy](https://github.com/toy)
