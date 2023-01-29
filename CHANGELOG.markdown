@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* pngquant 2.18.0 [@toy](https://github.com/toy)
+
 ## v0.9.1.20230127 (2023-01-27)
 
 * advancecomp 2.5 [@toy](https://github.com/toy)
