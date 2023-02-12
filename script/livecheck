@@ -7,85 +7,85 @@ require 'openssl'
 require 'rubygems/version'
 require 'fspath'
 
+CONFIG = {
+  advancecomp: {
+    url: 'https://github.com/amadvance/advancecomp/releases.atom',
+    regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    info_url: 'http://www.advancemame.it/comp-history',
+  },
+  gifsicle: {
+    url: 'https://www.lcdf.org/gifsicle/',
+    regexp: /gifsicle-(\d+(?:\.\d+)*)\.tar\.gz/,
+    info_url: 'https://www.lcdf.org/gifsicle/changes.html',
+  },
+  jhead: {
+    url: 'https://www.sentex.ca/~mwandel/jhead/',
+    regexp: /jhead-(\d+(?:\.\d+)*)/,
+    info_url: 'https://www.sentex.ca/~mwandel/jhead/changes.txt',
+  },
+  jpegoptim: {
+    url: 'https://github.com/tjko/jpegoptim/tags.atom',
+    regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    info_url: 'https://github.com/tjko/jpegoptim/#readme',
+  },
+  jpegarchive: {
+    url: 'https://github.com/danielgtaylor/jpeg-archive/releases.atom',
+    regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    info_url: 'https://github.com/danielgtaylor/jpeg-archive/releases',
+  },
+  libjpeg: {
+    url: 'https://www.ijg.org/files/',
+    regexp: /jpegsrc.v(.*?).tar.gz/,
+    info_url: 'https://jpegclub.org/reference/reference-sources/#:~:text=CHANGE%20LOG',
+  },
+  liblcms: {
+    url: 'https://sourceforge.net/projects/lcms/rss?path=/lcms',
+    regexp: %r{/lcms/(\d+(?:\.\d+)*)/},
+    info_url: 'https://www.littlecms.com/blog/',
+  },
+  libmozjpeg: {
+    url: 'https://github.com/mozilla/mozjpeg/releases.atom',
+    regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
+    info_url: 'https://github.com/mozilla/mozjpeg/releases',
+  },
+  libpng: {
+    url: 'https://sourceforge.net/projects/libpng/rss?path=/libpng16',
+    regexp: %r{/libpng\d*/(\d+(?:\.\d+)*)/},
+    info_url: 'https://github.com/glennrp/libpng/blob/libpng16/CHANGES#:~:text=Send%20comments/corrections/commendations%20to%20png%2Dmng%2Dimplement%20at%20lists.sf.net.',
+  },
+  libz: {
+    url: 'https://sourceforge.net/projects/libpng/rss?path=/zlib',
+    regexp: %r{/zlib/(\d+(?:\.\d+)*)/},
+    info_url: 'https://github.com/glennrp/zlib/blob/master/ChangeLog',
+  },
+  optipng: {
+    url: 'https://sourceforge.net/projects/optipng/rss',
+    regexp: %r{/OptiPNG/optipng-(\d+(?:\.\d+)*)/},
+    info_url: 'https://optipng.sourceforge.net/history.txt',
+  },
+  oxipng: {
+    url: 'https://github.com/shssoichiro/oxipng/releases.atom',
+    regexp: %r{<id>tag:github.com,2008:Repository/\d+/v(\d+(?:\.\d+)*)</id>},
+    info_url: 'https://github.com/shssoichiro/oxipng/releases',
+  },
+  pngcrush: {
+    url: 'https://sourceforge.net/projects/pmt/rss?path=/pngcrush',
+    regexp: %r{/pngcrush/(\d+(?:\.\d+)*)/},
+    info_url: 'https://pmt.sourceforge.io/pngcrush/ChangeLog.html',
+  },
+  pngout: {
+    url: 'http://www.jonof.id.au/kenutils.html',
+    regexp: %r{/files/kenutils/pngout-(\d{8})-linux.tar.gz},
+    info_url: 'http://www.jonof.id.au/kenutils.html#:~:text=Revision%20history',
+  },
+  pngquant: {
+    url: 'https://pngquant.org/releases.html',
+    regexp: %r{<span itemprop='version'>(\d+(?:\.\d+)*)</span>},
+  },
+}.freeze
+
 # Fetch and compare latest tool/library versions
 class Livecheck
-  CONFIG = {
-    advancecomp: {
-      url: 'https://github.com/amadvance/advancecomp/releases.atom',
-      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
-      info_url: 'http://www.advancemame.it/comp-history',
-    },
-    gifsicle: {
-      url: 'https://www.lcdf.org/gifsicle/',
-      regexp: /gifsicle-(\d+(?:\.\d+)*)\.tar\.gz/,
-      info_url: 'https://www.lcdf.org/gifsicle/changes.html',
-    },
-    jhead: {
-      url: 'https://www.sentex.ca/~mwandel/jhead/',
-      regexp: /jhead-(\d+(?:\.\d+)*)/,
-      info_url: 'https://www.sentex.ca/~mwandel/jhead/changes.txt',
-    },
-    jpegoptim: {
-      url: 'https://github.com/tjko/jpegoptim/tags.atom',
-      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
-      info_url: 'https://github.com/tjko/jpegoptim/#readme',
-    },
-    jpegarchive: {
-      url: 'https://github.com/danielgtaylor/jpeg-archive/releases.atom',
-      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
-      info_url: 'https://github.com/danielgtaylor/jpeg-archive/releases',
-    },
-    libjpeg: {
-      url: 'https://www.ijg.org/files/',
-      regexp: /jpegsrc.v(.*?).tar.gz/,
-      info_url: 'https://jpegclub.org/reference/reference-sources/#:~:text=CHANGE%20LOG',
-    },
-    liblcms: {
-      url: 'https://sourceforge.net/projects/lcms/rss?path=/lcms',
-      regexp: %r{/lcms/(\d+(?:\.\d+)*)/},
-      info_url: 'https://www.littlecms.com/blog/',
-    },
-    libmozjpeg: {
-      url: 'https://github.com/mozilla/mozjpeg/releases.atom',
-      regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
-      info_url: 'https://github.com/mozilla/mozjpeg/releases',
-    },
-    libpng: {
-      url: 'https://sourceforge.net/projects/libpng/rss?path=/libpng16',
-      regexp: %r{/libpng\d*/(\d+(?:\.\d+)*)/},
-      info_url: 'https://github.com/glennrp/libpng/blob/libpng16/CHANGES#:~:text=Send%20comments/corrections/commendations%20to%20png%2Dmng%2Dimplement%20at%20lists.sf.net.',
-    },
-    libz: {
-      url: 'https://sourceforge.net/projects/libpng/rss?path=/zlib',
-      regexp: %r{/zlib/(\d+(?:\.\d+)*)/},
-      info_url: 'https://github.com/glennrp/zlib/blob/master/ChangeLog',
-    },
-    optipng: {
-      url: 'https://sourceforge.net/projects/optipng/rss',
-      regexp: %r{/OptiPNG/optipng-(\d+(?:\.\d+)*)/},
-      info_url: 'https://optipng.sourceforge.net/history.txt',
-    },
-    oxipng: {
-      url: 'https://github.com/shssoichiro/oxipng/releases.atom',
-      regexp: %r{<id>tag:github.com,2008:Repository/\d+/v(\d+(?:\.\d+)*)</id>},
-      info_url: 'https://github.com/shssoichiro/oxipng/releases',
-    },
-    pngcrush: {
-      url: 'https://sourceforge.net/projects/pmt/rss?path=/pngcrush',
-      regexp: %r{/pngcrush/(\d+(?:\.\d+)*)/},
-      info_url: 'https://pmt.sourceforge.io/pngcrush/ChangeLog.html',
-    },
-    pngout: {
-      url: 'http://www.jonof.id.au/kenutils.html',
-      regexp: %r{/files/kenutils/pngout-(\d{8})-linux.tar.gz},
-      info_url: 'http://www.jonof.id.au/kenutils.html#:~:text=Revision%20history',
-    },
-    pngquant: {
-      url: 'https://pngquant.org/releases.html',
-      regexp: %r{<span itemprop='version'>(\d+(?:\.\d+)*)</span>},
-    },
-  }.freeze
-
   # Commands
   class Cli
     VERSION_REGEXP = /^([A-Z]+)_VER *:= *(.*)$/.freeze
