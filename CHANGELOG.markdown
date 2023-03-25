@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jpegoptim 1.5.3 [@toy](https://github.com/toy)
+
 ## v0.9.1.20230304 (2023-03-04)
 
 * liblcms 2.15 [@toy](https://github.com/toy)
