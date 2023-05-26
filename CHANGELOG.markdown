@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libmozjpeg 4.1.3 [@toy](https://github.com/toy)
+
 ## v0.9.1.20230515 (2023-05-15)
 
 * jpegoptim 1.5.4 [@toy](https://github.com/toy)
