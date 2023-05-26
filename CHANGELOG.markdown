@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.9.1.20230526 (2023-05-26)
+
 * libmozjpeg 4.1.3 [@toy](https://github.com/toy)
 
 ## v0.9.1.20230515 (2023-05-15)
