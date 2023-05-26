@@ -1,5 +1,7 @@
 name: livecheck
 on:
+  push:
+  pull_request:
   schedule:
   - cron: 34 5 * * *
   workflow_dispatch:
