@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* gifsicle 1.94 [@toy](https://github.com/toy)
+
 ## v0.9.1.20230622 (2023-06-22)
 
 * libpng 1.6.40 [@toy](https://github.com/toy)
