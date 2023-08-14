@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jpegoptim 1.5.5 [@toy](https://github.com/toy)
+
 ## v0.9.1.20230625 (2023-06-25)
 
 * gifsicle 1.94 [@toy](https://github.com/toy)
