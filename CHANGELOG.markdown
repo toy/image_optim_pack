@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.9.1.20230814 (2023-08-14)
+
 * jpegoptim 1.5.5 [@toy](https://github.com/toy)
 
 ## v0.9.1.20230625 (2023-06-25)
