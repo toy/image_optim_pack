@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* advancecomp 2.6 and oxipng 9.0.0 [@toy](https://github.com/toy)
 * Remove 32 bit (i686) linux binaries/platform [@toy](https://github.com/toy)
 
 ## v0.9.1.20230828 (2023-08-28)
