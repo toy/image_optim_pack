@@ -5,26 +5,7 @@ require 'gems'
 require 'ostruct'
 require 'terminal-table'
 
-ATTRIBUTES = %i[
-  authors
-  built_at
-  created_at
-  description
-  downloads_count
-  metadata
-  number
-  summary
-  platform
-  rubygems_version
-  ruby_version
-  prerelease
-  licenses
-  requirements
-  sha
-].freeze
-Version = Struct.new(*ATTRIBUTES, :keyword_init => true)
-
-versions = Gems.versions('image_optim_pack').map(&Version.method(:new))
+versions = Gems.versions('image_optim_pack').map(&OpenStruct.method(:new)) # rubocop:disable Style/OpenStructUse
 
 platforms = versions.map(&:platform).uniq.sort_by do |platform|
   platform.sub('amd64', 'x86_64').split('-').reverse
