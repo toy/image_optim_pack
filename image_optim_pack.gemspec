@@ -22,7 +22,6 @@ Gem::Specification.new do |s|
     s.platform = Gem::Platform.new([gem_cpu, gem_os])
 
     cpu_aliases = {
-      'x86' => %w[i386 i686],
       'x86_64' => %w[x86_64 amd64],
     }[gem_cpu] || [gem_cpu]
 

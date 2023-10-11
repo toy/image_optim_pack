@@ -17,7 +17,6 @@ Vagrant.configure('2') do |config|
 
   {
     'linux-x86_64'  => 'boxes/centos-amd64.box',
-    'linux-i686'    => 'ubuntu/xenial32',
   }.each do |name, location|
     config.vm.define name do |machine|
       machine.vm.hostname = name.gsub('_', '-')

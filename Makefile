@@ -244,8 +244,6 @@ endef
 
 ifdef IS_DARWIN
 test : ARCH_STRING := $(ARCH)
-else ifeq (i386,$(ARCH:i686=i386))
-test : ARCH_STRING := 80386
 else ifeq (amd64,$(ARCH:x86_64=amd64))
 test : ARCH_STRING := x86-64
 endif
