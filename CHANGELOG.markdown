@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libmozjpeg 4.1.5 [@toy](https://github.com/toy)
+
 ## v0.10.0 (2023-10-11)
 
 * advancecomp 2.6 and oxipng 9.0.0 [@toy](https://github.com/toy)
