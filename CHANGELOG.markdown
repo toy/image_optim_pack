@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* optipng 0.7.8 [@toy](https://github.com/toy)
+
 ## v0.10.0.20231014 (2023-10-14)
 
 * libmozjpeg 4.1.5 [@toy](https://github.com/toy)
