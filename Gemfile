@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gemspec :name => 'image_optim_pack'
+gemspec name: 'image_optim_pack'
 
 if RUBY_VERSION >= '2.1.9'
   gem 'gems', '~> 1.0'

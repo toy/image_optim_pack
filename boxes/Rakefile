@@ -73,10 +73,10 @@ Dir['definitions/*/definition.rb'].each do |definition_path|
   end
 
   desc 'build all boxes'
-  task :build => box.path
+  task build: box.path
 
   desc 'add all boxes to vagrant'
-  task :add => "add:#{box.name}"
+  task add: "add:#{box.name}"
 end
 
 desc 'remove *.box and iso dir'
@@ -85,4 +85,4 @@ task :clean do
   sh 'rm -r iso || true'
 end
 
-task :default => :build
+task default: :build

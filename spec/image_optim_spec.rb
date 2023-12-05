@@ -19,7 +19,7 @@ describe ImageOptim do
     ImageOptim::Worker.klasses.map do |klass|
       [klass.bin_sym, false]
     end
-  ].merge(:skip_missing_workers => false)
+  ].merge(skip_missing_workers: false)
 
   ImageOptim::Worker.klasses.each do |worker_klass|
     next if [:pngout, :svgo].include?(worker_klass.bin_sym)
@@ -30,7 +30,7 @@ describe ImageOptim do
 
         image_optim = ImageOptim.new(options)
         if Array(worker_klass.init(image_optim)).empty?
-          image_optim = ImageOptim.new(options.merge(:allow_lossy => true))
+          image_optim = ImageOptim.new(options.merge(allow_lossy: true))
         end
 
         expect(test_images.any? do |original|

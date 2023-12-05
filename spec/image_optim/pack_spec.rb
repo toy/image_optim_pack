@@ -64,7 +64,7 @@ describe ImageOptim::Pack do
 
       it{ should all(be_an(ImageOptim::BinResolver::Bin)) }
 
-      it{ should all(have_attributes(:version => be)) }
+      it{ should all(have_attributes(version: be)) }
 
       it{ should all(be_non_libraries) }
     end
@@ -72,7 +72,7 @@ describe ImageOptim::Pack do
     describe 'bin helpers' do
       def bins_with_versions(*versions)
         versions.map do |version|
-          double(:version => version, :inspect => version ? 'good' : 'bad')
+          double(version: version, inspect: version ? 'good' : 'bad')
         end
       end
 
@@ -88,8 +88,8 @@ describe ImageOptim::Pack do
 
         it{ should be_all_bins_working }
         it{ should_not be_all_bins_failing }
-        it{ should have_attributes(:working_bins => eq(bins)) }
-        it{ should have_attributes(:failing_bins => be_empty) }
+        it{ should have_attributes(working_bins: eq(bins)) }
+        it{ should have_attributes(failing_bins: be_empty) }
       end
 
       describe 'mixed good/bad bins' do
@@ -98,8 +98,8 @@ describe ImageOptim::Pack do
 
         it{ should_not be_all_bins_working }
         it{ should_not be_all_bins_failing }
-        it{ should have_attributes(:working_bins => bins.select(&:version)) }
-        it{ should have_attributes(:failing_bins => bins.reject(&:version)) }
+        it{ should have_attributes(working_bins: bins.select(&:version)) }
+        it{ should have_attributes(failing_bins: bins.reject(&:version)) }
       end
 
       describe 'all bad bins' do
@@ -108,8 +108,8 @@ describe ImageOptim::Pack do
 
         it{ should_not be_all_bins_working }
         it{ should be_all_bins_failing }
-        it{ should have_attributes(:working_bins => be_empty) }
-        it{ should have_attributes(:failing_bins => eq(bins)) }
+        it{ should have_attributes(working_bins: be_empty) }
+        it{ should have_attributes(failing_bins: eq(bins)) }
       end
     end
   end
