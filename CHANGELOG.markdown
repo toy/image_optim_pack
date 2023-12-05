@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.10.1 (2023-12-05)
+
 * liblcms 2.16 [@toy](https://github.com/toy)
 
 ## v0.10.0.20231105 (2023-11-05)
