@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* liblcms 2.16 [@toy](https://github.com/toy)
+
 ## v0.10.0.20231105 (2023-11-05)
 
 * optipng 0.7.8 [@toy](https://github.com/toy)
