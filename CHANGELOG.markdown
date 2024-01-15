@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libjpeg 9f [@toy](https://github.com/toy)
+
 ## v0.10.1 (2023-12-05)
 
 * liblcms 2.16 [@toy](https://github.com/toy)
