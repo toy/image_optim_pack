@@ -14,7 +14,7 @@ jobs:
         - DOCKER_FILE=Dockerfile.debian DOCKER_TAG_SUFFIX=-debian
       fail-fast: false
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
       with:
         registry: ghcr.io
