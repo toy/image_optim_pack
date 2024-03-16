@@ -27,13 +27,13 @@ Vagrant.configure('2') do |config|
           set -ex
 
           apt-get update
-          apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake cargo
+          apt-get -y install rsync ntpdate make wget gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake cargo patch
           apt-get -y remove unattended-upgrades
         else
           set -ex
 
           yum -y install epel-release
-          yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm cmake cargo
+          yum -y install rsync ntpdate make wget gcc gcc-c++ chrpath perl pkg-config autoconf automake libtool nasm cmake cargo patch
         fi
 
         mkdir -p /vagrant

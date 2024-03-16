@@ -44,7 +44,7 @@ for arch in x86_64; do
     mkdir -p '$build_dir'
     cd '$build_dir'
 
-    ln -nsf '$PWD/Makefile' '$PWD/checksums.mk' '$PWD/download' .
+    ln -nsf '$PWD/Makefile' '$PWD/checksums.mk' '$PWD/download' '$PWD/patches' .
     rsync -aR --del '$PWD/./vendor/$platform' .
 
     make $MAKE_TASK ARCH=$arch
@@ -67,7 +67,7 @@ for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile 
 
   # rsync needed files to the box
   mkdir -p "vendor/$vm"
-  rsync -e "ssh -F $ssh_config" -aR --del Makefile checksums.mk download "vendor/$vm" "$vm:/vagrant"
+  rsync -e "ssh -F $ssh_config" -aR --del Makefile checksums.mk download patches "vendor/$vm" "$vm:/vagrant"
 
   # sync time and run make
   ssh -F "$ssh_config" "$vm" "

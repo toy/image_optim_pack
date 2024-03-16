@@ -10,7 +10,7 @@ JPEGOPTIM_VER := 1.5.5
 LIBJPEG_VER := 9f
 LIBLCMS_VER := 2.16
 LIBMOZJPEG_VER := 4.1.5
-LIBPNG_VER := 1.6.40
+LIBPNG_VER := 1.6.43
 LIBZ_VER := 1.2.11
 OPTIPNG_VER := 0.7.8
 OXIPNG_VER := 9.0.0
@@ -43,6 +43,7 @@ BUILD_ROOT_DIR := $(CURDIR)/build
 BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
 OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
+PATCHES_DIR := $(CURDIR)/patches
 
 ANSI_RED=\033[31m
 ANSI_GREEN=\033[32m
@@ -495,6 +496,7 @@ $(OXIPNG_TARGET) :
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
 $(PNGCRUSH_TARGET) :
 	cd $(DIR) && rm -f png.h pngconf.h
+	cd $(DIR) && patch < $(PATCHES_DIR)/pngcrush.patch
 	cd $(DIR) && $(MAKE) pngcrush \
 		CC="$(CC)" \
 		LD="$(CC)" \

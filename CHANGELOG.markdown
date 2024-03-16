@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* libpng 1.6.43, patching pngcrush to be compatible [@toy](https://github.com/toy)
 * libjpeg 9f [@toy](https://github.com/toy)
 
 ## v0.10.1 (2023-12-05)
