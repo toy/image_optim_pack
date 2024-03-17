@@ -120,8 +120,10 @@ FROM libpng as pngcrush
 ARG PNGCRUSH_VER
 ARG PNGCRUSH_SHA256
 COPY download/pngcrush-$PNGCRUSH_VER.tar.gz download/
+COPY patches/pngcrush.patch patches/
 RUN ./extract pngcrush && \
     cd build/pngcrush && \
+    patch < ../../patches/pngcrush.patch && \
     make && \
     install -c pngcrush /usr/local/bin
 
