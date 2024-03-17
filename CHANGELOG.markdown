@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* gifsicle 1.95 [@toy](https://github.com/toy)
 * libpng 1.6.43, patching pngcrush to be compatible [@toy](https://github.com/toy)
 * libjpeg 9f [@toy](https://github.com/toy)
 
