@@ -38,14 +38,13 @@ for arch in x86_64; do
 
   mkdir -p "vendor/$platform"
 
+  rsync -aR --del Makefile checksums.mk download patches "$build_dir"
+
   sudo -u _image_optim --set-home bash -c "
     set -e
 
     mkdir -p '$build_dir'
     cd '$build_dir'
-
-    ln -nsf '$PWD/Makefile' '$PWD/checksums.mk' '$PWD/download' '$PWD/patches' .
-    rsync -aR --del '$PWD/./vendor/$platform' .
 
     make $MAKE_TASK ARCH=$arch
   "
