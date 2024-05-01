@@ -411,7 +411,7 @@ $(JHEAD_TARGET) :
 ## jpeg-recompress
 $(eval $(call depend-build,JPEG-RECOMPRESS,LIBMOZJPEG))
 $(JPEG-RECOMPRESS_TARGET) :
-	cd $(DIR) && $(MAKE) jpeg-recompress CC="$(CC) $(CFLAGS)" LIBJPEG=$(LIBMOZJPEG_TARGET) \
+	cd $(DIR) && $(MAKE) jpeg-recompress CC="$(CC) $(CFLAGS) -fcommon" LIBJPEG=$(LIBMOZJPEG_TARGET) \
 		MAKE=$(MAKE) # fix for bsd in jpeg-archive-2.1.1
 
 ## jpegoptim
