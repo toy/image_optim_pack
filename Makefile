@@ -45,6 +45,8 @@ OUTPUT_ROOT_DIR := $(CURDIR)/vendor
 OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
 PATCHES_DIR := $(CURDIR)/patches
 
+export CARGO_HOME := $(DL_DIR)/cargo
+
 ANSI_RED=\033[31m
 ANSI_GREEN=\033[32m
 ANSI_MAGENTA=\033[35m
@@ -112,6 +114,10 @@ $(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.ta
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_ARC))
 .PHONY : download
+
+download-dependencies : $(OXIPNG_EXTRACTED)
+	cd $(OXIPNG_DIR) && cargo fetch --locked
+.PHONY : download-dependencies
 
 download-tidy-up :
 	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_ARC)),$(wildcard $(DL_DIR)/*.*))
@@ -270,6 +276,7 @@ test :
 update-versions :
 	script/livecheck --update
 	make checksum-update
+	make download-dependencies
 .PHONY : update-versions
 
 # ====== DOCKER ======
@@ -490,7 +497,7 @@ $(OPTIPNG_TARGET) :
 
 ## oxipng
 $(OXIPNG_TARGET) :
-	cd $(DIR) && cargo build --release --locked
+	cd $(DIR) && cargo build --release --frozen --offline
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))

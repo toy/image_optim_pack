@@ -27,6 +27,8 @@ if [[ $(uname -s) != 'Darwin' ]]; then
   exit 1
 fi
 
+make download-dependencies
+
 for arch in x86_64; do
   platform="darwin-$arch"
   passes-filter "$platform" || continue
