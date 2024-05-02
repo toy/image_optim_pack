@@ -1,8 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -e
 
 # Build tools on Mac OS X host and in all vms
-
-set -e
 
 MAKE_TASK='all -j'
 
@@ -40,9 +38,7 @@ for arch in x86_64; do
 
   rsync -aR --del Makefile checksums.mk download patches "$build_dir"
 
-  sudo -u _image_optim --set-home bash -c "
-    set -e
-
+  sudo -u _image_optim --set-home bash -exc "
     mkdir -p '$build_dir'
     cd '$build_dir'
 
@@ -52,38 +48,74 @@ for arch in x86_64; do
   rsync -aR --del "$build_dir/./vendor/$platform" .
 done
 
-for vm in $(perl -pe "s/.*?'(.+?-.+?)'\s+=>\s+'.+?\/.+?'.*|.*/\$1/" Vagrantfile | uniq); do
-  passes-filter "$vm" || continue
+if command -v docker &> /dev/null; then
+  container_tool="docker"
+elif command -v podman &> /dev/null; then
+  container_tool="podman"
+else
+  echo "neither docker nor podman found"
+  exit 1
+fi
+
+container_build() {
+  vm=$1
+  image=$2
+
+  passes-filter "$vm" || return 0
   header "$vm"
 
+  container_name="image_optim_pack-build-$vm"
+  workdir=/pack
+
   if [[ -z "$NO_UP" ]]; then
-    vagrant status "$vm" | grep -q running || vagrant up "$vm"
+    status=$("$container_tool" inspect --format '{{.State.Status}}' "$container_name" 2>/dev/null || true)
+
+    if [[ "$status" == "" ]]; then
+      mount="./_path_:$workdir/_path_"
+
+      "$container_tool" \
+        container create \
+        --quiet \
+        --name="$container_name" \
+        --stop-signal SIGHUP \
+        -it \
+        -v "${mount//_path_/}:ro" \
+        -v "${mount//_path_/build/$vm}" \
+        -v "${mount//_path_/vendor/$vm}" \
+        --workdir "$workdir" \
+        "$image"
+
+      "$container_tool" container start "$container_name"
+
+      "$container_tool" exec -it "$container_name" bash -exc "
+        apt update
+        apt -y install make gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake patch
+      "
+    fi
+
+    if [[ "$status" = @(created|exited) ]]; then
+      "$container_tool" container start "$container_name"
+    fi
+
+    if [[ "$status" = @(created|exited|running) ]]; then
+      "$container_tool" exec -it "$container_name" bash -exc "
+        apt update
+        apt -y dist-upgrade
+        rustup update
+      "
+    fi
+
+    if ! [[ "$status" = @(|created|exited|running) ]]; then
+      echo "unexpected status $status"
+      exit 1
+    fi
   fi
 
-  # create ssh config
-  ssh_config=".vagrant/ssh_config.$vm"
-  vagrant ssh-config "$vm" > "$ssh_config"
-
-  # rsync needed files to the box
-  mkdir -p "vendor/$vm"
-  rsync -e "ssh -F $ssh_config" -aR --del Makefile checksums.mk download patches "vendor/$vm" "$vm:/vagrant"
-
-  # sync time and run make
-  ssh -F "$ssh_config" "$vm" "
-    set -e
-
-    sudo ntpdate pool.ntp.org
-
-    cd /vagrant
-    if make -v 2>&1 | grep -q GNU\ Make; then
-      make $MAKE_TASK
-    else
-      gmake $MAKE_TASK
-    fi
+  "$container_tool" exec -it "$container_name" bash -exc "
+    make $MAKE_TASK
   "
 
-  # rsync files in vendor from the box
-  rsync -e "ssh -F $ssh_config" -aR --del "$vm:/vagrant/./vendor/$vm" .
+  [[ -n "$NO_HALT" ]] || "$container_tool" container stop "$container_name"
+}
 
-  [[ -n "$NO_HALT" ]] || vagrant halt "$vm"
-done
+container_build linux-x86_64 rust:slim

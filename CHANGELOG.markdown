@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Use container instead of vagrant to build linux binaries [@toy](https://github.com/toy)
+
 ## v0.10.1.20240317 (2024-03-17)
 
 * gifsicle 1.95 [@toy](https://github.com/toy)

@@ -70,9 +70,7 @@ gem 'image_optim_pack'
 
 ## Development
 
-Mac OS X binaries and libraries are built on host, others using [vagrant](https://www.vagrantup.com/).
-
-Boxes for vagrant are built using [veewee](https://github.com/jedi4ever/veewee), check [boxes/Rakefile](boxes/Rakefile) and [boxes/definitions](boxes/definitions).
+Mac OS X binaries and libraries are built on host, others using containers.
 
 ```sh
 script/run # Build and test all for all oses and architectures

@@ -1,6 +1,5 @@
 /build/
 /download/
-/.vagrant/
 
 Gemfile.lock
 /*.gem
