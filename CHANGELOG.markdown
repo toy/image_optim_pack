@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.11.0 (2024-05-05)
+
 * Use container instead of vagrant to build linux binaries [@toy](https://github.com/toy)
 * oxipng 9.1.1 [@toy](https://github.com/toy)
 
