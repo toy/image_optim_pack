@@ -122,8 +122,13 @@ class Livecheck
     def update_changelog
       changelog = FSPath('CHANGELOG.markdown')
       lines = changelog.readlines
-      lines.insert(4, "\n") if lines[4] =~ /^## /
-      lines.insert(4, changelog_entry)
+      i = 4
+      if lines[i] =~ /^## /
+        lines.insert(i, "\n")
+      else
+        i += 1 while lines[i] =~ /^\* /
+      end
+      lines.insert(i, changelog_entry)
       write(changelog, lines.join(''))
     end
 
