@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.11.1 (2024-05-09)
+
 * Use oldest maintained debian buster instead of newest bookworm for building linux binaries [@toy](https://github.com/toy)
 
 ## v0.11.0 (2024-05-05)
