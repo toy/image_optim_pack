@@ -77,7 +77,6 @@ container_build() {
 
       "$container_tool" \
         container create \
-        --quiet \
         --name="$container_name" \
         --stop-signal SIGHUP \
         -it \
@@ -120,4 +119,4 @@ container_build() {
   [[ -n "$NO_HALT" ]] || "$container_tool" container stop "$container_name"
 }
 
-container_build linux-x86_64 rust:slim
+container_build linux-x86_64 rust:slim-buster

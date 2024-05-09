@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Use oldest maintained debian buster instead of newest bookworm for building linux binaries [@toy](https://github.com/toy)
+
 ## v0.11.0 (2024-05-05)
 
 * Use container instead of vagrant to build linux binaries [@toy](https://github.com/toy)
