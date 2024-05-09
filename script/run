@@ -89,8 +89,8 @@ container_build() {
       "$container_tool" container start "$container_name"
 
       "$container_tool" exec -it "$container_name" bash -exc "
-        apt update
-        apt -y install make gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake patch
+        apt-get update
+        apt-get -y install make gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake patch
       "
     fi
 
@@ -100,8 +100,8 @@ container_build() {
 
     if [[ "$status" = @(created|exited|running) ]]; then
       "$container_tool" exec -it "$container_name" bash -exc "
-        apt update
-        apt -y dist-upgrade
+        apt-get update
+        apt-get -y dist-upgrade
         rustup update
       "
     fi
