@@ -11,7 +11,7 @@ CONFIG = {
   advancecomp: {
     url: 'https://github.com/amadvance/advancecomp/releases.atom',
     regexp: %r{<id>tag:github.com,2008:Repository/\d+/\D+?(\d+(?:\.\d+)*)</id>},
-    info_url: 'http://www.advancemame.it/comp-history',
+    info_url: 'https://www.advancemame.it/comp-history',
   },
   gifsicle: {
     url: 'https://www.lcdf.org/gifsicle/',
@@ -74,9 +74,9 @@ CONFIG = {
     info_url: 'https://pmt.sourceforge.io/pngcrush/ChangeLog.html',
   },
   pngout: {
-    url: 'http://www.jonof.id.au/kenutils.html',
+    url: 'https://www.jonof.id.au/kenutils.html',
     regexp: %r{/files/kenutils/pngout-(\d{8})-linux.tar.gz},
-    info_url: 'http://www.jonof.id.au/kenutils.html#:~:text=Revision%20history',
+    info_url: 'https://www.jonof.id.au/kenutils.html#:~:text=Revision%20history',
   },
   pngquant: {
     url: 'https://pngquant.org/releases.html',
