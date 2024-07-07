@@ -84,6 +84,8 @@ CONFIG = {
   },
 }.freeze
 
+Thread.report_on_exception = false
+
 # Fetch and compare latest tool/library versions
 class Livecheck
   # Commands
