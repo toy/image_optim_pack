@@ -17,12 +17,14 @@ jobs:
         MAX_ATTEMPTS=10
         for ((attempt = 1; ; attempt++)); do
           echo "#### Attempt $attempt"
-          bundle exec script/livecheck
-          exit_code=$?
-
-          if [ $exit_code -eq 2 ] && [ $attempt -lt $MAX_ATTEMPTS ]; then
-            sleep 300
+          if bundle exec script/livecheck; then
+            exit
           else
-            exit $exit_code
+            exit_code=$?
+            if [ $exit_code -eq 2 ] && [ $attempt -lt $MAX_ATTEMPTS ]; then
+              sleep 3
+            else
+              exit $exit_code
+            fi
           fi
         done
