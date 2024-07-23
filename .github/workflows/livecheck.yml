@@ -22,7 +22,7 @@ jobs:
           else
             exit_code=$?
             if [ $exit_code -eq 2 ] && [ $attempt -lt $MAX_ATTEMPTS ]; then
-              sleep 3
+              sleep 300
             else
               exit $exit_code
             fi
