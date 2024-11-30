@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* oxipng 9.1.3 [@toy](https://github.com/toy)
+
 ## v0.11.1.20240914 (2024-09-14)
 
 * libpng 1.6.44 [@toy](https://github.com/toy)
