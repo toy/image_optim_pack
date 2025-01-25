@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libpng 1.6.46 [@toy](https://github.com/toy)
+
 ## v0.11.1.20250108 (2025-01-08)
 
 * libpng 1.6.45 [@toy](https://github.com/toy)
