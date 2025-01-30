@@ -116,6 +116,8 @@ container_build() {
     make $MAKE_TASK
   "
 
+  chmod 755 vendor/$vm/*
+
   [[ -n "$NO_HALT" ]] || "$container_tool" container stop "$container_name"
 }
 

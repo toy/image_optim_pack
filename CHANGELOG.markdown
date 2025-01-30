@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Ensure linux binaries built in container have mode `755` instead of `700` [#28](https://github.com/toy/image_optim_pack/issues/28) [#29](https://github.com/toy/image_optim_pack/issues/29) [@toy](https://github.com/toy)
+
 ## v0.11.1.20250125 (2025-01-25)
 
 * libpng 1.6.46 [@toy](https://github.com/toy)
