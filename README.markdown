@@ -11,7 +11,7 @@
 
 Precompiled binaries for [`image_optim`](https://github.com/toy/image_optim).
 
-Contains binaries for Mac OS X (>= 10.12, x86\_64) and Linux (x86\_64).
+Contains binaries for Mac OS X (>= 10.12, x86\_64, arm64) and Linux (x86\_64).
 
 A test application with latest `image_optim` and `image_optim_pack` is available on render: https://iopack.onrender.com/.
 

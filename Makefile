@@ -28,7 +28,8 @@ include checksums.mk
 # ====== CONSTANTS ======
 
 OS := $(shell uname -s | tr A-Z a-z)
-ARCH := $(shell uname -m)
+HOST_ARCH := $(shell uname -m)
+ARCH := $(HOST_ARCH)
 
 IS_DARWIN := $(findstring darwin,$(OS))
 IS_LINUX := $(findstring linux,$(OS))
@@ -36,7 +37,8 @@ IS_BSD := $(findstring bsd,$(OS))
 IS_FREEBSD := $(findstring freebsd,$(OS))
 IS_OPENBSD := $(findstring openbsd,$(OS))
 DLEXT := $(if $(IS_DARWIN),.dylib,.so)
-HOST := $(ARCH)-$(if $(IS_DARWIN),apple,pc)-$(OS)
+HOST := $(ARCH:arm64=arm)-$(if $(IS_DARWIN),apple,pc)-$(OS)
+RUST_HOST := $(ARCH:arm64=aarch64)-$(if $(IS_DARWIN),apple-darwin,unknown-linux-gnu)
 
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
@@ -184,7 +186,7 @@ $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
 $(eval $(call target,OPTIPNG,,src/optipng/optipng))
-$(eval $(call target,OXIPNG,,target/release/oxipng))
+$(eval $(call target,OXIPNG,,target/$(RUST_HOST)/release/oxipng))
 $(eval $(call target,PNGCRUSH))
 ifdef IS_DARWIN
 $(eval $(call target,PNGOUT,PNGOUT_DARWIN,,NOSTRIP))
@@ -196,7 +198,11 @@ $(eval $(call target,PNGQUANT))
 # ====== TARGETS ======
 
 all : build
+ifeq ($(ARCH),$(HOST_ARCH))
 	@$(MAKE) test
+else
+	@echo Skipping tests when compiling for different architecture
+endif
 .PHONY : all
 
 build : $(call downcase,$(PRODUCTS))
@@ -389,6 +395,7 @@ ifdef IS_DARWIN
 export MACOSX_DEPLOYMENT_TARGET := 10.12
 GCC_FLAGS += -arch $(ARCH)
 CXXFLAGS += -stdlib=libc++
+export CMAKE_OSX_ARCHITECTURES := $(ARCH)
 endif
 
 ifdef IS_BSD
@@ -402,13 +409,13 @@ endif
 ## advpng
 $(eval $(call depend,ADVPNG,LIBZ))
 $(ADVPNG_TARGET) :
-	cd $(DIR) && ./configure LDFLAGS="$(XORIGIN)"
+	cd $(DIR) && ./configure --host "$(HOST)" LDFLAGS="$(XORIGIN)"
 	cd $(DIR) && $(MAKE) advpng
 	$(call chrpath_origin,$@)
 
 ## gifsicle
 $(GIFSICLE_TARGET) :
-	cd $(DIR) && ./configure
+	cd $(DIR) && ./configure --host "$(HOST)"
 	cd $(DIR) && $(MAKE) gifsicle
 
 ## jhead
@@ -424,7 +431,7 @@ $(JPEG-RECOMPRESS_TARGET) :
 ## jpegoptim
 $(eval $(call depend,JPEGOPTIM,LIBJPEG))
 $(JPEGOPTIM_TARGET) :
-	cd $(DIR) && ./configure LDFLAGS="$(XORIGIN)" --host $(HOST)
+	cd $(DIR) && ./configure --host "$(HOST)" LDFLAGS="$(XORIGIN)"
 	cd $(DIR) && $(MAKE) jpegoptim
 	$(call chrpath_origin,$@)
 
@@ -436,7 +443,7 @@ $(JPEGTRAN_TARGET) :
 
 ## libjpeg
 $(LIBJPEG_TARGET) :
-	cd $(DIR) && ./configure CC="$(CC) $(CFLAGS)"
+	cd $(DIR) && ./configure --host "$(HOST)" CC="$(CC) $(CFLAGS)"
 	cd $(DIR) && $(libtool_target_soname)
 ifdef IS_DARWIN
 	cd $(DIR) && $(MAKE) libjpeg.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
@@ -447,7 +454,7 @@ endif
 
 ## liblcms
 $(LIBLCMS_TARGET) :
-	cd $(DIR) && ./configure
+	cd $(DIR) && ./configure --host "$(HOST)"
 	cd $(DIR) && $(libtool_target_soname)
 ifdef IS_DARWIN
 	cd $(DIR)/src && make liblcms2.la LDFLAGS="-Wl,-install_name,@loader_path/$(@F)"
@@ -465,7 +472,7 @@ $(LIBMOZJPEG_TARGET) :
 ## libpng
 $(eval $(call depend,LIBPNG,LIBZ))
 $(LIBPNG_TARGET) :
-	cd $(DIR) && ./configure CC="$(CC) $(CFLAGS)"
+	cd $(DIR) && ./configure --host "$(HOST)" CC="$(CC) $(CFLAGS)"
 	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
 	cd $(DIR) && perl -pi -e 's/(?<=lpng)\d+//g' -- *.pc # %MAJOR%%MINOR% suffix
 	cd $(DIR) && $(libtool_target_soname)
@@ -497,7 +504,7 @@ $(OPTIPNG_TARGET) :
 
 ## oxipng
 $(OXIPNG_TARGET) :
-	cd $(DIR) && cargo build --release --frozen --offline
+	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST)
 
 ## pngcrush
 $(eval $(call depend,PNGCRUSH,LIBPNG LIBZ))
@@ -523,6 +530,6 @@ endif
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBLCMS LIBPNG LIBZ))
 $(PNGQUANT_TARGET) :
-	cd $(DIR) && ./configure --without-cocoa --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
+	cd $(DIR) && ./configure --without-cocoa $(if $(filter-out amd64,$(ARCH)),--disable-sse) --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
 	cd $(DIR) && $(MAKE) pngquant
 	$(call chrpath_origin,$@)

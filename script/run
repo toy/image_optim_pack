@@ -29,7 +29,7 @@ fi
 
 make download-dependencies
 
-for arch in x86_64; do
+for arch in x86_64 arm64; do
   platform="darwin-$arch"
   passes-filter "$platform" || continue
   header "$platform"
@@ -40,7 +40,7 @@ for arch in x86_64; do
 
   rsync -aR --del Makefile checksums.mk download patches "$build_dir"
 
-  sudo -u _image_optim --set-home bash -exc "
+  sudo -u _image_optim --set-home zsh -exc "
     mkdir -p '$build_dir'
     cd '$build_dir'
 

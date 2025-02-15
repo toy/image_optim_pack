@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* Add darwin-arm64/Apple silicon platform [@toy](https://github.com/toy)
 * pngout 20230322 (only for darwin) for arm64 [@toy](https://github.com/toy)
 * Set darwin deployment target to 10.12 [@toy](https://github.com/toy)
 
