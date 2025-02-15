@@ -18,7 +18,7 @@ PNGCRUSH_VER := 1.8.13
 PNGOUT_VER = $(if $(IS_DARWIN),$(PNGOUT_DARWIN_VER),$(PNGOUT_LINUX_VER))
 PNGOUT_LINUX_VER := 20200115
 PNGOUT_LINUX_STATIC_VER := $(PNGOUT_LINUX_VER)
-PNGOUT_DARWIN_VER := 20200115
+PNGOUT_DARWIN_VER := 20230322
 PNGQUANT_VER := 2.18.0
 
 # ====== CHECKSUMS ======
@@ -109,7 +109,7 @@ $(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/arch
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGOUT_LINUX,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz))
 $(eval $(call archive-dl,PNGOUT_LINUX_STATIC,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux-static.tar.gz))
-$(eval $(call archive-dl,PNGOUT_DARWIN,https://www.jonof.id.au/files/kenutils/pngout-[VER]-macos.zip,zip))
+$(eval $(call archive-dl,PNGOUT_DARWIN,https://www.jonof.id.au/files/kenutils/pngout-[VER]-mac.zip,zip))
 $(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_ARC))

@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* pngout 20230322 (only for darwin) for arm64 [@toy](https://github.com/toy)
 * Set darwin deployment target to 10.12 [@toy](https://github.com/toy)
 
 ## v0.11.2 (2025-01-31)
