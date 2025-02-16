@@ -100,6 +100,13 @@ container_build() {
 
     if [[ "$status" = @(created|exited|running) ]]; then
       "$container_tool" exec -it "$container_name" bash -exc "
+        UPDATED_FILE=/.updated
+        if [ -f \"\$UPDATED_FILE\" ] && [ \"\$(date -r \"\$UPDATED_FILE\" +%F)\" == \"\$(date +%F)\" ]; then
+          echo \"Skipping updates\"
+          exit 0
+        fi
+        touch \"\$UPDATED_FILE\"
+
         apt-get update
         apt-get -y dist-upgrade
         rustup update
