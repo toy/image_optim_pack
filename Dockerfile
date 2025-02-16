@@ -141,7 +141,8 @@ ARG PNGQUANT_SHA256
 COPY download/pngquant-$PNGQUANT_VER.tar.gz download/
 RUN ./extract pngquant && \
     cd build/pngquant && \
-    make install
+    cargo build --release && \
+    install -c target/release/pngquant /usr/local/bin
 
 # FROM build as [name]
 # ARG [NAME]_VER
