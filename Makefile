@@ -19,7 +19,7 @@ PNGOUT_VER = $(if $(IS_DARWIN),$(PNGOUT_DARWIN_VER),$(PNGOUT_LINUX_VER))
 PNGOUT_LINUX_VER := 20200115
 PNGOUT_LINUX_STATIC_VER := $(PNGOUT_LINUX_VER)
 PNGOUT_DARWIN_VER := 20230322
-PNGQUANT_VER := 2.18.0
+PNGQUANT_VER := 3.0.3
 
 # ====== CHECKSUMS ======
 
@@ -112,13 +112,14 @@ $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pn
 $(eval $(call archive-dl,PNGOUT_LINUX,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz))
 $(eval $(call archive-dl,PNGOUT_LINUX_STATIC,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux-static.tar.gz))
 $(eval $(call archive-dl,PNGOUT_DARWIN,https://www.jonof.id.au/files/kenutils/pngout-[VER]-mac.zip,zip))
-$(eval $(call archive-dl,PNGQUANT,    https://pngquant.org/pngquant-[VER]-src.tar.gz))
+$(eval $(call archive-dl,PNGQUANT,    https://crates.io/api/v1/crates/pngquant/[VER]/download))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_ARC))
 .PHONY : download
 
-download-dependencies : $(OXIPNG_EXTRACTED)
+download-dependencies : $(OXIPNG_EXTRACTED) $(PNGQUANT_EXTRACTED)
 	cd $(OXIPNG_DIR) && cargo fetch --locked
+	cd $(PNGQUANT_DIR) && cargo fetch --locked
 .PHONY : download-dependencies
 
 download-tidy-up :
@@ -193,7 +194,7 @@ $(eval $(call target,PNGOUT,PNGOUT_DARWIN,,NOSTRIP))
 else
 $(eval $(call target,PNGOUT,PNGOUT_LINUX,,NOSTRIP))
 endif
-$(eval $(call target,PNGQUANT))
+$(eval $(call target,PNGQUANT,,target/$(RUST_HOST)/release/pngquant))
 
 # ====== TARGETS ======
 
@@ -529,7 +530,14 @@ endif
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBLCMS LIBPNG LIBZ))
+$(PNGQUANT_TARGET) : export OVERRIDE_BIN_DIR = $(LIBPNG_DIR)/override-bin
+$(PNGQUANT_TARGET) : export PATH := $(OVERRIDE_BIN_DIR):$(PATH)
+$(PNGQUANT_TARGET) : export RUSTFLAGS = -C link-arg=$(XORIGIN)
 $(PNGQUANT_TARGET) :
-	cd $(DIR) && ./configure --without-cocoa $(if $(filter-out amd64,$(ARCH)),--disable-sse) --extra-ldflags="$(XORIGIN) $(STATIC_LIBGCC)"
-	cd $(DIR) && $(MAKE) pngquant
+	# prevent build code of libpng-sys crate from using libpng-config
+	mkdir -p $(OVERRIDE_BIN_DIR) && \
+		cd $(OVERRIDE_BIN_DIR) && \
+		printf '%s\n' '#!/bin/sh' 'echo 1.5' > libpng-config && \
+		chmod +x libpng-config
+	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST)
 	$(call chrpath_origin,$@)

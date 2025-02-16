@@ -7,7 +7,11 @@ RUN apk add --no-cache build-base cmake nasm bash findutils
 COPY script/extract ./
 ENV CPATH=/usr/local/include
 
-FROM build as libz
+FROM rust:1-alpine as cargo
+RUN apk add --no-cache build-base
+COPY script/extract ./
+
+FROM cargo as libz
 ARG LIBZ_VER
 ARG LIBZ_SHA256
 COPY download/libz-$LIBZ_VER.tar.gz download/
@@ -105,9 +109,7 @@ RUN ./extract optipng && \
     ./configure && \
     make install
 
-FROM rust:1-alpine as oxipng
-RUN apk add --no-cache build-base
-COPY script/extract ./
+FROM cargo as oxipng
 ARG OXIPNG_VER
 ARG OXIPNG_SHA256
 COPY download/oxipng-$OXIPNG_VER.tar.gz download/
@@ -141,7 +143,8 @@ ARG PNGQUANT_SHA256
 COPY download/pngquant-$PNGQUANT_VER.tar.gz download/
 RUN ./extract pngquant && \
     cd build/pngquant && \
-    make install
+    cargo build --release && \
+    install -c target/release/pngquant /usr/local/bin
 
 # FROM build as [name]
 # ARG [NAME]_VER

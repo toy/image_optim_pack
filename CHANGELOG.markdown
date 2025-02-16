@@ -3,6 +3,7 @@
 ## unreleased
 
 * Add darwin-arm64/Apple silicon platform [@toy](https://github.com/toy)
+* Switch to rust version of pngquant updating to 3.0.3 [#27](https://github.com/toy/image_optim_pack/issues/27) [@toy](https://github.com/toy)
 * pngout 20230322 (only for darwin) for arm64 [@toy](https://github.com/toy)
 * Set darwin deployment target to 10.12 [@toy](https://github.com/toy)
 

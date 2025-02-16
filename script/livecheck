@@ -84,8 +84,8 @@ CONFIG = {
     info_url: 'https://www.jonof.id.au/kenutils.html#:~:text=Revision%20history',
   },
   pngquant: {
-    url: 'https://pngquant.org/releases.html',
-    regexp: %r{<span itemprop='version'>(\d+(?:\.\d+)*)</span>},
+    url: 'https://index.crates.io/pn/gq/pngquant',
+    regexp: /"vers":"([^"]+)"/,
   },
 }.freeze
 
