@@ -6,6 +6,7 @@
 * Switch to rust version of pngquant updating to 3.0.3 [#27](https://github.com/toy/image_optim_pack/issues/27) [@toy](https://github.com/toy)
 * pngout 20230322 (only for darwin) for arm64 [@toy](https://github.com/toy)
 * Set darwin deployment target to 10.12 [@toy](https://github.com/toy)
+* liblcms 2.17, libpng 1.6.47 and oxipng 9.1.4 [@toy](https://github.com/toy)
 
 ## v0.11.2 (2025-01-31)
 
