@@ -1,8 +1,7 @@
 name: docker-build
 on:
   push:
-    tags:
-    - '*'
+  pull_request:
   workflow_dispatch:
 jobs:
   docker-build:
@@ -20,4 +19,11 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-    - run: make docker-push ${{ matrix.params }}
+      if: startsWith(github.ref, 'refs/tags/')
+    - run: |
+        if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          echo "MAKE_ACTION=docker-push" >> $GITHUB_ENV
+        else
+          echo "MAKE_ACTION=docker-test" >> $GITHUB_ENV
+        fi
+    - run: make "$MAKE_ACTION" ${{ matrix.params }}
