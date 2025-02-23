@@ -1,0 +1,47 @@
+name: build
+on:
+  push:
+  pull_request:
+jobs:
+  build-on-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - run: uname -m
+    - run: sudo apt-get install -y chrpath
+    - run: rustup target list --installed
+    - run: make download download-dependencies
+    - run: rm -r vendor
+    - run: make all
+    - uses: actions/upload-artifact@v4
+      with:
+        name: on-linux
+        path: vendor/
+  build-on-darwin-x86_64:
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v4
+    - run: uname -m
+    - run: rustup target add aarch64-apple-darwin
+    - run: make download download-dependencies
+    - run: rm -r vendor
+    - run: make all ARCH=x86_64
+    - run: make all ARCH=arm64
+    - uses: actions/upload-artifact@v4
+      with:
+        name: on-darwin-x86_64
+        path: vendor/
+  build-on-darwin-arm64:
+    runs-on: macos-14
+    steps:
+    - uses: actions/checkout@v4
+    - run: uname -m
+    - run: rustup target add x86_64-apple-darwin
+    - run: make download download-dependencies
+    - run: rm -r vendor
+    - run: make all ARCH=arm64
+    - run: make all test ARCH=x86_64
+    - uses: actions/upload-artifact@v4
+      with:
+        name: on-darwin-arm64
+        path: vendor/

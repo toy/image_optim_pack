@@ -12,6 +12,7 @@ jobs:
         os:
         - ubuntu-latest
         - macos-13
+        - macos-14
         ruby:
         - '2.7'
         - '3.0'
