@@ -59,8 +59,8 @@ CONFIG = {
     info_url: 'https://github.com/glennrp/zlib/blob/master/ChangeLog',
   },
   optipng: {
-    url: 'https://sourceforge.net/projects/optipng/rss',
-    regexp: %r{/OptiPNG/optipng-(\d+(?:\.\d+)*)/},
+    url: 'https://optipng.sourceforge.net',
+    regexp: %r{/optipng/optipng-(\d+(?:\.\d+)*)\.tar\.gz\?download},
     info_url: 'https://optipng.sourceforge.net/history.txt',
   },
   oxipng: {
