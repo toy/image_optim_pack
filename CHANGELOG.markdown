@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Switch to oldest maintained debian bullseye for building linux binaries [@toy](https://github.com/toy)
+
 ## v0.12.0.20250227 (2025-02-27)
 
 * gifsicle 1.96 [@toy](https://github.com/toy)
