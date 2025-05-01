@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libpng 1.6.48 [@toy](https://github.com/toy)
+
 ## v0.12.1 (2025-04-27)
 
 * Switch to oldest maintained debian bullseye for building linux binaries [@toy](https://github.com/toy)
