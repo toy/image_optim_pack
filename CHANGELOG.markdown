@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* optipng 7.9.1 [@toy](https://github.com/toy)
+
 ## v0.12.1.20250501 (2025-05-01)
 
 * libpng 1.6.48 [@toy](https://github.com/toy)
