@@ -64,9 +64,9 @@ CONFIG = {
     info_url: 'https://optipng.sourceforge.net/history.txt',
   },
   oxipng: {
-    url: 'https://github.com/shssoichiro/oxipng/releases.atom',
+    url: 'https://github.com/oxipng/oxipng/releases.atom',
     regexp: %r{<id>tag:github.com,2008:Repository/\d+/v(\d+(?:\.\d+)*)</id>},
-    info_url: 'https://github.com/shssoichiro/oxipng/releases',
+    info_url: 'https://github.com/oxipng/oxipng/releases',
   },
   pngcrush: {
     url: 'https://sourceforge.net/projects/pmt/rss?path=/pngcrush',

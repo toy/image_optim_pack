@@ -107,7 +107,7 @@ $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive
 $(eval $(call archive-dl,LIBPNG,      https://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBZ,        https://prdownloads.sourceforge.net/libpng/zlib-[VER].tar.gz?download))
 $(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
-$(eval $(call archive-dl,OXIPNG,      https://github.com/shssoichiro/oxipng/archive/refs/tags/v[VER].tar.gz))
+$(eval $(call archive-dl,OXIPNG,      https://github.com/oxipng/oxipng/archive/refs/tags/v[VER].tar.gz))
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
 $(eval $(call archive-dl,PNGOUT_LINUX,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz))
 $(eval $(call archive-dl,PNGOUT_LINUX_STATIC,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux-static.tar.gz))
