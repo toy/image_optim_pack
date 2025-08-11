@@ -6,7 +6,7 @@ jobs:
   build-on-linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - run: uname -m
     - run: sudo apt-get install -y chrpath
     - run: rustup target list --installed
@@ -20,7 +20,7 @@ jobs:
   build-on-darwin-x86_64:
     runs-on: macos-13
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - run: uname -m
     - run: rustup target add aarch64-apple-darwin
     - run: make download download-dependencies
@@ -34,7 +34,7 @@ jobs:
   build-on-darwin-arm64:
     runs-on: macos-14
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - run: uname -m
     - run: rustup target add x86_64-apple-darwin
     - run: make download download-dependencies
