@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* jpegoptim 1.5.6 [@toy](https://github.com/toy)
+
 ## v0.12.1.20250704 (2025-07-04)
 
 * libpng 1.6.50 [@toy](https://github.com/toy)
