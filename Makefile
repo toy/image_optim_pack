@@ -467,7 +467,7 @@ endif
 
 ## libmozjpeg
 $(LIBMOZJPEG_TARGET) :
-	cd $(DIR) && cmake -DPNG_SUPPORTED=0 .
+	cd $(DIR) && cmake -DPNG_SUPPORTED=0 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
 	cd $(DIR) && $(MAKE) jpeg-static
 
 ## libpng
