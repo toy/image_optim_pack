@@ -51,7 +51,7 @@ CONFIG = {
   libpng: {
     url: 'https://sourceforge.net/projects/libpng/rss?path=/libpng16',
     regexp: %r{/libpng\d*/(\d+(?:\.\d+)*)/},
-    info_url: 'https://github.com/glennrp/libpng/blob/libpng16/CHANGES#:~:text=Send%20comments/corrections/commendations%20to%20png%2Dmng%2Dimplement%20at%20lists.sf.net.',
+    info_url: 'https://github.com/pnggroup/libpng/blob/libpng16/CHANGES#:~:text=Send%20comments/corrections/commendations%20to%20png%2Dmng%2Dimplement%20at%20lists.sf.net.',
   },
   libz: {
     url: 'https://sourceforge.net/projects/libpng/rss?path=/zlib',
