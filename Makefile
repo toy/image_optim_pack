@@ -546,6 +546,8 @@ $(PNGQUANT_TARGET) :
 	mkdir -p $(OVERRIDE_BIN_DIR) && \
 		cd $(OVERRIDE_BIN_DIR) && \
 		printf '%s\n' '#!/bin/sh' 'echo 1.5' > libpng-config && \
-		chmod +x libpng-config
-	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST)
+		chmod +x libpng-config &&
+		hash -r
+	libpng-config
+	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST) -vv
 	$(call chrpath_origin,$@)
