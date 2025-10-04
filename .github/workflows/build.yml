@@ -12,7 +12,7 @@ jobs:
     - run: rustup target list --installed
     - run: make download download-dependencies
     - run: rm -r vendor
-    - run: make all
+    - run: make pngquant
     - uses: actions/upload-artifact@v4
       with:
         name: on-linux
@@ -25,8 +25,8 @@ jobs:
     - run: rustup target add aarch64-apple-darwin
     - run: make download download-dependencies
     - run: rm -r vendor
-    - run: make all ARCH=x86_64
-    - run: make all ARCH=arm64
+    - run: make pngquant ARCH=x86_64
+    - run: make pngquant ARCH=arm64
     - uses: actions/upload-artifact@v4
       with:
         name: on-darwin-x86_64
@@ -39,8 +39,8 @@ jobs:
     - run: rustup target add x86_64-apple-darwin
     - run: make download download-dependencies
     - run: rm -r vendor
-    - run: make all ARCH=arm64
-    - run: make all test ARCH=x86_64
+    - run: make pngquant ARCH=arm64
+    - run: make pngquant test ARCH=x86_64
     - uses: actions/upload-artifact@v4
       with:
         name: on-darwin-arm64
