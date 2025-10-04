@@ -59,7 +59,15 @@ ANSI_RESET=\033[0m
 downcase = $(shell echo $1 | tr A-Z a-z)
 
 tar := $(shell if command -v bsdtar >/dev/null 2>&1; then echo bsdtar; else echo tar; fi)
-sha256sum := $(shell if command -v sha256sum >/dev/null 2>&1; then echo sha256sum; elif command -v shasum >/dev/null 2>&1; then echo shasum -a 256; else echo sha256; fi)
+sha256sum := $(shell \
+	empty_sha256=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855; \
+	for cmd in sha256sum "shasum -a 256" gsha256sum sha256; do \
+		if echo "$$empty_sha256  /dev/null" | $$cmd -c >/dev/null 2>&1; then \
+			echo "$$cmd"; \
+			exit 0; \
+		fi; \
+	done; \
+	echo false)
 
 # ====== ARCHIVES ======
 
