@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libz 1.3.1 [@toy](https://github.com/toy)
+
 ## v0.12.1.20250921 (2025-09-21)
 
 * jpegoptim 1.5.6 [@toy](https://github.com/toy)
