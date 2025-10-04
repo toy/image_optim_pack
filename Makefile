@@ -544,14 +544,14 @@ endif
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBLCMS2 LIBPNG LIBZ))
-$(PNGQUANT_TARGET) : export OVERRIDE_BIN_DIR = $(LIBPNG_DIR)/override-bin
-$(PNGQUANT_TARGET) : export PATH := $(OVERRIDE_BIN_DIR):$(PATH)
 $(PNGQUANT_TARGET) : export RUSTFLAGS = -C link-arg=$(XORIGIN)
 $(PNGQUANT_TARGET) :
-	# prevent build code of libpng-sys crate from using libpng-config
-	mkdir -p $(OVERRIDE_BIN_DIR) && \
-		cd $(OVERRIDE_BIN_DIR) && \
-		printf '%s\n' '#!/bin/sh' 'echo 1.5' > libpng-config && \
-		chmod +x libpng-config
-	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST)
+	printf "%s\n" \
+		$(foreach LIB,PNG Z LCMS2, \
+			"[target.$(RUST_HOST).$(call downcase,$(LIB))]" \
+			"rustc-link-lib = ['$(call downcase,$(LIB))']" \
+			"rustc-link-search = ['native=$(LIB$(LIB)_DIR)']" \
+			"include = '$(LIB$(LIB)_DIR)'" \
+		) > $(DIR)/override.toml
+	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST) --config override.toml
 	$(call chrpath_origin,$@)
