@@ -103,10 +103,10 @@ $(call archive,$1,$3)
 $$($1_ARC) :
 	mkdir -p $(DL_DIR)
 	test -w $(DL_DIR)
-	while ! mkdir $$@.lock 2> /dev/null; do sleep 1; done
-	wget -q -O $$@.tmp --no-use-server-timestamps $(subst [VER],$($1_VER),$(strip $2))
-	mv $$@.tmp $$@
-	rm -r $$@.lock
+	tmpfile=`mktemp "$$@.XXXXXXXXXX"` && \
+		wget -q -O "$$$$tmpfile" --no-use-server-timestamps "$(subst [VER],$($1_VER),$(strip $2))" && \
+		chmod 644 "$$$$tmpfile" && \
+		mv "$$$$tmpfile" "$$@"
 endef
 
 $(eval $(call archive-dl,ADVANCECOMP, https://github.com/amadvance/advancecomp/releases/download/v[VER]/advancecomp-[VER].tar.gz))
