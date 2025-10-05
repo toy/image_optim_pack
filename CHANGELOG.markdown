@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.12.2 (2025-10-05)
+
 * Rebuild pngquant ensuring proper linking of libraries [@toy](https://github.com/toy)
 * libz 1.3.1 [@toy](https://github.com/toy)
 
