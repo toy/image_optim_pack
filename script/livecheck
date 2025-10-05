@@ -38,7 +38,7 @@ CONFIG = {
     regexp: /jpegsrc.v(.*?).tar.gz/,
     info_url: 'https://jpegclub.org/reference/reference-sources/#:~:text=CHANGE%20LOG',
   },
-  liblcms: {
+  liblcms2: {
     url: 'https://sourceforge.net/projects/lcms/rss?path=/lcms',
     regexp: %r{/lcms/(\d+(?:\.\d+)*)/},
     info_url: 'https://www.littlecms.com/blog/',

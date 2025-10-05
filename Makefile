@@ -13,7 +13,7 @@ JHEAD_VER := 3.04
 JPEGARCHIVE_VER := 2.2.0
 JPEGOPTIM_VER := 1.5.6
 LIBJPEG_VER := 9f
-LIBLCMS_VER := 2.17
+LIBLCMS2_VER := 2.17
 LIBMOZJPEG_VER := 4.1.5
 LIBPNG_VER := 1.6.50
 LIBZ_VER := 1.3.1
@@ -115,7 +115,7 @@ $(eval $(call archive-dl,JHEAD,       https://www.sentex.ca/~mwandel/jhead/jhead
 $(eval $(call archive-dl,JPEGARCHIVE, https://github.com/danielgtaylor/jpeg-archive/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,JPEGOPTIM,   https://github.com/tjko/jpegoptim/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBJPEG,     https://www.ijg.org/files/jpegsrc.v[VER].tar.gz))
-$(eval $(call archive-dl,LIBLCMS,     https://prdownloads.sourceforge.net/lcms/lcms2-[VER].tar.gz?download))
+$(eval $(call archive-dl,LIBLCMS2,    https://prdownloads.sourceforge.net/lcms/lcms2-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBPNG,      https://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBZ,        https://github.com/madler/zlib/archive/v[VER].tar.gz))
@@ -195,7 +195,7 @@ $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
 $(eval $(call target,JPEGTRAN,LIBJPEG,.libs/jpegtran))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
-$(eval $(call target,LIBLCMS,,liblcms2$(DLEXT)))
+$(eval $(call target,LIBLCMS2,,liblcms2$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
@@ -467,8 +467,8 @@ else
 endif
 	cd $(DIR) && ln -sf .libs/libjpeg$(DLEXT) .
 
-## liblcms
-$(LIBLCMS_TARGET) :
+## liblcms2
+$(LIBLCMS2_TARGET) :
 	cd $(DIR) && ./configure --host "$(HOST)"
 	cd $(DIR) && $(libtool_target_soname)
 ifdef IS_DARWIN
@@ -543,7 +543,7 @@ endif
 	cd $(DIR) && touch pngout
 
 ## pngquant
-$(eval $(call depend,PNGQUANT,LIBLCMS LIBPNG LIBZ))
+$(eval $(call depend,PNGQUANT,LIBLCMS2 LIBPNG LIBZ))
 $(PNGQUANT_TARGET) : export OVERRIDE_BIN_DIR = $(LIBPNG_DIR)/override-bin
 $(PNGQUANT_TARGET) : export PATH := $(OVERRIDE_BIN_DIR):$(PATH)
 $(PNGQUANT_TARGET) : export RUSTFLAGS = -C link-arg=$(XORIGIN)

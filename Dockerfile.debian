@@ -29,12 +29,12 @@ RUN ./extract libpng && \
     ./configure --with-zlib-prefix=/usr/local && \
     make install
 
-FROM libpng as liblcms
-ARG LIBLCMS_VER
-ARG LIBLCMS_SHA256
-COPY download/liblcms-$LIBLCMS_VER.tar.gz download/
-RUN ./extract liblcms && \
-    cd build/liblcms && \
+FROM libpng as liblcms2
+ARG LIBLCMS2_VER
+ARG LIBLCMS2_SHA256
+COPY download/liblcms2-$LIBLCMS2_VER.tar.gz download/
+RUN ./extract liblcms2 && \
+    cd build/liblcms2 && \
     ./configure && \
     make install
 
@@ -137,7 +137,7 @@ RUN ./extract pngout_linux_static && \
     cd build/pngout_linux_static && \
     cp amd64/pngout-static /usr/local/bin/pngout
 
-FROM liblcms as pngquant
+FROM liblcms2 as pngquant
 ARG PNGQUANT_VER
 ARG PNGQUANT_SHA256
 COPY download/pngquant-$PNGQUANT_VER.tar.gz download/
@@ -176,7 +176,7 @@ COPY --from=pngquant    /usr/local/bin/pngquant        /usr/local/bin/
 COPY --from=libjpeg     /usr/local/lib/libjpeg.so.9    /usr/local/lib/
 COPY --from=libpng      /usr/local/lib/libpng16.so.16  /usr/local/lib/
 COPY --from=libz        /usr/local/lib/libz.so.1       /usr/local/lib/
-COPY --from=liblcms     /usr/local/lib/liblcms2.so.2   /usr/local/lib/
+COPY --from=liblcms2    /usr/local/lib/liblcms2.so.2   /usr/local/lib/
 
 RUN npm -g install svgo
 RUN gem install --no-document image_optim
