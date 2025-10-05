@@ -251,6 +251,7 @@ define check_output
 endef
 
 define check_shlib
+	@$(ldd) $(OUTPUT_DIR)/$1 | egrep "\s+.*/.*"
 	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
 endef
 
