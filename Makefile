@@ -1,5 +1,10 @@
 all :
 
+ORIGINAL_VARIABLES := $(.VARIABLES)
+print-variables :
+	$(foreach v, $(sort $(filter-out $(ORIGINAL_VARIABLES) ORIGINAL_VARIABLES,$(.VARIABLES))), $(info $(v) = $($(v))))
+.PHONY : print-variables
+
 # ====== VERSIONS ======
 
 ADVANCECOMP_VER := 2.6
