@@ -193,8 +193,10 @@ $(eval $(call target,GIFSICLE,,src/gifsicle))
 $(eval $(call target,JHEAD))
 $(eval $(call target,JPEG-RECOMPRESS,JPEGARCHIVE))
 $(eval $(call target,JPEGOPTIM))
-$(eval $(call target,JPEGTRAN,LIBJPEG,.libs/jpegtran))
+$(eval $(call target,JPEGTRAN,LIBMOZJPEG,jpegtran))
+$(eval $(call target,CJPEG,LIBMOZJPEG,cjpeg))
 $(eval $(call target,LIBJPEG,,libjpeg$(DLEXT)))
+$(eval $(call target,LIBJPEG62,LIBMOZJPEG,libjpeg.62$(DLEXT)))
 $(eval $(call target,LIBLCMS2,,liblcms2$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
@@ -282,8 +284,10 @@ test :
 	$(call check_bin,jhead,-V,$(JHEAD_VER))
 	$(call check_bin,jpeg-recompress,--version,$(JPEGARCHIVE_VER))
 	$(call check_bin,jpegoptim,--version,$(JPEGOPTIM_VER))
-	$(call check_bin,jpegtran,-v - 2>&1,$(LIBJPEG_VER))
+	$(call check_bin,jpegtran,-v - 2>&1,$(LIBMOZJPEG_VER))
+	$(call check_bin,cjpeg,-v - 2>&1,$(LIBMOZJPEG_VER))
 	$(call check_lib,libjpeg$(DLEXT))
+	$(call check_lib,libjpeg.62$(DLEXT))
 	$(call check_lib,liblcms2$(DLEXT))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
@@ -451,10 +455,20 @@ $(JPEGOPTIM_TARGET) :
 	$(call chrpath_origin,$@)
 
 ## jpegtran
-$(eval $(call depend,JPEGTRAN,LIBJPEG))
+$(eval $(call depend,JPEGTRAN,LIBMOZJPEG LIBJPEG62))
 $(JPEGTRAN_TARGET) :
-	cd $(DIR) && $(MAKE) jpegtran LDFLAGS="$(XORIGIN)"
-	$(call chrpath_origin,$(JPEGTRAN_TARGET))
+	cd $(DIR) && $(MAKE) jpegtran
+ifdef IS_DARWIN
+	install_name_tool -change @rpath/libjpeg.62.dylib @loader_path/libjpeg.62.dylib $@
+endif
+
+## cjpeg
+$(eval $(call depend,CJPEG,LIBMOZJPEG LIBJPEG62))
+$(CJPEG_TARGET) :
+	cd $(DIR) && $(MAKE) cjpeg
+ifdef IS_DARWIN
+	install_name_tool -change @rpath/libjpeg.62.dylib @loader_path/libjpeg.62.dylib $@
+endif
 
 ## libjpeg
 $(LIBJPEG_TARGET) :
@@ -483,6 +497,10 @@ endif
 $(LIBMOZJPEG_TARGET) :
 	cd $(DIR) && cmake -DPNG_SUPPORTED=0 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 .
 	cd $(DIR) && $(MAKE) jpeg-static
+	cd $(DIR) && $(MAKE) jpeg
+ifdef IS_DARWIN
+	install_name_tool -id @loader_path/libjpeg.62.dylib $(DIR)/libjpeg.62.dylib
+endif
 
 ## libpng
 $(eval $(call depend,LIBPNG,LIBZ))
