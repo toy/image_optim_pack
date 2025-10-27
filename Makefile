@@ -16,6 +16,7 @@ LIBJPEG_VER := 9f
 LIBLCMS2_VER := 2.17
 LIBMOZJPEG_VER := 4.1.5
 LIBPNG_VER := 1.6.50
+LIBWEBP_VER := 1.4.0
 LIBZ_VER := 1.3.1
 OPTIPNG_VER := 7.9.1
 OXIPNG_VER := 9.1.5
@@ -118,6 +119,7 @@ $(eval $(call archive-dl,LIBJPEG,     https://www.ijg.org/files/jpegsrc.v[VER].t
 $(eval $(call archive-dl,LIBLCMS2,    https://prdownloads.sourceforge.net/lcms/lcms2-[VER].tar.gz?download))
 $(eval $(call archive-dl,LIBMOZJPEG,  https://github.com/mozilla/mozjpeg/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,LIBPNG,      https://prdownloads.sourceforge.net/libpng/libpng-[VER].tar.gz?download))
+$(eval $(call archive-dl,LIBWEBP,     https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-[VER].tar.gz))
 $(eval $(call archive-dl,LIBZ,        https://github.com/madler/zlib/archive/v[VER].tar.gz))
 $(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,OXIPNG,      https://github.com/oxipng/oxipng/archive/refs/tags/v[VER].tar.gz))
@@ -202,6 +204,8 @@ $(eval $(call target,LIBLCMS2,,liblcms2$(DLEXT)))
 $(eval $(call target-build,LIBMOZJPEG,,libjpeg.a))
 $(eval $(call target,LIBPNG,,libpng$(DLEXT)))
 $(eval $(call target,LIBZ,,libz$(DLEXT)))
+$(eval $(call target,CWEBP,LIBWEBP,examples/cwebp))
+$(eval $(call target,DWEBP,LIBWEBP,examples/dwebp))
 $(eval $(call target,OPTIPNG,,src/optipng/optipng))
 $(eval $(call target,OXIPNG,,target/$(RUST_HOST)/release/oxipng))
 $(eval $(call target,PNGCRUSH))
@@ -292,6 +296,8 @@ test :
 	$(call check_lib,liblcms2$(DLEXT))
 	$(call check_lib,libpng$(DLEXT))
 	$(call check_lib,libz$(DLEXT))
+	$(call check_bin,cwebp,-version 2>&1,$(LIBWEBP_VER))
+	$(call check_bin,dwebp,-version 2>&1,$(LIBWEBP_VER))
 	$(call check_bin,optipng,--version,$(OPTIPNG_VER))
 	$(call check_bin,oxipng,--version,$(OXIPNG_VER))
 	$(call check_bin,pngcrush,-version 2>&1,$(PNGCRUSH_VER))
@@ -532,6 +538,12 @@ $(LIBZ_TARGET) :
 	cd $(DIR) && ./configure
 	cd $(DIR) && $(pkgconfig_pwd) -- *.pc
 	cd $(DIR) && $(MAKE) placebo
+
+## libwebp (cwebp, dwebp)
+$(eval $(call depend-build,LIBWEBP,LIBPNG LIBZ))
+$(CWEBP_TARGET) $(DWEBP_TARGET) : $(LIBWEBP_EXTRACTED)
+	cd $(LIBWEBP_DIR) && PATH="$(LIBPNG_DIR):$(LIBZ_DIR):$$PATH" ./configure --host "$(HOST)" --disable-shared --enable-static
+	cd $(LIBWEBP_DIR) && $(MAKE)
 
 ## optipng
 $(eval $(call depend,OPTIPNG,LIBPNG LIBZ))

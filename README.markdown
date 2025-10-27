@@ -35,6 +35,9 @@ A test application with latest `image_optim` and `image_optim_pack` is available
 * [libpng](http://libpng.org/pub/png/) by Guy Eric Schalnat, Andreas Dilger, Glenn Randers-Pehrson and others ([license](acknowledgements/libpng.txt))
 * [mozjpeg](https://github.com/mozilla/mozjpeg) by Mozilla Research ([license](acknowledgements/mozjpeg.txt))
 	* base on libjpeg and libjpeg-turbo, see above
+* [libwebp](https://developers.google.com/speed/webp) by Google ([license](acknowledgements/libwebp.txt))
+	* includes `cwebp` for encoding images to WebP format
+	* includes `dwebp` for decoding WebP images
 * [optipng](http://optipng.sourceforge.net/) by Cosmin Truta ([license](acknowledgements/optipng.txt), [authors](acknowledgements/optipng-authors.txt))
 	* contains code based in part on the work of Miyasaka Masaru for BMP support ([license](acknowledgements/bmp2png.txt))
 	* and David Koblas for GIF support ([license](acknowledgements/gifread.txt))
