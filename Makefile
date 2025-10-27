@@ -461,6 +461,8 @@ $(JPEGTRAN_TARGET) :
 	cd $(DIR) && $(MAKE) jpegtran
 ifdef IS_DARWIN
 	install_name_tool -change @rpath/libjpeg.62.dylib @loader_path/libjpeg.62.dylib $@
+else
+	$(call chrpath_origin,$@)
 endif
 
 ## cjpeg
@@ -469,6 +471,8 @@ $(CJPEG_TARGET) :
 	cd $(DIR) && $(MAKE) cjpeg
 ifdef IS_DARWIN
 	install_name_tool -change @rpath/libjpeg.62.dylib @loader_path/libjpeg.62.dylib $@
+else
+	$(call chrpath_origin,$@)
 endif
 
 ## libjpeg
