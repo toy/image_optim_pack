@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libpng 1.6.51 [@toy](https://github.com/toy)
+
 ## v0.12.2 (2025-10-05)
 
 * Rebuild pngquant ensuring proper linking of libraries [@toy](https://github.com/toy)
