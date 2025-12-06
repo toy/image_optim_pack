@@ -53,7 +53,7 @@ ARG LIBMOZJPEG_SHA256
 COPY download/libmozjpeg-$LIBMOZJPEG_VER.tar.gz download/
 RUN ./extract libmozjpeg && \
     cd build/libmozjpeg && \
-    cmake -DPNG_SUPPORTED=0 . && \
+    cmake -DPNG_SUPPORTED=0 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 . && \
     make install
 
 FROM libpng as advancecomp
