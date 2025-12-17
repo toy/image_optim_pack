@@ -13,7 +13,7 @@ jobs:
     - run: make download download-dependencies
     - run: rm -r vendor
     - run: make all
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: on-linux
         path: vendor/
@@ -27,7 +27,7 @@ jobs:
     - run: rm -r vendor
     - run: make all ARCH=x86_64
     - run: make all ARCH=arm64
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: on-darwin-x86_64
         path: vendor/
@@ -41,7 +41,7 @@ jobs:
     - run: rm -r vendor
     - run: make all ARCH=arm64
     - run: make all test ARCH=x86_64
-    - uses: actions/upload-artifact@v5
+    - uses: actions/upload-artifact@v6
       with:
         name: on-darwin-arm64
         path: vendor/
