@@ -104,7 +104,7 @@ $$($1_ARC) :
 	mkdir -p $(DL_DIR)
 	test -w $(DL_DIR)
 	tmpfile=`mktemp "$$@.XXXXXXXXXX"` && \
-		wget -q -O "$$$$tmpfile" --no-use-server-timestamps "$(subst [VER],$($1_VER),$(strip $2))" && \
+		wget -O "$$$$tmpfile" --no-use-server-timestamps "$(subst [VER],$($1_VER),$(strip $2))" && \
 		chmod 644 "$$$$tmpfile" && \
 		mv "$$$$tmpfile" "$$@"
 endef
