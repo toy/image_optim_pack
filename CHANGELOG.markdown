@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.12.2.20251229 (2025-12-29)
+
 * oxipng 10.0.0 [@toy](https://github.com/toy)
 * libz 1.3.1.2 [@toy](https://github.com/toy)
 
