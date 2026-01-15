@@ -117,4 +117,4 @@ make docker-push # will push tags created by docker-build
 
 ## Copyright
 
-Copyright (c) 2014-2025 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
+Copyright (c) 2014-2026 Ivan Kuchin. See [LICENSE.txt](LICENSE.txt) for details.
