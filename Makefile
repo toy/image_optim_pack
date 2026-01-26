@@ -15,11 +15,11 @@ JPEGOPTIM_VER := 1.5.6
 LIBJPEG_VER := 9f
 LIBLCMS2_VER := 2.17
 LIBMOZJPEG_VER := 4.1.5
-LIBPNG_VER := 1.6.50
+LIBPNG_VER := 1.6.54
 LIBWEBP_VER := 1.4.0
-LIBZ_VER := 1.3.1
+LIBZ_VER := 1.3.1.2
 OPTIPNG_VER := 7.9.1
-OXIPNG_VER := 9.1.5
+OXIPNG_VER := 10.0.0
 PNGCRUSH_VER := 1.8.13
 PNGOUT_VER = $(if $(IS_DARWIN),$(PNGOUT_DARWIN_VER),$(PNGOUT_LINUX_VER))
 PNGOUT_LINUX_VER := 20200115
@@ -105,7 +105,7 @@ $$($1_ARC) :
 	mkdir -p $(DL_DIR)
 	test -w $(DL_DIR)
 	tmpfile=`mktemp "$$@.XXXXXXXXXX"` && \
-		wget -q -O "$$$$tmpfile" --no-use-server-timestamps "$(subst [VER],$($1_VER),$(strip $2))" && \
+		wget -O "$$$$tmpfile" --no-use-server-timestamps "$(subst [VER],$($1_VER),$(strip $2))" && \
 		chmod 644 "$$$$tmpfile" && \
 		mv "$$$$tmpfile" "$$@"
 endef

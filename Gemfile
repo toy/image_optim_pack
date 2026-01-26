@@ -8,3 +8,7 @@ if RUBY_VERSION >= '2.1.9'
   gem 'gems', '~> 1.0'
   gem 'terminal-table'
 end
+
+if RUBY_VERSION >= '4'
+  gem 'logger'
+end

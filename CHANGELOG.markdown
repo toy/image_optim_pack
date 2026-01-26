@@ -2,6 +2,23 @@
 
 ## unreleased
 
+## v0.12.2.20260115 (2026-01-15)
+
+* libpng 1.6.54 [@toy](https://github.com/toy)
+
+## v0.12.2.20251229 (2025-12-29)
+
+* oxipng 10.0.0 [@toy](https://github.com/toy)
+* libz 1.3.1.2 [@toy](https://github.com/toy)
+
+## v0.12.2.20251207 (2025-12-07)
+
+* libpng 1.6.53 [@toy](https://github.com/toy)
+
+## v0.12.2.20251130 (2025-11-30)
+
+* libpng 1.6.51 [@toy](https://github.com/toy)
+
 ## v0.12.2 (2025-10-05)
 
 * Rebuild pngquant ensuring proper linking of libraries [@toy](https://github.com/toy)
