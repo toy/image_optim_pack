@@ -97,6 +97,7 @@ endef
 # $1 - name of archive
 # $2 - url of archive with [VER] for replace with version
 # $3 - extension to use
+# $4 - extra arguments to wget
 define archive-dl
 $(call archive,$1,$3)
 # download archive from url
@@ -104,7 +105,7 @@ $$($1_ARC) :
 	mkdir -p $(DL_DIR)
 	test -w $(DL_DIR)
 	tmpfile=`mktemp "$$@.XXXXXXXXXX"` && \
-		wget -O "$$$$tmpfile" --no-use-server-timestamps "$(subst [VER],$($1_VER),$(strip $2))" && \
+		wget -O "$$$$tmpfile" --no-use-server-timestamps $4 "$(subst [VER],$($1_VER),$(strip $2))" && \
 		chmod 644 "$$$$tmpfile" && \
 		mv "$$$$tmpfile" "$$@"
 endef
@@ -122,9 +123,9 @@ $(eval $(call archive-dl,LIBZ,        https://github.com/madler/zlib/archive/v[V
 $(eval $(call archive-dl,OPTIPNG,     https://prdownloads.sourceforge.net/optipng/optipng-[VER].tar.gz?download))
 $(eval $(call archive-dl,OXIPNG,      https://github.com/oxipng/oxipng/archive/refs/tags/v[VER].tar.gz))
 $(eval $(call archive-dl,PNGCRUSH,    https://prdownloads.sourceforge.net/pmt/pngcrush-[VER]-nolib.tar.gz?download))
-$(eval $(call archive-dl,PNGOUT_LINUX,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz))
-$(eval $(call archive-dl,PNGOUT_LINUX_STATIC,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux-static.tar.gz))
-$(eval $(call archive-dl,PNGOUT_DARWIN,https://www.jonof.id.au/files/kenutils/pngout-[VER]-mac.zip,zip))
+$(eval $(call archive-dl,PNGOUT_LINUX,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux.tar.gz,,--retry-on-http-error=415))
+$(eval $(call archive-dl,PNGOUT_LINUX_STATIC,https://www.jonof.id.au/files/kenutils/pngout-[VER]-linux-static.tar.gz,,--retry-on-http-error=415))
+$(eval $(call archive-dl,PNGOUT_DARWIN,https://www.jonof.id.au/files/kenutils/pngout-[VER]-mac.zip,zip,--retry-on-http-error=415))
 $(eval $(call archive-dl,PNGQUANT,    https://crates.io/api/v1/crates/pngquant/[VER]/download))
 
 download : $(foreach archive,$(ARCHIVES),$($(archive)_ARC))
