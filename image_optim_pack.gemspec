@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name        = 'image_optim_pack'
-  s.version     = '0.12.2.20260131'
+  s.version     = '0.12.2.20260212'
   s.summary     = %q{Precompiled binaries for image_optim: advpng, gifsicle, jhead, jpeg-recompress, jpegoptim, jpegtran, optipng, oxipng, pngcrush, pngout, pngquant}
   s.homepage    = "https://github.com/toy/#{s.name}"
   s.authors     = ['Ivan Kuchin']
