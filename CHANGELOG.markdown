@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libz 1.3.2 [@toy](https://github.com/toy)
+
 ## v0.12.2.20260212 (2026-02-12)
 
 * libpng 1.6.55 [@toy](https://github.com/toy)
