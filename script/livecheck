@@ -19,9 +19,9 @@ CONFIG = {
     info_url: 'https://www.lcdf.org/gifsicle/changes.html',
   },
   jhead: {
-    url: 'https://www.sentex.ca/~mwandel/jhead/',
-    regexp: /jhead-(\d+(?:\.\d+)*)/,
-    info_url: 'https://www.sentex.ca/~mwandel/jhead/changes.txt',
+    url: 'https://github.com/Matthias-Wandel/jhead/tags.atom',
+    regexp: %r{<id>tag:github.com,2008:Repository/\d+/(\d+(?:\.\d+)*)</id>},
+    info_url: 'https://github.com/Matthias-Wandel/jhead',
   },
   jpegoptim: {
     url: 'https://github.com/tjko/jpegoptim/tags.atom',
