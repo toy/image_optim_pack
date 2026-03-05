@@ -112,11 +112,12 @@ container_build() {
           echo \"Skipping updates\"
           exit 0
         fi
-        touch \"\$UPDATED_FILE\"
 
         apt-get update
         apt-get -y dist-upgrade
         rustup update
+
+        touch \"\$UPDATED_FILE\"
       "
     fi
 
