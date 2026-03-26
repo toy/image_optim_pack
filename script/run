@@ -70,9 +70,9 @@ container_build() {
   workdir=/pack
 
   if [[ -z "$NO_UP" ]]; then
-    used_image=$("$container_tool" inspect --format='{{.Config.Image}}' "$container_name")
+    used_image=$("$container_tool" inspect --format='{{.Config.Image}}' "$container_name" 2>/dev/null || true)
 
-    if [[ "$used_image" != "$image" ]]; then
+    if [[ -n "$used_image" && "$used_image" != "$image" ]]; then
       echo "Container is using $used_image instead of $image, recreating"
       "$container_tool" rm "$container_name"
     fi
