@@ -62,6 +62,7 @@ fi
 container_build() {
   vm=$1
   image=$2
+  platform=$3
 
   passes-filter "$vm" || return 0
   header "$vm"
@@ -77,6 +78,14 @@ container_build() {
       "$container_tool" rm --force "$container_name"
     fi
 
+    used_image_id=$("$container_tool" inspect --format '{{.Image}}' "$container_name" 2>/dev/null || true)
+    used_platform=$("$container_tool" inspect --format '{{.Os}}/{{.Architecture}}' "$used_image_id" 2>/dev/null || true)
+
+    if [[ -n "$used_platform" && "$used_platform" != "$platform" ]]; then
+      echo "Container is using image platform $used_platform instead of $platform, recreating"
+      "$container_tool" rm --force "$container_name"
+    fi
+
     status=$("$container_tool" inspect --format '{{.State.Status}}' "$container_name" 2>/dev/null || true)
 
     if [[ "$status" == "" ]]; then
@@ -84,7 +93,8 @@ container_build() {
 
       "$container_tool" \
         container create \
-        --name="$container_name" \
+        --platform "$platform" \
+        --name "$container_name" \
         --stop-signal SIGHUP \
         -it \
         -v "${mount//_path_/}:ro" \
@@ -137,4 +147,4 @@ container_build() {
 }
 
 export DOCKER_CLI_HINTS='do people really like SPAM?'
-container_build linux-x86_64 rust:slim-bullseye
+container_build linux-x86_64 rust:slim-bullseye linux/amd64
