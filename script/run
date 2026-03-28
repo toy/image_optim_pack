@@ -74,7 +74,7 @@ container_build() {
 
     if [[ -n "$used_image" && "$used_image" != "$image" ]]; then
       echo "Container is using $used_image instead of $image, recreating"
-      "$container_tool" rm "$container_name"
+      "$container_tool" rm --force "$container_name"
     fi
 
     status=$("$container_tool" inspect --format '{{.State.Status}}' "$container_name" 2>/dev/null || true)
