@@ -146,5 +146,5 @@ container_build() {
   [[ -n "$NO_HALT" ]] || "$container_tool" container stop "$container_name"
 }
 
-container_build linux-x86_64 rust:slim-bullseye linux/amd64
-container_build linux-aarch64 rust:slim-bookworm linux/arm64
+container_build linux-x86_64-gnu rust:slim-bullseye linux/amd64
+container_build linux-aarch64-gnu rust:slim-bookworm linux/arm64

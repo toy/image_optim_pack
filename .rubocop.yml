@@ -16,6 +16,9 @@ Layout/AccessModifierIndentation:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: start_of_line
+
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 

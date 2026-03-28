@@ -2,6 +2,7 @@
 
 ## unreleased
 
+* Differentiate linux platform and vendor dirs using libc suffix [@toy](https://github.com/toy)
 * Add linux-aarch64/arm64 platform built using debian bookworm [@toy](https://github.com/toy)
 
 ## v0.12.2.20260327 (2026-03-27)

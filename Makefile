@@ -41,15 +41,19 @@ IS_LINUX := $(findstring linux,$(OS))
 IS_BSD := $(findstring bsd,$(OS))
 IS_FREEBSD := $(findstring freebsd,$(OS))
 IS_OPENBSD := $(findstring openbsd,$(OS))
+
+IS_LINUX_MUSL := $(findstring linux-musl,$(shell gcc -dumpmachine))
+
 DLEXT := $(if $(IS_DARWIN),.dylib,.so)
 HOST := $(ARCH:arm64=arm)-$(if $(IS_DARWIN),apple,pc)-$(OS)
-RUST_HOST := $(ARCH:arm64=aarch64)-$(if $(IS_DARWIN),apple-darwin,unknown-linux-gnu)
+LIBC_SUFFIX := $(if $(IS_DARWIN),,$(if $(IS_LINUX_MUSL),-musl,-gnu))
+RUST_HOST := $(ARCH:arm64=aarch64)-$(if $(IS_DARWIN),apple-darwin,unknown-linux$(LIBC_SUFFIX))
 
 DL_DIR := $(CURDIR)/download
 BUILD_ROOT_DIR := $(CURDIR)/build
-BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)
+BUILD_DIR := $(BUILD_ROOT_DIR)/$(OS)-$(ARCH)$(LIBC_SUFFIX)
 OUTPUT_ROOT_DIR := $(CURDIR)/vendor
-OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)
+OUTPUT_DIR := $(OUTPUT_ROOT_DIR)/$(OS)-$(ARCH)$(LIBC_SUFFIX)
 PATCHES_DIR := $(CURDIR)/patches
 
 export CARGO_HOME := $(DL_DIR)/cargo

@@ -15,13 +15,16 @@ class ImageOptim
       # Intended os
       attr_reader :os
 
-      # Inteded architecture
+      # Intended architecture
       attr_reader :arch
+
+      # Intended version
+      attr_reader :version
 
       # Receive path, use last part for arch and last but one part for os
       def initialize(path)
         @path = FSPath(path)
-        @os, @arch = @path.basename.to_s.split('-', 2)
+        @os, @arch, @version = @path.basename.to_s.split('-', 3)
       end
 
       # Return path converted to string
@@ -78,6 +81,15 @@ class ImageOptim
       'unknown'
     end
 
+    # extracted from ldd output
+    VERSION = if OS == 'linux'
+      begin
+        `ldd /bin/sh`[/musl|gnu/]
+      rescue Errno::ENOENT
+        'unknown'
+      end
+    end
+
     # Path to vendor at root of image_optim_pack
     VENDOR_PATH = FSPath('../../../vendor').expand_path(__FILE__)
 
@@ -96,10 +108,15 @@ class ImageOptim
 
     private
 
-      # Order by match of os and architecture
+      # Order by match of os, arch and version
       def ordered_by_os_arch_match
-        PATHS.sort_by do |path|
-          [path.os == OS ? 0 : 1, path.arch == ARCH ? 0 : 1]
+        PATHS.sort_by.with_index do |path, i|
+          [
+            path.os == OS ? 0 : 1,
+            path.arch == ARCH ? 0 : 1,
+            path.version == VERSION ? 0 : 1,
+            i,
+          ]
         end
       end
 

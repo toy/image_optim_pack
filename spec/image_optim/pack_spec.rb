@@ -39,13 +39,19 @@ describe ImageOptim::Pack do
 
     describe :os do
       it 'returns last but one part of path' do
-        expect(Path.new('path/futureos-K-qbit').os).to eq('futureos')
+        expect(Path.new('path/futureos-K_qbit-foo-bar')).to have_attributes(os: 'futureos')
       end
     end
 
     describe :arch do
       it 'returns last but one part of path' do
-        expect(Path.new('path/futureos-K-qbit').arch).to eq('K-qbit')
+        expect(Path.new('path/futureos-K_qbit-foo-bar')).to have_attributes(arch: 'K_qbit')
+      end
+    end
+
+    describe :version do
+      it 'returns last but one part of path' do
+        expect(Path.new('path/futureos-K_qbit-foo-bar')).to have_attributes(version: 'foo-bar')
       end
     end
 

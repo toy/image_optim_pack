@@ -19,16 +19,16 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n")
   if defined?(gemspec_path)
-    gem_os, gem_cpu = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
+    gem_os, gem_arch, gem_version = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
 
-    s.platform = Gem::Platform.new([gem_cpu, gem_os])
+    s.platform = Gem::Platform.new([gem_arch, gem_os, gem_version])
 
-    cpu_aliases = {
+    arch_aliases = {
       'x86_64' => %w[x86_64 amd64],
-    }[gem_cpu] || [gem_cpu]
+    }[gem_arch] || [gem_arch]
 
-    possible_vendor_dirs = cpu_aliases.map do |cpu_alias|
-      "#{gem_os}-#{cpu_alias}"
+    possible_vendor_dirs = arch_aliases.map do |arch_alias|
+      [gem_os, arch_alias, gem_version].compact.join('-')
     end
 
     existing_vendor_dirs = possible_vendor_dirs.select do |vendor_dir|
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
       existing_vendor_dirs.first
     else
       message = existing_vendor_dirs.empty? ? 'no vendor dir' : 'multiple vendor dirs'
-      fail "#{message} found for os #{gem_os} and cpu #{gem_cpu} out of: #{possible_vendor_dirs.join(', ')}"
+      fail "#{message} found for os #{gem_os} and arch #{gem_arch} out of: #{possible_vendor_dirs.join(', ')}"
     end
 
     s.files.reject! do |path|
