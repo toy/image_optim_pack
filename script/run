@@ -148,3 +148,4 @@ container_build() {
 
 export DOCKER_CLI_HINTS='do people really like SPAM?'
 container_build linux-x86_64 rust:slim-bullseye linux/amd64
+container_build linux-aarch64 rust:slim-bookworm linux/arm64

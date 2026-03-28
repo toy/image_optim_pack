@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* Add linux-aarch64/arm64 platform built using debian bookworm [@toy](https://github.com/toy)
+
 ## v0.12.2.20260327 (2026-03-27)
 
 * libpng 1.6.56 [@toy](https://github.com/toy)

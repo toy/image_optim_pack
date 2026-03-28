@@ -275,9 +275,10 @@ ifdef IS_DARWIN
 test : ARCH_STRING := $(ARCH)
 else ifeq (amd64,$(ARCH:x86_64=amd64))
 test : ARCH_STRING := x86-64
+else
+test : ARCH_STRING := $(ARCH)
 endif
 test :
-	$(if $(ARCH_STRING),,@echo Detecting 'ARCH $(ARCH) for OS $(OS) undefined'; false)
 	$(call check_bin,advpng,--version 2>&1,$(ADVANCECOMP_VER))
 	$(call check_bin,gifsicle,--version,$(GIFSICLE_VER))
 	$(call check_bin,jhead,-V,$(JHEAD_VER))
