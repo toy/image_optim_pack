@@ -209,6 +209,8 @@ $(eval $(call target,OXIPNG,,target/$(RUST_HOST)/release/oxipng))
 $(eval $(call target,PNGCRUSH))
 ifdef IS_DARWIN
 $(eval $(call target,PNGOUT,PNGOUT_DARWIN,,NOSTRIP))
+else ifdef IS_LINUX_MUSL
+$(eval $(call target,PNGOUT,PNGOUT_LINUX_STATIC,,NOSTRIP))
 else
 $(eval $(call target,PNGOUT,PNGOUT_LINUX,,NOSTRIP))
 endif
@@ -260,8 +262,12 @@ define check_output
 endef
 
 define check_shlib
-	@$(ldd) $(OUTPUT_DIR)/$1 | egrep "\s+.*/.*"
-	@! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"
+	@if file $(OUTPUT_DIR)/$1 | fgrep -q 'statically linked'; then \
+		printf '\tstatically Linked\n'; \
+	else \
+		$(ldd) $(OUTPUT_DIR)/$1 | egrep "\s+.*/.*" && \
+			! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"; \
+	fi
 endef
 
 define check_lib
@@ -548,7 +554,7 @@ $(PNGCRUSH_TARGET) :
 ## pngout
 $(PNGOUT_TARGET) :
 ifdef IS_LINUX
-	cd $(DIR) && ln -sf $(ARCH:x86_64=amd64)/pngout .
+	cd $(DIR) && ln -sf $(ARCH:x86_64=amd64)/pngout$(if $(IS_LINUX_MUSL),-static) pngout
 endif
 	cd $(DIR) && touch pngout
 
