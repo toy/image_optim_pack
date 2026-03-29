@@ -534,6 +534,9 @@ $(OPTIPNG_TARGET) :
 	$(call chrpath_origin,$@)
 
 ## oxipng
+ifdef IS_LINUX_MUSL
+$(PNGQUANT_TARGET) : export RUSTFLAGS = -C target-feature=-crt-static
+endif
 $(OXIPNG_TARGET) :
 	cd $(DIR) && cargo build --release --frozen --offline --target=$(RUST_HOST)
 
@@ -560,7 +563,7 @@ endif
 
 ## pngquant
 $(eval $(call depend,PNGQUANT,LIBLCMS2 LIBPNG LIBZ))
-$(PNGQUANT_TARGET) : export RUSTFLAGS = -C link-arg=$(XORIGIN)
+$(PNGQUANT_TARGET) : export RUSTFLAGS = -C link-arg=$(XORIGIN) $(if $(IS_LINUX_MUSL),-C target-feature=-crt-static)
 $(PNGQUANT_TARGET) :
 	printf "%s\n" \
 		$(foreach LIB,PNG Z LCMS2, \
