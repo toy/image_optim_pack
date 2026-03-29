@@ -236,9 +236,13 @@ endif
 ldd-version :; $(ldd) --version
 .PHONY : ldd-version
 
-define check_exists
-	@test -f $(OUTPUT_DIR)/$1 || \
+define check_file_presence
+	@test -e $(OUTPUT_DIR)/$1 || \
 		{ printf "%s: $(ANSI_RED)not found$(ANSI_RESET)\n" "$1"; exit 1; }
+	@test -f $(OUTPUT_DIR)/$1 || \
+		{ printf "%s: $(ANSI_RED)not a regular file$(ANSI_RESET)\n" "$1"; exit 1; }
+	@test -s $(OUTPUT_DIR)/$1 || \
+		{ printf "%s: $(ANSI_RED)has size zero$(ANSI_RESET)\n" "$1"; exit 1; }
 endef
 
 define check_version
@@ -261,14 +265,14 @@ define check_shlib
 endef
 
 define check_lib
-	$(call check_exists,$1)
+	$(call check_file_presence,$1)
 	$(call check_arch,$1)
 	$(call check_output,$1,,-)
 	$(call check_shlib,$1)
 endef
 
 define check_bin
-	$(call check_exists,$1)
+	$(call check_file_presence,$1)
 	$(call check_version,$1,$2,$3)
 	$(call check_arch,$1)
 	$(call check_output,$1,,$3)
