@@ -130,12 +130,12 @@ RUN ./extract pngcrush && \
     install -c pngcrush /usr/local/bin
 
 FROM build AS pngout
-ARG PNGOUT_LINUX_STATIC_VER
-ARG PNGOUT_LINUX_STATIC_SHA256
-COPY download/pngout_linux_static-$PNGOUT_LINUX_STATIC_VER.tar.gz download/
-RUN ./extract pngout_linux_static && \
-    cd build/pngout_linux_static && \
-    cp amd64/pngout-static /usr/local/bin/pngout
+ARG PNGOUT_LINUX_VER
+ARG PNGOUT_LINUX_SHA256
+COPY download/pngout_linux-$PNGOUT_LINUX_VER.tar.gz download/
+RUN ./extract pngout_linux && \
+    cd build/pngout_linux && \
+    cp amd64/pngout /usr/local/bin/pngout
 
 FROM liblcms2 AS pngquant
 ARG PNGQUANT_VER
