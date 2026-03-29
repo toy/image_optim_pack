@@ -1,17 +1,17 @@
-FROM debian as base
+FROM debian AS base
 ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /tmp
 
-FROM base as build
+FROM base AS build
 RUN apt-get update && apt-get install -y build-essential cmake nasm bash findutils
 COPY script/extract ./
 ENV CPATH=/usr/local/include
 
-FROM rust:1 as cargo
+FROM rust:1 AS cargo
 RUN apt-get update && apt-get install -y build-essential
 COPY script/extract ./
 
-FROM cargo as libz
+FROM cargo AS libz
 ARG LIBZ_VER
 ARG LIBZ_SHA256
 COPY download/libz-$LIBZ_VER.tar.gz download/
@@ -20,7 +20,7 @@ RUN ./extract libz && \
     ./configure && \
     make install
 
-FROM libz as libpng
+FROM libz AS libpng
 ARG LIBPNG_VER
 ARG LIBPNG_SHA256
 COPY download/libpng-$LIBPNG_VER.tar.gz download/
@@ -29,7 +29,7 @@ RUN ./extract libpng && \
     ./configure --with-zlib-prefix=/usr/local && \
     make install
 
-FROM libpng as liblcms2
+FROM libpng AS liblcms2
 ARG LIBLCMS2_VER
 ARG LIBLCMS2_SHA256
 COPY download/liblcms2-$LIBLCMS2_VER.tar.gz download/
@@ -38,7 +38,7 @@ RUN ./extract liblcms2 && \
     ./configure && \
     make install
 
-FROM build as libjpeg
+FROM build AS libjpeg
 ARG LIBJPEG_VER
 ARG LIBJPEG_SHA256
 COPY download/libjpeg-$LIBJPEG_VER.tar.gz download/
@@ -47,7 +47,7 @@ RUN ./extract libjpeg && \
     ./configure && \
     make install
 
-FROM build as libmozjpeg
+FROM build AS libmozjpeg
 ARG LIBMOZJPEG_VER
 ARG LIBMOZJPEG_SHA256
 COPY download/libmozjpeg-$LIBMOZJPEG_VER.tar.gz download/
@@ -56,7 +56,7 @@ RUN ./extract libmozjpeg && \
     cmake -DPNG_SUPPORTED=0 -DCMAKE_POLICY_VERSION_MINIMUM=3.5 . && \
     make install
 
-FROM libpng as advancecomp
+FROM libpng AS advancecomp
 ARG ADVANCECOMP_VER
 ARG ADVANCECOMP_SHA256
 COPY download/advancecomp-$ADVANCECOMP_VER.tar.gz download/
@@ -65,7 +65,7 @@ RUN ./extract advancecomp && \
     ./configure && \
     make install
 
-FROM build as gifsicle
+FROM build AS gifsicle
 ARG GIFSICLE_VER
 ARG GIFSICLE_SHA256
 COPY download/gifsicle-$GIFSICLE_VER.tar.gz download/
@@ -74,7 +74,7 @@ RUN ./extract gifsicle && \
     ./configure && \
     make install
 
-FROM build as jhead
+FROM build AS jhead
 ARG JHEAD_VER
 ARG JHEAD_SHA256
 COPY download/jhead-$JHEAD_VER.tar.gz download/
@@ -83,7 +83,7 @@ RUN ./extract jhead && \
     make && \
     install -c jhead /usr/local/bin
 
-FROM libmozjpeg as jpegarchive
+FROM libmozjpeg AS jpegarchive
 ARG JPEGARCHIVE_VER
 ARG JPEGARCHIVE_SHA256
 COPY download/jpegarchive-$JPEGARCHIVE_VER.tar.gz download/
@@ -91,7 +91,7 @@ RUN ./extract jpegarchive && \
     cd build/jpegarchive && \
     CFLAGS=-fcommon make install
 
-FROM libjpeg as jpegoptim
+FROM libjpeg AS jpegoptim
 ARG JPEGOPTIM_VER
 ARG JPEGOPTIM_SHA256
 COPY download/jpegoptim-$JPEGOPTIM_VER.tar.gz download/
@@ -100,7 +100,7 @@ RUN ./extract jpegoptim && \
     ./configure && \
     make install
 
-FROM libpng as optipng
+FROM libpng AS optipng
 ARG OPTIPNG_VER
 ARG OPTIPNG_SHA256
 COPY download/optipng-$OPTIPNG_VER.tar.gz download/
@@ -109,7 +109,7 @@ RUN ./extract optipng && \
     ./configure && \
     make install
 
-FROM cargo as oxipng
+FROM cargo AS oxipng
 ARG OXIPNG_VER
 ARG OXIPNG_SHA256
 COPY download/oxipng-$OXIPNG_VER.tar.gz download/
@@ -118,7 +118,7 @@ RUN ./extract oxipng && \
     cargo build --release && \
     install -c target/release/oxipng /usr/local/bin
 
-FROM libpng as pngcrush
+FROM libpng AS pngcrush
 ARG PNGCRUSH_VER
 ARG PNGCRUSH_SHA256
 COPY download/pngcrush-$PNGCRUSH_VER.tar.gz download/
@@ -129,7 +129,7 @@ RUN ./extract pngcrush && \
     make && \
     install -c pngcrush /usr/local/bin
 
-FROM build as pngout
+FROM build AS pngout
 ARG PNGOUT_LINUX_STATIC_VER
 ARG PNGOUT_LINUX_STATIC_SHA256
 COPY download/pngout_linux_static-$PNGOUT_LINUX_STATIC_VER.tar.gz download/
@@ -137,7 +137,7 @@ RUN ./extract pngout_linux_static && \
     cd build/pngout_linux_static && \
     cp amd64/pngout-static /usr/local/bin/pngout
 
-FROM liblcms2 as pngquant
+FROM liblcms2 AS pngquant
 ARG PNGQUANT_VER
 ARG PNGQUANT_SHA256
 COPY download/pngquant-$PNGQUANT_VER.tar.gz download/
@@ -146,7 +146,7 @@ RUN ./extract pngquant && \
     cargo build --release && \
     install -c target/release/pngquant /usr/local/bin
 
-# FROM build as [name]
+# FROM build AS [name]
 # ARG [NAME]_VER
 # ARG [NAME]_SHA256
 # COPY download/[name]-$[NAME]_VER.tar.gz download/
@@ -155,7 +155,7 @@ RUN ./extract pngquant && \
 #     ./configure && \
 #     make install
 
-FROM base as image_optim
+FROM base AS image_optim
 RUN apt-get update && apt-get install -y ruby npm perl-base dumb-init
 
 COPY README.markdown /
