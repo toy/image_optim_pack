@@ -162,4 +162,6 @@ container_build() {
 }
 
 container_build linux-x86_64-gnu rust:slim-bullseye linux/amd64
+container_build linux-x86_64-musl rust:alpine linux/amd64
 container_build linux-aarch64-gnu rust:slim-bookworm linux/arm64
+container_build linux-aarch64-musl rust:alpine linux/arm64
