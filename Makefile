@@ -266,7 +266,7 @@ define check_shlib
 		printf '\tstatically Linked\n'; \
 	else \
 		$(ldd) $(OUTPUT_DIR)/$1 | egrep "\s+.*/.*" && \
-			! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o "[^: 	]+/[^: 	]+" | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"; \
+			! $(ldd) $(OUTPUT_DIR)/$1 | egrep -o $$'[^: \t]+/[^: \t]+' | egrep -v "^(@loader_path|/lib|/lib64|/usr|$(OUTPUT_DIR))/"; \
 	fi
 endef
 
