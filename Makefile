@@ -219,11 +219,7 @@ $(eval $(call target,PNGQUANT,,target/$(RUST_HOST)/release/pngquant))
 # ====== TARGETS ======
 
 all : build
-ifeq ($(ARCH),$(HOST_ARCH))
 	@$(MAKE) test
-else
-	@echo Skipping tests when compiling for different architecture
-endif
 .PHONY : all
 
 build : $(call downcase,$(PRODUCTS))
@@ -247,6 +243,8 @@ define check_file_presence
 		{ printf "%s: $(ANSI_RED)has size zero$(ANSI_RESET)\n" "$1"; exit 1; }
 endef
 
+CHECK_VERSION := $(if $(findstring $(HOST_ARCH)/$(ARCH),x86_64/arm64),,check)
+
 define check_version
 	@$(OUTPUT_DIR)/$1 $2 | fgrep -q "$3" || \
 		{ printf "%s: $(ANSI_RED)Expected %s, got %s$(ANSI_RESET)\n" "$1" "$3" "$$($(OUTPUT_DIR)/$1 $2)"; exit 1; }
@@ -258,7 +256,7 @@ define check_arch
 endef
 
 define check_output
-	@printf "%s: $(ANSI_GREEN)%s$(ANSI_RESET) / $(ANSI_MAGENTA)%s$(ANSI_RESET)\n" "$1" "$3" "$(ARCH_STRING)"
+	@printf "%s: $(ANSI_GREEN)%s$(ANSI_RESET) / $(ANSI_MAGENTA)%s$(ANSI_RESET)\n" "$1" "$2" "$(ARCH_STRING)"
 endef
 
 define check_shlib
@@ -273,15 +271,15 @@ endef
 define check_lib
 	$(call check_file_presence,$1)
 	$(call check_arch,$1)
-	$(call check_output,$1,,-)
+	$(call check_output,$1,-)
 	$(call check_shlib,$1)
 endef
 
 define check_bin
 	$(call check_file_presence,$1)
-	$(call check_version,$1,$2,$3)
+	$(if $(CHECK_VERSION),$(call check_version,$1,$2,$3))
 	$(call check_arch,$1)
-	$(call check_output,$1,,$3)
+	$(call check_output,$1,$(if $(CHECK_VERSION),$3,[can't run $(ARCH) on $(HOST_ARCH)]))
 	$(call check_shlib,$1)
 endef
 
