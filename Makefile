@@ -415,7 +415,6 @@ export CXX := g++
 endif
 
 GCC_FLAGS := -O3
-STATIC_LIBGCC := $(shell if $(CC) -v 2>&1 | fgrep -q gcc; then echo -static-libgcc; fi)
 
 export CFLAGS = $(GCC_FLAGS)
 export CXXFLAGS = $(GCC_FLAGS)
