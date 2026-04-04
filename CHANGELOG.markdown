@@ -2,6 +2,8 @@
 
 ## unreleased
 
+## v0.13.0 (2026-04-04)
+
 * Add linux-x86_64-musl and linux-aarch64-musl builds [@toy](https://github.com/toy)
 * Differentiate linux platform and vendor dirs using libc suffix [@toy](https://github.com/toy)
 * Add linux-aarch64/arm64 platform built using debian bookworm [@toy](https://github.com/toy)
