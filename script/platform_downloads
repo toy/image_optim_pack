@@ -5,13 +5,17 @@ require 'gems'
 require 'ostruct'
 require 'terminal-table'
 
+def platform_parts(platform)
+  platform.split('-', 3).values_at(1, 0, 2).compact
+end
+
 versions = Gems.versions('image_optim_pack').map do |attributes|
   attributes['number'] = Gem::Version.new(attributes['number'])
   OpenStruct.new(attributes) # rubocop:disable Style/OpenStructUse
 end
 
 platforms = versions.map(&:platform).uniq.sort_by do |platform|
-  platform.sub('amd64', 'x86_64').split('-').reverse
+  platform_parts(platform)
 end
 
 version_time = begin
@@ -28,7 +32,7 @@ end
 table = Terminal::Table.new
 
 table.headings = ['version', 'days', 'base dls'] + platforms.map do |platform|
-  platform.split('-').reverse.join("\n")
+  platform_parts(platform).join("\n")
 end + ['total']
 
 versions.group_by(&:number).each do |version_n, platform_versions|
