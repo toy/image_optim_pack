@@ -4,6 +4,7 @@
 
 * Add linux-x86_64 and linux-aarch64 platforms including two vendor dirs each [@toy](https://github.com/toy)
 * libpng 1.6.57 [@toy](https://github.com/toy)
+* Don't require presence of `git` in gemspec [@toy](https://github.com/toy)
 
 ## v0.13.0 (2026-04-04)
 

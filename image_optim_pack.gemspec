@@ -17,7 +17,20 @@ Gem::Specification.new do |s|
     'source_code_uri'   => "https://github.com/toy/#{s.name}",
   }
 
-  s.files         = `git ls-files`.split("\n")
+  s.files = Dir[*%w[
+    .dockerignore
+    .gitignore
+    .rubocop.yml
+    checksums.mk
+    Gemfile
+    LICENSE.txt
+    Makefile
+    *.markdown
+    Dockerfile*
+    *.gemspec
+    {.github,acknowledgements,lib,patches,script,spec,vendor}/**/*
+  ]].reject(&File.method(:directory?))
+
   if defined?(gemspec_path)
     platform_parts = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
     s.platform = Gem::Platform.new(platform_parts.values_at(1, 0, 2))
@@ -42,8 +55,8 @@ Gem::Specification.new do |s|
       parts[0] == 'vendor' && !vendor_dirs.include?(parts[1])
     end
   end
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+
+  s.test_files    = Dir['spec/**/*.*']
   s.require_paths = %w[lib]
 
   s.add_dependency 'image_optim', '~> 0.19'
