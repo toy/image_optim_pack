@@ -3,12 +3,16 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /tmp
 
 FROM base AS build
-RUN apt-get update && apt-get install -y build-essential cmake nasm bash findutils
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential cmake nasm bash findutils \
+ && rm -rf /var/lib/apt/lists/*
 COPY script/extract ./
 ENV CPATH=/usr/local/include
 
 FROM rust:1 AS cargo
-RUN apt-get update && apt-get install -y build-essential
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends build-essential \
+ && rm -rf /var/lib/apt/lists/*
 COPY script/extract ./
 
 FROM cargo AS libz
@@ -156,7 +160,9 @@ RUN ./extract pngquant \
 #  && make install
 
 FROM base AS image_optim
-RUN apt-get update && apt-get install -y ruby npm perl-base dumb-init
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ruby npm perl-base dumb-init \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY README.markdown /
 COPY acknowledgements /acknowledgements
