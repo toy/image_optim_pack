@@ -19,32 +19,27 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n")
   if defined?(gemspec_path)
-    gem_os, gem_arch, gem_version = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
+    platform_parts = File.basename(gemspec_path, File.extname(gemspec_path)).split('-').drop(1)
+    s.platform = Gem::Platform.new(platform_parts.values_at(1, 0, 2))
 
-    s.platform = Gem::Platform.new([gem_arch, gem_os, gem_version])
+    all_vendor_dirs = s.files.filter_map do |path|
+      parts = path.split('/')
+      parts[1] if parts[0] == 'vendor'
+    end.uniq
 
-    arch_aliases = {
-      'x86_64' => %w[x86_64 amd64],
-    }[gem_arch] || [gem_arch]
-
-    possible_vendor_dirs = arch_aliases.map do |arch_alias|
-      [gem_os, arch_alias, gem_version].compact.join('-')
+    vendor_dirs = all_vendor_dirs.select do |vendor_dir|
+      s.platform =~ Gem::Platform.new(vendor_dir.split('-').values_at(1, 0, 2))
     end
 
-    existing_vendor_dirs = possible_vendor_dirs.select do |vendor_dir|
-      File.directory?(File.join('vendor', vendor_dir))
-    end
+    expected_vendor_dirs = s.platform.os == 'linux' && !s.platform.version ? 2 : 1
 
-    vendor_dir = if existing_vendor_dirs.length == 1
-      existing_vendor_dirs.first
-    else
-      message = existing_vendor_dirs.empty? ? 'no vendor dir' : 'multiple vendor dirs'
-      fail "#{message} found for os #{gem_os} and arch #{gem_arch} out of: #{possible_vendor_dirs.join(', ')}"
+    unless vendor_dirs.length == expected_vendor_dirs
+      fail "expected #{expected_vendor_dirs}, got #{vendor_dirs.length} (#{vendor_dirs.join(', ')}) for #{s.platform}"
     end
 
     s.files.reject! do |path|
       parts = path.split('/')
-      parts[0] == 'vendor' && parts[1] != vendor_dir
+      parts[0] == 'vendor' && !vendor_dirs.include?(parts[1])
     end
   end
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
