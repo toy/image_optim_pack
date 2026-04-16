@@ -99,7 +99,8 @@ class Livecheck
 
     def initialize(args)
       @update = args.delete('--update')
-      abort '--update is the only supported option' unless args.empty?
+      @verbose = args.delete('--verbose')
+      abort '--update and --verbose are the only supported options' unless args.empty?
     end
 
     def run
@@ -153,7 +154,7 @@ class Livecheck
 
     def livechecks
       @livechecks ||= makefile.read.scan(VERSION_REGEXP).map do |name, version|
-        Livecheck.new(name.downcase, version)
+        Livecheck.new(name.downcase, version, @verbose)
       end
     end
 
@@ -215,8 +216,9 @@ class Livecheck
   module Fetcher
     @cache = {}
 
-    def self.get(url)
+    def self.get(url, verbose)
       @cache[url] ||= Thread.new do
+        $stderr << "GET #{url}\n" if verbose
         uri = URI(url)
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = (uri.scheme == 'https')
@@ -227,10 +229,11 @@ class Livecheck
 
   attr_reader :name, :current_version
 
-  def initialize(name, current_version)
+  def initialize(name, current_version, verbose)
     @name = name
+    @verbose = verbose
     @current_version = Version.new(current_version)
-    @fetcher = Fetcher.get(config[:url])
+    @fetcher = Fetcher.get(config[:url], verbose)
   end
 
   def latest_version
@@ -263,6 +266,8 @@ private
 
       versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
       fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
+
+      $stderr << "#{name}: #{versions.join(', ')}\n" if @verbose
 
       versions
     end
