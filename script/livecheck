@@ -94,7 +94,7 @@ Thread.report_on_exception = false
 # Fetch and compare latest tool/library versions
 class Livecheck
   # Commands
-  class Cli
+  class CLI
     VERSION_REGEXP = /^([A-Z_]+)_VER *:= *([^$\n]*)$/.freeze
 
     def initialize(args)
@@ -211,16 +211,30 @@ class Livecheck
     end
   end
 
+  # Don't fetch twice
+  module Fetcher
+    @cache = {}
+
+    def self.get(url)
+      @cache[url] ||= Thread.new do
+        uri = URI(url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = (uri.scheme == 'https')
+        http.request_get(uri.request_uri).body
+      end
+    end
+  end
+
   attr_reader :name, :current_version
 
   def initialize(name, current_version)
     @name = name
     @current_version = Version.new(current_version)
-    @fetcher = Thread.new{ fetch_versions.last }
+    @fetcher = Fetcher.get(config[:url])
   end
 
   def latest_version
-    @fetcher.value
+    versions.last
   end
 
   def changed?
@@ -241,23 +255,18 @@ private
     CONFIG[name.to_sym] || fail(ArgumentError, "Livecheck for #{name} not defined")
   end
 
-  def get(url)
-    uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = (uri.scheme == 'https')
-    http.request_get(uri.request_uri).body
-  end
+  def versions
+    @versions ||= begin
+      body = @fetcher.value
 
-  def fetch_versions
-    body = get(config[:url])
+      version_regex = config[:regexp]
 
-    version_regex = config[:regexp]
+      versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
+      fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
 
-    versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
-    fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
-
-    versions
+      versions
+    end
   end
 end
 
-Livecheck::Cli.new(ARGV).run
+Livecheck::CLI.new(ARGV).run
