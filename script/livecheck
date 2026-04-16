@@ -203,6 +203,12 @@ class Livecheck
       end
     end
 
+    def hash
+      @string.hash
+    end
+
+    alias_method :eql?, :==
+
     def <=>(other)
       if parsed && other.parsed
         parsed <=> other.parsed
@@ -264,7 +270,7 @@ private
 
       version_regex = config[:regexp]
 
-      versions = body.scan(version_regex).map{ |match| Version.new(*match) }.sort
+      versions = body.scan(version_regex).map{ |match| Version.new(*match) }.uniq.sort
       fail "No versions found for #{name} in body:\n#{body}" if versions.empty?
 
       $stderr << "#{name}: #{versions.join(', ')}\n" if @verbose
