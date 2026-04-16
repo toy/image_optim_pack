@@ -1,0 +1,52 @@
+name: cache-downloads
+on:
+  schedule:
+  - cron: 7 10 */3 * *
+  workflow_dispatch:
+    inputs:
+      retry:
+        description: 'Retry attempt'
+        required: true
+        type: number
+jobs:
+  cache-downloads:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '4'
+        bundler-cache: true
+    - id: cache-restore
+      uses: actions/cache/restore@v5
+      with:
+        path: download
+        key: download-${{ hashFiles('checksums.mk') }}
+        restore-keys: download-
+    - run: make download-tidy-up
+    - run: make download
+    - run: make download-dependencies
+    - uses: actions/cache/save@v5
+      with:
+        path: download
+        key: download-${{ hashFiles('checksums.mk') }}
+      if: steps.cache-restore.outputs.cache-hit != 'true'
+    - run: make purge-dependencies
+    - run: make update-versions
+    - env:
+        RETRY: ${{ inputs.retry }}
+        RETRIES: 3
+        GITHUB_TOKEN: ${{ secrets.RETRY_TOKEN }}
+      run: |
+        if (( ${RETRY:-0} < $RETRIES )); then
+          sleep $(( ($RETRY + 0) * 30 ))
+          gh workflow run "$GITHUB_WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f retry=$(( $RETRY + 1 ))
+        else
+          exit $exit_code
+        fi
+      if: failure()
+    - uses: actions/cache@v5
+      with:
+        path: download
+        key: download-${{ hashFiles('checksums.mk') }}
+        lookup-only: true

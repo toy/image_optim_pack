@@ -28,8 +28,11 @@ jobs:
           exit_code=$?
           if (( $exit_code == 2 )) && (( ${RETRY:-0} < $RETRIES )); then
             sleep 300
-            gh workflow run livecheck --repo $GITHUB_REPOSITORY --ref $GITHUB_REF_NAME -f retry=$(( $RETRY + 1 ))
+            gh workflow run "$GITHUB_WORKFLOW" --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f retry=$(( $RETRY + 1 ))
           else
+            if (( $exit_code == 1 )); then
+              gh workflow run cache-downloads --repo "$GITHUB_REPOSITORY" --ref "$GITHUB_REF_NAME" -f retry=0
+            fi
             exit $exit_code
           fi
         }
