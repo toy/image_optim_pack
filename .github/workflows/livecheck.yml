@@ -21,7 +21,7 @@ jobs:
         bundler-cache: true
     - env:
         RETRY: ${{ inputs.retry }}
-        RETRIES: 10
+        RETRIES: 3
         GITHUB_TOKEN: ${{ secrets.RETRY_TOKEN }}
       run: |
         bundle exec script/livecheck || {
