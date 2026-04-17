@@ -140,7 +140,7 @@ download-dependencies : $(OXIPNG_EXTRACTED) $(PNGQUANT_EXTRACTED)
 .PHONY : download-dependencies
 
 download-tidy-up :
-	rm -f $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_ARC)),$(wildcard $(DL_DIR)/*.*))
+	rm -fv $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_ARC)),$(wildcard $(DL_DIR)/*.*))
 .PHONY : download-tidy-up
 
 checksum : download
