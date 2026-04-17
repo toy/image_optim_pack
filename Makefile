@@ -139,6 +139,10 @@ download-dependencies : $(OXIPNG_EXTRACTED) $(PNGQUANT_EXTRACTED)
 	cd $(PNGQUANT_DIR) && cargo fetch --locked
 .PHONY : download-dependencies
 
+purge-dependencies :
+	rm -rf $(CARGO_HOME)
+.PHONY : purge-dependencies
+
 download-tidy-up :
 	rm -fv $(filter-out $(foreach archive,$(ARCHIVES),$($(archive)_ARC)),$(wildcard $(DL_DIR)/*.*))
 .PHONY : download-tidy-up
