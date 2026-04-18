@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* libpng 1.6.58 [@toy](https://github.com/toy)
+
 ## v0.13.1 (2026-04-12)
 
 * Add linux-x86_64 and linux-aarch64 platforms including two vendor dirs each [@toy](https://github.com/toy)
