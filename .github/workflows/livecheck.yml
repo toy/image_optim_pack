@@ -24,7 +24,7 @@ jobs:
         RETRIES: 3
         GITHUB_TOKEN: ${{ secrets.RETRY_TOKEN }}
       run: |
-        bundle exec script/livecheck || {
+        script/livecheck || {
           exit_code=$?
           if (( $exit_code == 2 )) && (( ${RETRY:-0} < $RETRIES )); then
             sleep 300
