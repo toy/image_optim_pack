@@ -1,9 +1,10 @@
 [![Gem Version](https://img.shields.io/gem/v/image_optim_pack?logo=rubygems)](https://rubygems.org/gems/image_optim_pack)
 [![Check](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/check.yml?label=check&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/check.yml)
 [![Rubocop](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/rubocop.yml?label=rubocop&logo=rubocop)](https://github.com/toy/image_optim_pack/actions/workflows/rubocop.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/build.yml?label=build&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/build.yml)
 [![Docker build](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/docker-build.yml?label=docker+build&logo=docker)](https://github.com/toy/image_optim_pack/actions/workflows/docker-build.yml)
 [![Livecheck](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/livecheck.yml?label=livecheck&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/livecheck.yml)
-[![Build](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/build.yml?label=build&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/build.yml)
+[![Cache downloads](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/cache-downloads.yml?label=cache-downloads&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/cache-downloads.yml)
 [![Depfu](https://img.shields.io/depfu/toy/image_optim_pack)](https://depfu.com/github/toy/image_optim_pack)
 [![Inch CI](https://inch-ci.org/github/toy/image_optim_pack.svg?branch=master)](https://inch-ci.org/github/toy/image_optim_pack)
 
