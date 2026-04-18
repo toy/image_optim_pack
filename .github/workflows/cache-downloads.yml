@@ -18,7 +18,7 @@ jobs:
         ruby-version: '4'
         bundler-cache: true
     - id: cache-restore
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@v5.0.4
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -26,7 +26,7 @@ jobs:
     - run: make download-tidy-up
     - run: make download
     - run: make download-dependencies
-    - uses: actions/cache/save@v5
+    - uses: actions/cache/save@v5.0.4
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -45,7 +45,7 @@ jobs:
           exit $exit_code
         fi
       if: failure()
-    - uses: actions/cache@v5
+    - uses: actions/cache@v5.0.4
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
