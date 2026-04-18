@@ -11,11 +11,15 @@ jobs:
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
     - uses: actions/checkout@v6
+    - uses: actions/cache/restore@v5
+      with:
+        path: download
+        key: download-${{ hashFiles('checksums.mk') }}
+        fail-on-cache-miss: true
     - run: uname -m && test "$(uname -m)" = "${{ matrix.arch }}"
     - run: make test
     - run: rm -r vendor
     - run: sudo apt-get install -y chrpath
-    - run: make download download-dependencies
     - run: make all -j
     - uses: actions/upload-artifact@v7
       with:
@@ -30,13 +34,17 @@ jobs:
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
     - uses: actions/checkout@v6
+    - uses: actions/cache/restore@v5
+      with:
+        path: download
+        key: download-${{ hashFiles('checksums.mk') }}
+        fail-on-cache-miss: true
     - run: docker run -di --rm --name build -v ${{ github.workspace }}:/work -w /work rust:alpine
     - run: docker exec build sh -c 'uname -m && test "$(uname -m)" = "${{ matrix.arch }}"'
     - run: docker exec build apk add --no-cache make file perl
     - run: docker exec build make test
     - run: docker exec build rm -r vendor
-    - run: docker exec build apk add --no-cache gcc g++ chrpath pkgconf autoconf automake libtool nasm cmake patch wget
-    - run: docker exec build make download download-dependencies
+    - run: docker exec build apk add --no-cache gcc g++ chrpath pkgconf autoconf automake libtool nasm cmake patch
     - run: docker exec build make all -j
     - run: docker stop build
       if: always()
@@ -54,10 +62,14 @@ jobs:
     runs-on: ${{ case(matrix.arch == 'x86_64', 'macos-15-intel', 'macos-14') }}
     steps:
     - uses: actions/checkout@v6
+    - uses: actions/cache/restore@v5
+      with:
+        path: download
+        key: download-${{ hashFiles('checksums.mk') }}
+        fail-on-cache-miss: true
     - run: uname -m && test "$(uname -m)" = "${{ matrix.arch }}"
     - run: make test ARCH="${{ matrix.build }}"
     - run: rm -r vendor
-    - run: make download download-dependencies
     - run: rustup target add "${{ case(matrix.build == 'arm64', 'aarch64', matrix.build) }}-apple-darwin"
       if: ${{ matrix.build != matrix.arch }}
     - run: make all -j ARCH="${{ matrix.build }}"
