@@ -107,7 +107,7 @@ container_build() {
 
       "$container_tool" exec -it "$container_name" sh -exc "
         if command -v apt-get; then
-          apt-get update
+          apt-get update -o APT::Update::Error-Mode=any
           apt-get -y install make gcc g++ chrpath perl pkg-config autoconf automake libtool nasm cmake patch
         elif command -v apk; then
           apk add --no-cache bash make gcc g++ chrpath perl pkgconf autoconf automake libtool nasm cmake patch file
@@ -131,7 +131,7 @@ container_build() {
         fi
 
         if command -v apt-get; then
-          apt-get update
+          apt-get update -o APT::Update::Error-Mode=any
           apt-get -y dist-upgrade
         elif command -v apk; then
           apk upgrade --no-cache
