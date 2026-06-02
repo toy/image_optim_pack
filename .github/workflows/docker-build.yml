@@ -13,7 +13,7 @@ jobs:
         - DOCKER_FILE=Dockerfile.debian DOCKER_TAG_SUFFIX=-debian
       fail-fast: false
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
     - uses: actions/cache/restore@v5
       with:
         path: download
