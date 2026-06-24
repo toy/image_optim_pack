@@ -10,7 +10,7 @@ jobs:
         arch: [x86_64, aarch64]
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: actions/cache/restore@v5
       with:
         path: download
@@ -33,7 +33,7 @@ jobs:
         arch: [x86_64, aarch64]
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: actions/cache/restore@v5
       with:
         path: download
@@ -61,7 +61,7 @@ jobs:
         build: [x86_64, arm64]
     runs-on: ${{ case(matrix.arch == 'x86_64', 'macos-15-intel', 'macos-14') }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - uses: actions/cache/restore@v5
       with:
         path: download
