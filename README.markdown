@@ -7,6 +7,7 @@
 [![Cache downloads](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/cache-downloads.yml?label=cache-downloads&logo=github)](https://github.com/toy/image_optim_pack/actions/workflows/cache-downloads.yml)
 [![Depfu](https://img.shields.io/depfu/toy/image_optim_pack)](https://depfu.com/github/toy/image_optim_pack)
 [![Inch CI](https://inch-ci.org/github/toy/image_optim_pack.svg?branch=master)](https://inch-ci.org/github/toy/image_optim_pack)
+[![Zizmor](https://img.shields.io/github/actions/workflow/status/toy/image_optim_pack/zizmor.yml?label=zizmor&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNiAzNiI+PHBhdGggZmlsbD0iI0VCMjAyNyIgZD0iTTAgMzZBMzYgMzYgMCAwIDEgMzYgMHYzQTMzIDMzIDAgMCAwIDMgMzZ6Ii8+PHBhdGggZmlsbD0iI0YxOTAyMCIgZD0iTTMgMzZBMzMgMzMgMCAwIDEgMzYgM3YzQTMwIDMwIDAgMCAwIDYgMzZ6Ii8+PHBhdGggZmlsbD0iI0ZGQ0I0QyIgZD0iTTYgMzZBMzAgMzAgMCAwIDEgMzYgNnYzQTI3IDI3IDAgMCAwIDkgMzZ6Ii8+PHBhdGggZmlsbD0iIzVDOTAzRiIgZD0iTTkgMzZBMjcgMjcgMCAwIDEgMzYgOXYzQTI0IDI0IDAgMCAwIDEyIDM2eiIvPjxwYXRoIGZpbGw9IiMyMjY3OTgiIGQ9Ik0xMiAzNkEyNCAyNCAwIDAgMSAzNiAxMnYzQTIxIDIxIDAgMCAwIDE1IDM2eiIvPjxwYXRoIGZpbGw9IiM4NzY3QUMiIGQ9Ik0xNSAzNkEyMSAyMSAwIDAgMSAzNiAxNXYzQTE4IDE4IDAgMCAwIDE4IDM2eiIvPjwvc3ZnPg==)](https://github.com/toy/image_optim_pack/actions/workflows/zizmor.yml)
 
 # image\_optim\_pack
 
