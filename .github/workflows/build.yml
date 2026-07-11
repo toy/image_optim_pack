@@ -2,6 +2,7 @@ name: build
 on:
   push:
   pull_request:
+permissions: {}
 jobs:
   linux-gnu-build:
     strategy:

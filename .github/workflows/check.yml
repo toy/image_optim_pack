@@ -4,6 +4,7 @@ on:
   pull_request:
   schedule:
   - cron: 45 4 * * 0
+permissions: {}
 jobs:
   check:
     runs-on: "${{ matrix.os }}"

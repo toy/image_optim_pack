@@ -10,6 +10,7 @@ on:
         description: 'Retry attempt'
         required: true
         type: number
+permissions: {}
 jobs:
   livecheck:
     runs-on: ubuntu-latest

@@ -3,6 +3,7 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+permissions: {}
 jobs:
   docker-build:
     runs-on: ubuntu-latest
