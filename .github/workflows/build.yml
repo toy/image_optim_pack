@@ -10,10 +10,10 @@ jobs:
         arch: [x86_64, aarch64]
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
-    - uses: actions/cache/restore@v5
+    - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -23,7 +23,7 @@ jobs:
     - run: rm -r vendor
     - run: sudo apt-get install -y chrpath
     - run: make all -j
-    - uses: actions/upload-artifact@v7
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: ${{ github.job }}-${{ matrix.arch }}
         path: vendor/
@@ -35,10 +35,10 @@ jobs:
         arch: [x86_64, aarch64]
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
-    - uses: actions/cache/restore@v5
+    - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -52,7 +52,7 @@ jobs:
     - run: docker exec build make all -j
     - run: docker stop build
       if: always()
-    - uses: actions/upload-artifact@v7
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: ${{ github.job }}-${{ matrix.arch }}
         path: vendor/
@@ -65,10 +65,10 @@ jobs:
         build: [x86_64, arm64]
     runs-on: ${{ case(matrix.arch == 'x86_64', 'macos-15-intel', 'macos-14') }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
-    - uses: actions/cache/restore@v5
+    - uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -79,7 +79,7 @@ jobs:
     - run: rustup target add "${{ case(matrix.build == 'arm64', 'aarch64', matrix.build) }}-apple-darwin"
       if: ${{ matrix.build != matrix.arch }}
     - run: make all -j ARCH="${{ matrix.build }}"
-    - uses: actions/upload-artifact@v7
+    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: ${{ github.job }}-${{ matrix.arch }}-build-${{ matrix.build }}
         path: vendor/

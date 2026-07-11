@@ -12,15 +12,15 @@ jobs:
   cache-downloads:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       with:
         persist-credentials: false
-    - uses: ruby/setup-ruby@v1
+    - uses: ruby/setup-ruby@0dafeac902942906541bc140009cdbf32665b601 # v1.315.0
       with:
         ruby-version: '4'
         bundler-cache: true
     - id: cache-restore
-      uses: actions/cache/restore@v5
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -28,7 +28,7 @@ jobs:
     - run: make download-tidy-up
     - run: make download
     - run: make download-dependencies
-    - uses: actions/cache/save@v5
+    - uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
@@ -48,7 +48,7 @@ jobs:
             exit $exit_code
           fi
         }
-    - uses: actions/cache@v5
+    - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: download
         key: download-${{ hashFiles('checksums.mk') }}
