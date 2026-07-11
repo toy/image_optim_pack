@@ -11,6 +11,8 @@ jobs:
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
     - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - uses: actions/cache/restore@v5
       with:
         path: download
@@ -34,6 +36,8 @@ jobs:
     runs-on: ${{ case(matrix.arch == 'x86_64', 'ubuntu-latest', 'ubuntu-22.04-arm') }}
     steps:
     - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - uses: actions/cache/restore@v5
       with:
         path: download
@@ -62,6 +66,8 @@ jobs:
     runs-on: ${{ case(matrix.arch == 'x86_64', 'macos-15-intel', 'macos-14') }}
     steps:
     - uses: actions/checkout@v6
+      with:
+        persist-credentials: false
     - uses: actions/cache/restore@v5
       with:
         path: download
