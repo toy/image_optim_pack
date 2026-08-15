@@ -2,6 +2,8 @@
 
 ## unreleased
 
+* oxipng 10.2.0 [@toy](https://github.com/toy)
+
 ## v0.13.1.20260426 (2026-04-26)
 
 * oxipng 10.1.1 [@toy](https://github.com/toy)
